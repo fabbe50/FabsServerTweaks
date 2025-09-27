@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "fabsservertweaks",
+  "version": "${version}",
+  "name": "FabsServerTweaks",
+  "description": "Charting The Unknown Mod",
+  "authors": [
+    "fabbe50"
+  ],
+  "contact": {
+    "homepage": "https://fabbe50.com"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/fabsservertweaks/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.fabbe50.fabsservertweaks.fabric.FabsservertweaksFabric"
+    ]
+  },
+  "mixins": [
+    "fabsservertweaks.mixins.json"
+  ],
+  "accessWidener": "fabsservertweaks.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.17.2",
+    "minecraft": "~1.21.8",
+    "java": ">=21",
+    "architectury": ">=17.0.8",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "custom": {
+    "fabric-networking-v0:serverOnly": true
+  }
+}
