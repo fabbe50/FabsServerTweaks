@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks;
 
 import com.fabbe50.fabsservertweaks.registries.EventRegistry;
+import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import net.minecraft.resources.ResourceLocation;
 
@@ -9,6 +10,7 @@ public final class Fabsservertweaks {
 
     public static void init() {
         ModRegistry.init();
+        ModGameRules.init();
         EventRegistry.init();
     }
 
