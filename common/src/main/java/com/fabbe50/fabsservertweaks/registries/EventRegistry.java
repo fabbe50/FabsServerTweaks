@@ -15,5 +15,8 @@ import net.minecraft.world.level.Level;
 
 public class EventRegistry {
     public static void init() {
+        CommandRegistrationEvent.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> {
+            GotoCommand.register(commandDispatcher);
+        });
     }
 }
