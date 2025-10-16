@@ -1,5 +1,7 @@
 package com.fabbe50.fabsservertweaks;
 
+import com.fabbe50.fabsservertweaks.client.ClientData;
+import com.fabbe50.fabsservertweaks.network.NetworkHandler;
 import com.fabbe50.fabsservertweaks.registries.EventRegistry;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
@@ -15,9 +17,12 @@ public final class Fabsservertweaks {
     }
 
     public static void initServer() {
+        NetworkHandler.registerServerHandlers();
     }
 
     public static void initClient() {
+        NetworkHandler.registerClientHandlers();
+        ClientData.createDebugInfo();
     }
 
     public static ResourceLocation location(String name) {

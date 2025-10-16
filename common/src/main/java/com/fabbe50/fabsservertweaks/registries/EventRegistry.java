@@ -1,11 +1,16 @@
 package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
+import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
+import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Shulker;
@@ -45,6 +50,14 @@ public class EventRegistry {
         });
         CommandRegistrationEvent.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> {
             GotoCommand.register(commandDispatcher);
+        });
+        PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
+            long seed = serverPlayer.level().getSeed();
+            try {
+                NetworkManager.sendToPlayer(serverPlayer, new SeedPacket.Client.PacketPayload(seed));
+            } catch (UnsupportedOperationException ignored) {
+                serverPlayer.sendSystemMessage(Component.literal("Server Seed: " + serverPlayer.level().getSeed()));
+            }
         });
     }
 }
