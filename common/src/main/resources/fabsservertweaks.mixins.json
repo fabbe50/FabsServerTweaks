@@ -9,7 +9,8 @@
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
     "MobMixin",
-    "ServerLevelMixin"
+    "ServerLevelMixin",
+    "ShulkerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

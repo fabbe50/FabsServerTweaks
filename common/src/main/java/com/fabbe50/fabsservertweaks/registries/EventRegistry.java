@@ -8,7 +8,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -28,6 +30,13 @@ public class EventRegistry {
                                     stack.setCount(0);
                                 }
                             }
+                        }
+                    }
+                    if (mob instanceof Shulker shulker) {
+                        int shulker_shells = gameRules.getInt(ModGameRules.RULE_SHULKER_SHELL_DROP_AMOUNT);
+                        if (shulker_shells > 0) {
+                            shulker.spawnAtLocation(serverLevel, new ItemStack(Items.SHULKER_SHELL, shulker_shells));
+                            shulker.remove(Entity.RemovalReason.DISCARDED);
                         }
                     }
                 }

@@ -5,6 +5,7 @@ import com.fabbe50.fabsservertweaks.registries.gamerules.CropTrampleValue.CropTr
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameRules.BooleanValue;
 import net.minecraft.world.level.GameRules.Category;
+import net.minecraft.world.level.GameRules.IntegerValue;
 
 public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_MOB_GRIEF_ENDERMAN;
@@ -13,6 +14,9 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_EQUIPABLE;
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_FULL_DURABILITY;
     public static final GameRules.Key<CropTrampleValue> RULE_CROP_TRAMPLE_MODE;
+    public static final GameRules.Key<BooleanValue> RULE_SHULKERS_RANDOM_COLOR;
+    public static final GameRules.Key<BooleanValue> RULE_SHULKERS_CAN_TELEPORT;
+    public static final GameRules.Key<IntegerValue> RULE_SHULKER_SHELL_DROP_AMOUNT;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -21,6 +25,9 @@ public class ModGameRules {
         RULE_MOB_DROP_EQUIPABLE = GameRules.register("mobDropEquipable", Category.DROPS, BooleanValue.create(true));
         RULE_MOB_DROP_FULL_DURABILITY = GameRules.register("mobDropFullDurability", Category.DROPS, BooleanValue.create(false));
         RULE_CROP_TRAMPLE_MODE = GameRules.register("cropTrampleMode", Category.MISC, CropTrampleValue.create(CropTrampleMode.NORMAL));
+        RULE_SHULKERS_RANDOM_COLOR = GameRules.register("shulkerRandomColor", Category.MOBS, BooleanValue.create(false));
+        RULE_SHULKERS_CAN_TELEPORT = GameRules.register("shulkersCanTeleport", Category.MOBS, BooleanValue.create(true));
+        RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
     }
 
     public static void init() {}
