@@ -14,6 +14,12 @@ public final class Fabsservertweaks {
         EventRegistry.init();
     }
 
+    public static void initServer() {
+    }
+
+    public static void initClient() {
+    }
+
     public static ResourceLocation location(String name) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }

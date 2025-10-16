@@ -16,6 +16,12 @@
   "entrypoints": {
     "main": [
       "com.fabbe50.fabsservertweaks.fabric.FabsservertweaksFabric"
+    ],
+    "client": [
+      "com.fabbe50.fabsservertweaks.fabric.FabsservertweaksClientFabric"
+    ],
+    "server": [
+      "com.fabbe50.fabsservertweaks.fabric.FabsservertweaksServerFabric"
     ]
   },
   "mixins": [
