@@ -12,7 +12,8 @@
     "MobMixin",
     "PlayerMixin",
     "ServerLevelMixin",
-    "ShulkerMixin"
+    "ShulkerMixin",
+    "ThrownTridentMixin",
   ],
   "injectors": {
     "defaultRequire": 1
