@@ -17,6 +17,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_RANDOM_COLOR;
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_CAN_TELEPORT;
     public static final GameRules.Key<IntegerValue> RULE_SHULKER_SHELL_DROP_AMOUNT;
+    public static final GameRules.Key<BooleanValue> RULE_SHARE_SEED;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -28,6 +29,7 @@ public class ModGameRules {
         RULE_SHULKERS_RANDOM_COLOR = GameRules.register("shulkerRandomColor", Category.MOBS, BooleanValue.create(false));
         RULE_SHULKERS_CAN_TELEPORT = GameRules.register("shulkersCanTeleport", Category.MOBS, BooleanValue.create(true));
         RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
+        RULE_SHARE_SEED = GameRules.register("shareSeed", Category.MISC, BooleanValue.create(false));
     }
 
     public static void init() {}

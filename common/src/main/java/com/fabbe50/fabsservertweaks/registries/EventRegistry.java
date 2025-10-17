@@ -52,11 +52,13 @@ public class EventRegistry {
             GotoCommand.register(commandDispatcher);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
-            long seed = serverPlayer.level().getSeed();
-            try {
-                NetworkManager.sendToPlayer(serverPlayer, new SeedPacket.Client.PacketPayload(seed));
-            } catch (UnsupportedOperationException ignored) {
-                serverPlayer.sendSystemMessage(Component.literal("Server Seed: " + serverPlayer.level().getSeed()));
+            if (serverPlayer.level().getGameRules().getBoolean(ModGameRules.RULE_SHARE_SEED)) {
+                long seed = serverPlayer.level().getSeed();
+                try {
+                    NetworkManager.sendToPlayer(serverPlayer, new SeedPacket.Client.PacketPayload(seed));
+                } catch (UnsupportedOperationException ignored) {
+                    serverPlayer.sendSystemMessage(Component.literal("Server Seed: " + serverPlayer.level().getSeed()));
+                }
             }
         });
     }
