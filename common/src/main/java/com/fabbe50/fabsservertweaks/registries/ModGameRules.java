@@ -18,6 +18,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_CAN_TELEPORT;
     public static final GameRules.Key<IntegerValue> RULE_SHULKER_SHELL_DROP_AMOUNT;
     public static final GameRules.Key<BooleanValue> RULE_LOYALTY_TRIDENT_RETURNS_FROM_VOID;
+    public static final GameRules.Key<BooleanValue> RULE_ALWAYS_CONVERT_VILLAGERS;
     public static final GameRules.Key<BooleanValue> RULE_SHARE_SEED;
 
     static {
@@ -31,6 +32,7 @@ public class ModGameRules {
         RULE_SHULKERS_CAN_TELEPORT = GameRules.register("shulkersCanTeleport", Category.MOBS, BooleanValue.create(true));
         RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
         RULE_LOYALTY_TRIDENT_RETURNS_FROM_VOID = GameRules.register("tridentWithLoyaltyReturnsFromVoid", Category.MISC, BooleanValue.create(true));
+        RULE_ALWAYS_CONVERT_VILLAGERS = GameRules.register("villagerAlwaysTurnIntoZombies", Category.MISC, BooleanValue.create(true));
         RULE_SHARE_SEED = GameRules.register("shareSeed", Category.MISC, BooleanValue.create(false));
     }
 
