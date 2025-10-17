@@ -3,6 +3,7 @@ plugins {
 }
 
 def generatedResources = project(":common").file("src/main/generated/resources")
+def accessWidener = project(":common").file("src/main/resources/${mod_id}.accesswidener")
 
 sourceSets {
     main {
@@ -11,7 +12,7 @@ sourceSets {
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    accessWidenerPath.set(accessWidener)
 
     runs {
         data {

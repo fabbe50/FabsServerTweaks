@@ -2,8 +2,10 @@ architectury {
     common rootProject.enabled_platforms.split(',')
 }
 
+var accessWidener = file("src/main/resources/${mod_id}.accesswidener")
+
 loom {
-    accessWidenerPath = file("src/main/resources/fabsservertweaks.accesswidener")
+    accessWidenerPath.set(accessWidener)
 }
 
 dependencies {
