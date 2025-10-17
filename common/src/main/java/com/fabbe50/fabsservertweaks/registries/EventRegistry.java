@@ -2,6 +2,8 @@ package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
+import com.fabbe50.fabsservertweaks.util.ChanceUtil;
+import com.fabbe50.fabsservertweaks.util.EffectUtil;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
@@ -10,9 +12,11 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,6 +26,35 @@ import net.minecraft.world.level.Level;
 
 public class EventRegistry {
     public static void init() {
+        EntityEvent.ADD.register((entity, level) -> {
+            if (level instanceof ServerLevel serverLevel) {
+                if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
+                    if (entity instanceof Monster monster) {
+                        if (entity.getType().is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
+                            return EventResult.pass();
+                        }
+                        RandomSource random = entity.getRandom();
+                        if (serverLevel.dimension().equals(Level.NETHER)) {
+                            if (random.nextDouble() < 0.75d) {
+                                monster.addEffect(EffectUtil.getRandomNetherEffect(random));
+                                return EventResult.interruptTrue();
+                            }
+                        } else if (serverLevel.dimension().equals(Level.END)) {
+                            if (random.nextDouble() < 0.25d) {
+                                monster.addEffect(EffectUtil.getRandomEndEffect(random));
+                                return EventResult.interruptTrue();
+                            }
+                        } else {
+                            if (ChanceUtil.rollAtY(level, monster.getBlockY(), 0.01, 0.75, 5.25, random)) {
+                                monster.addEffect(EffectUtil.getRandomOverworldEffect(random));
+                                return EventResult.interruptTrue();
+                            }
+                        }
+                    }
+                }
+            }
+            return EventResult.pass();
+        });
         EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
             if (livingEntity instanceof Mob mob) {
                 Level level = mob.level();
