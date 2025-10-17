@@ -9,6 +9,7 @@
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
     "MobMixin",
+    "PlayerMixin",
     "ServerLevelMixin",
     "ShulkerMixin"
   ],
