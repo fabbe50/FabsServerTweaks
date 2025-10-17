@@ -12,8 +12,13 @@ sourceSets {
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
     accessWidenerPath.set(accessWidener)
+
+    runs {
+        client {
+            programArgs("--username", "Dev")
+        }
+    }
 }
 
 architectury {

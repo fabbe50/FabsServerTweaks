@@ -1,3 +1,16 @@
 {
-  "argument.fst_crop_trample_mode.invalid": "Unknown crop trample mode: %s"
+  "argument.fst_crop_trample_mode.invalid": "Unknown crop trample mode: %s",
+  "gamerule.friendlyPhantoms": "Friendly Phantoms",
+  "gamerule.mobGriefCreeper": "Creeper Griefing",
+  "gamerule.mobGriefEnderman": "Enderman Griefing",
+  "gamerule.mobGriefZombie": "Zombie Griefing",
+  "gamerule.shulkerRandomColor": "Random Shulker Colors",
+  "gamerule.shulkerShellDropAmount": "Shulker Shell Drop Amount",
+  "gamerule.shulkersCanTeleport": "Shulkers Can Teleport",
+  "gamerule.mobDropEquipable": "Mobs Drop Equipment",
+  "gamerule.mobDropFullDurability": "Mobs Drop Equipment With Full Durability",
+  "gamerule.mobsSpawnWithEffects": "Mobs Spawn With Potion Effects",
+  "gamerule.tridentWithLoyaltyReturnsFromVoid": "Loyalty Trident Returns From Void",
+  "gamerule.villagerAlwaysTurnIntoZombies": "Villagers always convert to Zombie Villagers when killed by Zombies",
+  "gamerule.shareSeed": "The level seed gets shared with players on join"
 }
