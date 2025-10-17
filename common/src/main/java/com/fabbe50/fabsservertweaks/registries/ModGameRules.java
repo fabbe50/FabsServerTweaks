@@ -21,6 +21,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_ALWAYS_CONVERT_VILLAGERS;
     public static final GameRules.Key<BooleanValue> RULE_MOBS_SPAWN_WITH_EFFECTS;
     public static final GameRules.Key<BooleanValue> RULE_FRIENDLY_PHANTOMS;
+    public static final GameRules.Key<BooleanValue> RULE_NO_COBBLE_GEN;
     public static final GameRules.Key<BooleanValue> RULE_SHARE_SEED;
 
     static {
@@ -37,6 +38,7 @@ public class ModGameRules {
         RULE_ALWAYS_CONVERT_VILLAGERS = GameRules.register("villagerAlwaysTurnIntoZombies", Category.MISC, BooleanValue.create(true));
         RULE_MOBS_SPAWN_WITH_EFFECTS = GameRules.register("mobsSpawnWithEffects", Category.MISC, BooleanValue.create(false));
         RULE_FRIENDLY_PHANTOMS = GameRules.register("friendlyPhantoms", Category.MOBS, BooleanValue.create(false));
+        RULE_NO_COBBLE_GEN = GameRules.register("noCobbleGen", Category.MISC, BooleanValue.create(false));
         RULE_SHARE_SEED = GameRules.register("shareSeed", Category.MISC, BooleanValue.create(false));
     }
 

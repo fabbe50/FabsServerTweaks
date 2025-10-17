@@ -15,6 +15,7 @@
     "ShulkerMixin",
     "ThrownTridentMixin",
     "ZombieMixin",
+    "LiquidBlockMixin",
     "PhantomMixin"
   ],
   "injectors": {
