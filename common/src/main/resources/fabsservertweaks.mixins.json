@@ -1,22 +1,22 @@
 {
   "required": true,
   "package": "com.fabbe50.fabsservertweaks.mixin",
-  "refmap": "fabsservertweaks.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "mixins": [
     "ArgumentTypeInfosMixin",
     "BreakDoorGoalMixin",
+    "CompassItemMixin",
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
+    "LiquidBlockMixin",
     "MobMixin",
+    "PhantomMixin",
     "PlayerMixin",
     "ServerLevelMixin",
     "ShulkerMixin",
     "ThrownTridentMixin",
-    "ZombieMixin",
-    "LiquidBlockMixin",
-    "PhantomMixin"
+    "ZombieMixin"
   ],
   "injectors": {
     "defaultRequire": 1
