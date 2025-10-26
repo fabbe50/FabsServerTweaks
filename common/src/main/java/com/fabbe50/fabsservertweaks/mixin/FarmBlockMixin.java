@@ -2,6 +2,7 @@ package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
+import com.fabbe50.fabsservertweaks.util.EnchantmentUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -28,19 +29,19 @@ public class FarmBlockMixin extends Block {
 
     @Inject(method = "fallOn", at = @At("HEAD"), cancellable = true)
     private void injectFallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, double d, CallbackInfo ci) {
-        if (level instanceof ServerLevel serverLevel) {
-            TrampleValue trampleValue = serverLevel.getGameRules().getRule(ModGameRules.RULE_CROP_TRAMPLE_MODE);
-            if (trampleValue.getValue().equals(TrampleValue.TrampleMode.FEATHER_FALLING)) {
-                if (entity instanceof LivingEntity livingEntity) {
-                    ItemStack boots = livingEntity.getItemBySlot(EquipmentSlot.FEET);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), boots) > 0) {
-                        super.fallOn(level, blockState, blockPos, entity, d);
+        if (level instanceof ServerLevel serverLevel && entity instanceof LivingEntity livingEntity) {
+            TrampleValue.TrampleMode trampleMode = serverLevel.getGameRules().getRule(ModGameRules.RULE_CROP_TRAMPLE_MODE).getValue();
+            switch (trampleMode) {
+                case NO_TRAMPLE -> {
+                    ci.cancel();
+                    super.stepOn(level, blockPos, blockState, entity);
+                }
+                case FEATHER_FALLING -> {
+                    if (EnchantmentUtil.hasFeatherFalling(livingEntity)) {
                         ci.cancel();
+                        super.stepOn(level, blockPos, blockState, entity);
                     }
                 }
-            } else if (trampleValue.getValue().equals(TrampleValue.TrampleMode.NO_TRAMPLE)) {
-                super.fallOn(level, blockState, blockPos, entity, d);
-                ci.cancel();
             }
         }
     }
