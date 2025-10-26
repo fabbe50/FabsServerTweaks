@@ -1,5 +1,6 @@
 {
   "argument.fst_crop_trample_mode.invalid": "Unknown crop trample mode: %s",
+  "argument.fst_difficulty.invalid": "Unknown difficulty mode: %s",
   "gamerule.friendlyPhantoms": "Friendly Phantoms",
   "gamerule.mobGriefCreeper": "Creeper Griefing",
   "gamerule.mobGriefEnderman": "Enderman Griefing",

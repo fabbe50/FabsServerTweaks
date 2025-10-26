@@ -2,6 +2,7 @@ package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
+import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.ChanceUtil;
 import com.fabbe50.fabsservertweaks.util.EffectUtil;
 import dev.architectury.event.EventResult;
@@ -34,20 +35,23 @@ public class EventRegistry {
                             return EventResult.pass();
                         }
                         RandomSource random = entity.getRandom();
-                        if (serverLevel.dimension().equals(Level.NETHER)) {
-                            if (random.nextDouble() < 0.75d) {
-                                monster.addEffect(EffectUtil.getRandomNetherEffect(random));
-                                return EventResult.interruptTrue();
-                            }
-                        } else if (serverLevel.dimension().equals(Level.END)) {
-                            if (random.nextDouble() < 0.25d) {
-                                monster.addEffect(EffectUtil.getRandomEndEffect(random));
-                                return EventResult.interruptTrue();
-                            }
-                        } else {
-                            if (ChanceUtil.rollAtY(level, monster.getBlockY(), 0.01, 0.75, 5.25, random)) {
-                                monster.addEffect(EffectUtil.getRandomOverworldEffect(random));
-                                return EventResult.interruptTrue();
+                        DifficultyValue.Difficulty difficulty = serverLevel.getGameRules().getRule(ModGameRules.RULE_SPAWN_WITH_EFFECT_MODE).getValue();
+                        if (shouldApplyEffect(serverLevel, random, difficulty)) {
+                            if (serverLevel.dimension().equals(Level.NETHER)) {
+                                if (random.nextDouble() < 0.75d) {
+                                    monster.addEffect(EffectUtil.getRandomNetherEffect(random));
+                                    return EventResult.interruptTrue();
+                                }
+                            } else if (serverLevel.dimension().equals(Level.END)) {
+                                if (random.nextDouble() < 0.25d) {
+                                    monster.addEffect(EffectUtil.getRandomEndEffect(random));
+                                    return EventResult.interruptTrue();
+                                }
+                            } else {
+                                if (ChanceUtil.rollAtY(level, monster.getBlockY(), 0.01, 0.75, 5.25, random)) {
+                                    monster.addEffect(EffectUtil.getRandomOverworldEffect(random));
+                                    return EventResult.interruptTrue();
+                                }
                             }
                         }
                     }
@@ -94,5 +98,15 @@ public class EventRegistry {
                 }
             }
         });
+    }
+
+    private static boolean shouldApplyEffect(ServerLevel level, RandomSource random, DifficultyValue.Difficulty difficulty) {
+        if (difficulty.equals(DifficultyValue.Difficulty.SCALE_BY_DIFFICULTY)) {
+            return switch (level.getDifficulty()) {
+                case PEACEFUL, EASY -> false;
+                case NORMAL -> random.nextBoolean();
+                case HARD -> true;
+            };
+        } else return difficulty.equals(DifficultyValue.Difficulty.SAME_ON_ALL_DIFFICULTIES);
     }
 }

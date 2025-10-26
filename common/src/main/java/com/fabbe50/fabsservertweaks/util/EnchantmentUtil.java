@@ -18,4 +18,13 @@ public class EnchantmentUtil {
         }
         return EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, equipmentStack) > 0;
     }
+
+    public static boolean hasAquaAffinity(LivingEntity livingEntity) {
+        Holder<Enchantment> enchantmentHolder = livingEntity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.AQUA_AFFINITY);
+        ItemStack headStack = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
+        if (headStack.isEmpty()) {
+            return false;
+        }
+        return EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, headStack) > 0;
+    }
 }

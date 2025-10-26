@@ -1,5 +1,7 @@
 package com.fabbe50.fabsservertweaks.registries;
 
+import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
+import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficulty;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleMode;
 import net.minecraft.world.level.GameRules;
@@ -21,6 +23,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_LOYALTY_TRIDENT_RETURNS_FROM_VOID;
     public static final GameRules.Key<BooleanValue> RULE_ALWAYS_CONVERT_VILLAGERS;
     public static final GameRules.Key<BooleanValue> RULE_MOBS_SPAWN_WITH_EFFECTS;
+    public static final GameRules.Key<DifficultyValue> RULE_SPAWN_WITH_EFFECT_MODE;
     public static final GameRules.Key<BooleanValue> RULE_FRIENDLY_PHANTOMS;
     public static final GameRules.Key<BooleanValue> RULE_NO_COBBLE_GEN;
     public static final GameRules.Key<BooleanValue> RULE_SHARE_SEED;
@@ -38,7 +41,8 @@ public class ModGameRules {
         RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
         RULE_LOYALTY_TRIDENT_RETURNS_FROM_VOID = GameRules.register("tridentWithLoyaltyReturnsFromVoid", Category.MISC, BooleanValue.create(true));
         RULE_ALWAYS_CONVERT_VILLAGERS = GameRules.register("villagerAlwaysTurnIntoZombies", Category.MISC, BooleanValue.create(true));
-        RULE_MOBS_SPAWN_WITH_EFFECTS = GameRules.register("mobsSpawnWithEffects", Category.MISC, BooleanValue.create(false));
+        RULE_MOBS_SPAWN_WITH_EFFECTS = GameRules.register("mobsSpawnWithEffects", Category.MISC, BooleanValue.create(true));
+        RULE_SPAWN_WITH_EFFECT_MODE = GameRules.register("spawnWithEffectMode", Category.MISC, DifficultyValue.create(Difficulty.SCALE_BY_DIFFICULTY));
         RULE_FRIENDLY_PHANTOMS = GameRules.register("friendlyPhantoms", Category.MOBS, BooleanValue.create(false));
         RULE_NO_COBBLE_GEN = GameRules.register("noCobbleGen", Category.MISC, BooleanValue.create(false));
         RULE_SHARE_SEED = GameRules.register("shareSeed", Category.MISC, BooleanValue.create(false));
