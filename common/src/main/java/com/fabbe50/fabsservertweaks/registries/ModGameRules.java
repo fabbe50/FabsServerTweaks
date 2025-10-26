@@ -27,6 +27,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_FRIENDLY_PHANTOMS;
     public static final GameRules.Key<BooleanValue> RULE_NO_COBBLE_GEN;
     public static final GameRules.Key<BooleanValue> RULE_SHARE_SEED;
+    public static final GameRules.Key<BooleanValue> RULE_BETTER_HOES;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -46,6 +47,7 @@ public class ModGameRules {
         RULE_FRIENDLY_PHANTOMS = GameRules.register("friendlyPhantoms", Category.MOBS, BooleanValue.create(false));
         RULE_NO_COBBLE_GEN = GameRules.register("noCobbleGen", Category.MISC, BooleanValue.create(false));
         RULE_SHARE_SEED = GameRules.register("shareSeed", Category.MISC, BooleanValue.create(false));
+        RULE_BETTER_HOES = GameRules.register("betterHoes", Category.MISC, BooleanValue.create(true));
     }
 
     public static void init() {}

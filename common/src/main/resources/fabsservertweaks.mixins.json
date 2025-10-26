@@ -9,6 +9,7 @@
     "CompassItemMixin",
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
+    "HoeItemMixin",
     "ItemStackMixin",
     "LiquidBlockMixin",
     "MobMixin",

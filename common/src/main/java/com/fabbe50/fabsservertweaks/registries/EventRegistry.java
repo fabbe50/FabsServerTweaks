@@ -5,18 +5,20 @@ import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.ChanceUtil;
 import com.fabbe50.fabsservertweaks.util.EffectUtil;
+import com.fabbe50.fabsservertweaks.util.ToolUtil;
+import com.fabbe50.fabsservertweaks.util.WorldUtil;
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.event.events.common.EntityEvent;
-import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.event.events.common.*;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +26,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventRegistry {
     public static void init() {
@@ -97,6 +106,30 @@ public class EventRegistry {
                     serverPlayer.sendSystemMessage(Component.literal("Server Seed: " + serverPlayer.level().getSeed()));
                 }
             }
+        });
+        InteractionEvent.LEFT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            Level level = player.level();
+            ItemStack stack = player.getItemInHand(hand);
+            if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
+                AtomicBoolean flag = new AtomicBoolean(false);
+                WorldUtil.getBlocksInSphericalRadius(pos, ToolUtil.getScytheRadiusFromHoe(stack))
+                        .forEach(blockPos1 -> {
+                            BlockState state = level.getBlockState(blockPos1);
+                            if (state.is(ModRegistry.SCYTHE_ABLE)) {
+                                List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
+                                for (ItemStack dropStack : stacks) {
+                                    ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), dropStack);
+                                    level.addFreshEntity(itemEntity);
+                                }
+                                level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
+                                flag.set(true);
+                            }
+                        });
+                if (flag.get()) {
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            return InteractionResult.PASS;
         });
     }
 
