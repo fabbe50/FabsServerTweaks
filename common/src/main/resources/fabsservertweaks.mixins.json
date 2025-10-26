@@ -6,6 +6,7 @@
   "mixins": [
     "ArgumentTypeInfosMixin",
     "BreakDoorGoalMixin",
+    "CactusBlockMixin",
     "CompassItemMixin",
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
