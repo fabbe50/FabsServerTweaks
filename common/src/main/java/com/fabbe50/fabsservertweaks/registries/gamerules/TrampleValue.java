@@ -29,35 +29,35 @@ import java.util.function.BiConsumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
-public class CropTrampleValue extends GameRules.Value<CropTrampleValue> {
-    private CropTrampleMode value;
+public class TrampleValue extends GameRules.Value<TrampleValue> {
+    private TrampleMode value;
 
-    private static GameRules.Type<CropTrampleValue> create(CropTrampleMode value, BiConsumer<MinecraftServer, CropTrampleValue> biConsumer) {
-        return new GameRules.Type<>(CropTrampleArgumentType::value, type -> new CropTrampleValue(type, value), biConsumer, (visitor, key, type) -> {
-            if (visitor instanceof CropTrampleVisitor) {
-                ((CropTrampleVisitor) visitor).visitCropTrampleValue(key, type);
+    private static GameRules.Type<TrampleValue> create(TrampleMode value, BiConsumer<MinecraftServer, TrampleValue> biConsumer) {
+        return new GameRules.Type<>(TrampleArgumentType::value, type -> new TrampleValue(type, value), biConsumer, (visitor, key, type) -> {
+            if (visitor instanceof TrampleVisitor) {
+                ((TrampleVisitor) visitor).visitTrampleValue(key, type);
             }
-        }, CropTrampleValue.class, FeatureFlagSet.of());
+        }, TrampleValue.class, FeatureFlagSet.of());
     }
 
-    public static GameRules.Type<CropTrampleValue> create(CropTrampleMode value) {
-        return create(value, (minecraftServer, cropTrampleValue) -> {
+    public static GameRules.Type<TrampleValue> create(TrampleMode value) {
+        return create(value, (minecraftServer, trampleValue) -> {
         });
     }
 
-    public CropTrampleValue(GameRules.Type<CropTrampleValue> type, CropTrampleMode value) {
+    public TrampleValue(GameRules.Type<TrampleValue> type, TrampleMode value) {
         super(type);
         this.value = value;
     }
 
     @Override
     protected void updateFromArgument(CommandContext<CommandSourceStack> commandContext, String string) {
-        this.value = CropTrampleArgumentType.getValue(commandContext, string);
+        this.value = TrampleArgumentType.getValue(commandContext, string);
     }
 
     @Override
     protected void deserialize(String string) {
-        this.value = CropTrampleMode.byName(string.toLowerCase());
+        this.value = TrampleMode.byName(string.toLowerCase());
     }
 
     @Override
@@ -70,39 +70,39 @@ public class CropTrampleValue extends GameRules.Value<CropTrampleValue> {
         return this.value.id;
     }
 
-    public CropTrampleMode getValue() {
+    public TrampleMode getValue() {
         return value;
     }
 
     @Override
-    protected @NotNull CropTrampleValue getSelf() {
+    protected @NotNull TrampleValue getSelf() {
         return this;
     }
 
     @Override
-    protected @NotNull CropTrampleValue copy() {
-        return new CropTrampleValue(this.type, this.value);
+    protected @NotNull TrampleValue copy() {
+        return new TrampleValue(this.type, this.value);
     }
 
     @Override
-    public void setFrom(CropTrampleValue value, @Nullable MinecraftServer minecraftServer) {
+    public void setFrom(TrampleValue value, @Nullable MinecraftServer minecraftServer) {
         this.value = value.value;
         this.onChanged(minecraftServer);
     }
 
-    public enum CropTrampleMode implements StringRepresentable {
+    public enum TrampleMode implements StringRepresentable {
         NORMAL(0, "normal"),
         FEATHER_FALLING(1, "feather_falling"),
         NO_TRAMPLE(2, "no_trample");
 
-        public static final StringRepresentable.EnumCodec<CropTrampleMode> CODEC = StringRepresentable.fromEnum(CropTrampleMode::values);
-        private static final IntFunction<CropTrampleMode> BY_ID = ByIdMap.continuous(CropTrampleMode::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
-        public static final StreamCodec<ByteBuf, CropTrampleMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CropTrampleMode::getId);
+        public static final StringRepresentable.EnumCodec<TrampleMode> CODEC = StringRepresentable.fromEnum(TrampleMode::values);
+        private static final IntFunction<TrampleMode> BY_ID = ByIdMap.continuous(TrampleMode::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        public static final StreamCodec<ByteBuf, TrampleMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, TrampleMode::getId);
 
         private final int id;
         private final String name;
 
-        CropTrampleMode(int commandResult, String name) {
+        TrampleMode(int commandResult, String name) {
             this.id = commandResult;
             this.name = name;
         }
@@ -115,21 +115,21 @@ public class CropTrampleValue extends GameRules.Value<CropTrampleValue> {
             return name;
         }
 
-        public static CropTrampleMode byId(int i) {
+        public static TrampleMode byId(int i) {
             return BY_ID.apply(i);
         }
 
-        public static CropTrampleMode byName(String name) {
+        public static TrampleMode byName(String name) {
             return byName(name, NORMAL);
         }
 
-        public static CropTrampleMode byName(String name, CropTrampleMode cropTrampleMode) {
-            CropTrampleMode newCropTrampleMode = CODEC.byName(name);
-            return newCropTrampleMode != null ? newCropTrampleMode : cropTrampleMode;
+        public static TrampleMode byName(String name, TrampleMode trampleMode) {
+            TrampleMode newTrampleMode = CODEC.byName(name);
+            return newTrampleMode != null ? newTrampleMode : trampleMode;
         }
 
         public static Set<String> getNames() {
-            return Arrays.stream(values()).map(CropTrampleMode::getSerializedName).collect(Collectors.toSet());
+            return Arrays.stream(values()).map(TrampleMode::getSerializedName).collect(Collectors.toSet());
         }
 
         @Override
@@ -138,25 +138,25 @@ public class CropTrampleValue extends GameRules.Value<CropTrampleValue> {
         }
     }
 
-    public static class CropTrampleArgumentType implements ArgumentType<CropTrampleMode> {
-        private static final CropTrampleMode[] VALUES;
+    public static class TrampleArgumentType implements ArgumentType<TrampleMode> {
+        private static final TrampleMode[] VALUES;
         private static final DynamicCommandExceptionType ERROR_INVALID;
 
-        private CropTrampleArgumentType() {
+        private TrampleArgumentType() {
         }
 
-        public static CropTrampleArgumentType value() {
-            return new CropTrampleArgumentType();
+        public static TrampleArgumentType value() {
+            return new TrampleArgumentType();
         }
 
-        public static CropTrampleMode getValue(CommandContext<?> context, String name) {
-            return context.getArgument(name, CropTrampleMode.class);
+        public static TrampleMode getValue(CommandContext<?> context, String name) {
+            return context.getArgument(name, TrampleMode.class);
         }
 
         @Override
-        public CropTrampleMode parse(StringReader stringReader) throws CommandSyntaxException {
+        public TrampleMode parse(StringReader stringReader) throws CommandSyntaxException {
             String arg = stringReader.readUnquotedString();
-            CropTrampleMode trampleMode = CropTrampleMode.byName(arg, null);
+            TrampleMode trampleMode = TrampleMode.byName(arg, null);
             if (trampleMode == null) {
                 throw ERROR_INVALID.createWithContext(stringReader, arg);
             } else {
@@ -166,22 +166,22 @@ public class CropTrampleValue extends GameRules.Value<CropTrampleValue> {
 
         @Override
         public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-            return context.getSource() instanceof SharedSuggestionProvider ? SharedSuggestionProvider.suggest(Arrays.stream(VALUES).map(CropTrampleMode::getName), builder) : Suggestions.empty();
+            return context.getSource() instanceof SharedSuggestionProvider ? SharedSuggestionProvider.suggest(Arrays.stream(VALUES).map(TrampleMode::getName), builder) : Suggestions.empty();
         }
 
         @Override
         public Collection<String> getExamples() {
-            return CropTrampleMode.getNames();
+            return TrampleMode.getNames();
         }
 
         static {
-            VALUES = CropTrampleMode.values();
+            VALUES = TrampleMode.values();
             ERROR_INVALID = new DynamicCommandExceptionType(object -> Component.translatableEscape("argument.fst_crop_trample_mode.invalid", object));
         }
     }
 
-    interface CropTrampleVisitor extends GameRules.GameRuleTypeVisitor {
-        default void visitCropTrampleValue(GameRules.Key<CropTrampleValue> key, GameRules.Type<CropTrampleValue> type) {
+    interface TrampleVisitor extends GameRules.GameRuleTypeVisitor {
+        default void visitTrampleValue(GameRules.Key<TrampleValue> key, GameRules.Type<TrampleValue> type) {
             visit(key, type);
         }
     }

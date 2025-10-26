@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
-import com.fabbe50.fabsservertweaks.registries.gamerules.CropTrampleValue;
+import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
+import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
 import com.mojang.brigadier.arguments.ArgumentType;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -22,6 +23,7 @@ public abstract class ArgumentTypeInfosMixin {
 
     @Inject(method = "bootstrap", at = @At("RETURN"))
     private static void injectBootstrap(Registry<ArgumentTypeInfo<?, ?>> registry, CallbackInfoReturnable<ArgumentTypeInfo<?, ?>> cir) {
-        register(registry, "tramplemode", CropTrampleValue.CropTrampleArgumentType.class, SingletonArgumentInfo.contextFree(CropTrampleValue.CropTrampleArgumentType::value));
+        register(registry, "tramplemode", TrampleValue.TrampleArgumentType.class, SingletonArgumentInfo.contextFree(TrampleValue.TrampleArgumentType::value));
+        register(registry, "difficultymode", DifficultyValue.DifficultyArgumentType.class, SingletonArgumentInfo.contextFree(DifficultyValue.DifficultyArgumentType::value));
     }
 }

@@ -1,7 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
-import com.fabbe50.fabsservertweaks.registries.gamerules.CropTrampleValue;
+import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -29,8 +29,8 @@ public class FarmBlockMixin extends Block {
     @Inject(method = "fallOn", at = @At("HEAD"), cancellable = true)
     private void injectFallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, double d, CallbackInfo ci) {
         if (level instanceof ServerLevel serverLevel) {
-            CropTrampleValue cropTrampleValue = serverLevel.getGameRules().getRule(ModGameRules.RULE_CROP_TRAMPLE_MODE);
-            if (cropTrampleValue.getValue().equals(CropTrampleValue.CropTrampleMode.FEATHER_FALLING)) {
+            TrampleValue trampleValue = serverLevel.getGameRules().getRule(ModGameRules.RULE_CROP_TRAMPLE_MODE);
+            if (trampleValue.getValue().equals(TrampleValue.TrampleMode.FEATHER_FALLING)) {
                 if (entity instanceof LivingEntity livingEntity) {
                     ItemStack boots = livingEntity.getItemBySlot(EquipmentSlot.FEET);
                     if (EnchantmentHelper.getItemEnchantmentLevel(serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), boots) > 0) {
@@ -38,7 +38,7 @@ public class FarmBlockMixin extends Block {
                         ci.cancel();
                     }
                 }
-            } else if (cropTrampleValue.getValue().equals(CropTrampleValue.CropTrampleMode.NO_TRAMPLE)) {
+            } else if (trampleValue.getValue().equals(TrampleValue.TrampleMode.NO_TRAMPLE)) {
                 super.fallOn(level, blockState, blockPos, entity, d);
                 ci.cancel();
             }

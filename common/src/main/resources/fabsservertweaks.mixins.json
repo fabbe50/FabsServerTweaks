@@ -17,6 +17,7 @@
     "ServerLevelMixin",
     "ShulkerMixin",
     "ThrownTridentMixin",
+    "TurtleEggBlockMixin",
     "ZombieMixin"
   ],
   "injectors": {

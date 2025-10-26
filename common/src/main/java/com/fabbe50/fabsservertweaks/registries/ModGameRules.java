@@ -1,7 +1,7 @@
 package com.fabbe50.fabsservertweaks.registries;
 
-import com.fabbe50.fabsservertweaks.registries.gamerules.CropTrampleValue;
-import com.fabbe50.fabsservertweaks.registries.gamerules.CropTrampleValue.CropTrampleMode;
+import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
+import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleMode;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameRules.BooleanValue;
 import net.minecraft.world.level.GameRules.Category;
@@ -13,7 +13,8 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_MOB_GRIEF_ZOMBIE;
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_EQUIPABLE;
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_FULL_DURABILITY;
-    public static final GameRules.Key<CropTrampleValue> RULE_CROP_TRAMPLE_MODE;
+    public static final GameRules.Key<TrampleValue> RULE_CROP_TRAMPLE_MODE;
+    public static final GameRules.Key<TrampleValue> RULE_TURTLE_EGG_TRAMPLE_MODE;
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_RANDOM_COLOR;
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_CAN_TELEPORT;
     public static final GameRules.Key<IntegerValue> RULE_SHULKER_SHELL_DROP_AMOUNT;
@@ -30,7 +31,8 @@ public class ModGameRules {
         RULE_MOB_GRIEF_ZOMBIE = GameRules.register("mobGriefZombie", Category.MOBS, BooleanValue.create(true));
         RULE_MOB_DROP_EQUIPABLE = GameRules.register("mobDropEquipable", Category.DROPS, BooleanValue.create(true));
         RULE_MOB_DROP_FULL_DURABILITY = GameRules.register("mobDropFullDurability", Category.DROPS, BooleanValue.create(false));
-        RULE_CROP_TRAMPLE_MODE = GameRules.register("cropTrampleMode", Category.MISC, CropTrampleValue.create(CropTrampleMode.NORMAL));
+        RULE_CROP_TRAMPLE_MODE = GameRules.register("cropTrampleMode", Category.MISC, TrampleValue.create(TrampleMode.FEATHER_FALLING));
+        RULE_TURTLE_EGG_TRAMPLE_MODE = GameRules.register("turtleEggTrampleMode", Category.MISC, TrampleValue.create(TrampleMode.FEATHER_FALLING));
         RULE_SHULKERS_RANDOM_COLOR = GameRules.register("shulkerRandomColor", Category.MOBS, BooleanValue.create(false));
         RULE_SHULKERS_CAN_TELEPORT = GameRules.register("shulkersCanTeleport", Category.MOBS, BooleanValue.create(true));
         RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
