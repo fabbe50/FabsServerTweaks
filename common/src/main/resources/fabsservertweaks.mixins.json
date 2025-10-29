@@ -7,6 +7,7 @@
     "ArgumentTypeInfosMixin",
     "BreakDoorGoalMixin",
     "CactusBlockMixin",
+    "CauldronBlockMixin",
     "CompassItemMixin",
     "EndermanTakeBlockGoalMixin",
     "FarmBlockMixin",
