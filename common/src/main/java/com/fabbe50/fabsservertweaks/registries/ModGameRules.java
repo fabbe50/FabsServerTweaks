@@ -30,6 +30,8 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_BETTER_HOES;
     public static final GameRules.Key<BooleanValue> RULE_WATER_DRIPSTONE_FILL_CAULDRON;
     public static final GameRules.Key<BooleanValue> RULE_LAVA_DRIPSTONE_FILL_CAULDRON;
+    public static final GameRules.Key<BooleanValue> RULE_RAIN_FILLS_CAULDRON;
+    public static final GameRules.Key<BooleanValue> RULE_SNOW_FILLS_CAULDRON;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -52,6 +54,8 @@ public class ModGameRules {
         RULE_BETTER_HOES = GameRules.register("betterHoes", Category.MISC, BooleanValue.create(true));
         RULE_WATER_DRIPSTONE_FILL_CAULDRON = GameRules.register("dripstoneFillCauldronWater", Category.MISC, BooleanValue.create(true));
         RULE_LAVA_DRIPSTONE_FILL_CAULDRON = GameRules.register("dripstoneFillCauldronLava", Category.MISC, BooleanValue.create(true));
+        RULE_RAIN_FILLS_CAULDRON = GameRules.register("rainFillsCauldron", Category.MISC, BooleanValue.create(true));
+        RULE_SNOW_FILLS_CAULDRON = GameRules.register("snowFillsCauldron", Category.MISC, BooleanValue.create(true));
     }
 
     public static void init() {}
