@@ -15,6 +15,7 @@
     "HoeItemMixin",
     "ItemStackMixin",
     "LiquidBlockMixin",
+    "LivingEntityMixin",
     "MobMixin",
     "PhantomMixin",
     "PlayerMixin",

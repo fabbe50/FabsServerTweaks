@@ -15,6 +15,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_MOB_GRIEF_ZOMBIE;
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_EQUIPABLE;
     public static final GameRules.Key<BooleanValue> RULE_MOB_DROP_FULL_DURABILITY;
+    public static final GameRules.Key<BooleanValue> RULE_MOB_DROPS_REQUIRE_PLAYER_KILL;
     public static final GameRules.Key<TrampleValue> RULE_CROP_TRAMPLE_MODE;
     public static final GameRules.Key<TrampleValue> RULE_TURTLE_EGG_TRAMPLE_MODE;
     public static final GameRules.Key<BooleanValue> RULE_SHULKERS_RANDOM_COLOR;
@@ -40,6 +41,7 @@ public class ModGameRules {
         RULE_MOB_GRIEF_ZOMBIE = GameRules.register("mobGriefZombie", Category.MOBS, BooleanValue.create(true));
         RULE_MOB_DROP_EQUIPABLE = GameRules.register("mobDropEquipable", Category.DROPS, BooleanValue.create(true));
         RULE_MOB_DROP_FULL_DURABILITY = GameRules.register("mobDropFullDurability", Category.DROPS, BooleanValue.create(false));
+        RULE_MOB_DROPS_REQUIRE_PLAYER_KILL = GameRules.register("mobDropsRequirePlayerKill", Category.DROPS, BooleanValue.create(false));
         RULE_CROP_TRAMPLE_MODE = GameRules.register("cropTrampleMode", Category.MISC, TrampleValue.create(TrampleMode.FEATHER_FALLING));
         RULE_TURTLE_EGG_TRAMPLE_MODE = GameRules.register("turtleEggTrampleMode", Category.MISC, TrampleValue.create(TrampleMode.FEATHER_FALLING));
         RULE_SHULKERS_RANDOM_COLOR = GameRules.register("shulkerRandomColor", Category.MOBS, BooleanValue.create(false));
