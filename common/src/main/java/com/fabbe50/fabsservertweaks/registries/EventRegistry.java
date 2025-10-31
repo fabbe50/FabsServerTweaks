@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
+import com.fabbe50.fabsservertweaks.commands.PresetCommand;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.ChanceUtil;
@@ -88,6 +89,7 @@ public class EventRegistry {
                         if (shulker_shells > 0) {
                             shulker.spawnAtLocation(serverLevel, new ItemStack(Items.SHULKER_SHELL, shulker_shells));
                             shulker.remove(Entity.RemovalReason.DISCARDED);
+                            return EventResult.interruptTrue();
                         }
                     }
                 }
@@ -96,6 +98,7 @@ public class EventRegistry {
         });
         CommandRegistrationEvent.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> {
             GotoCommand.register(commandDispatcher);
+            PresetCommand.register(commandDispatcher);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
             if (serverPlayer.level().getGameRules().getBoolean(ModGameRules.RULE_SHARE_SEED)) {
