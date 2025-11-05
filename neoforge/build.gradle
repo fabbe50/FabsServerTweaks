@@ -16,7 +16,7 @@ loom {
 
     runs {
         data {
-            data()
+            clientData()
             programArgs("--all", "--mod", "${mod_id}")
             programArgs("--output", generatedResources.absolutePath)
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)

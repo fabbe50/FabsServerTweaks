@@ -1,0 +1,371 @@
+{
+  "defaultCookTime": 200,
+  "defaultXp": 0.7,
+  "furnaceType": [
+    "furnace",
+    "blast_furnace"
+  ],
+  "ingredient": "minecraft:iron_helmet",
+  "tiers": [
+    {
+      "cookTime": 196,
+      "minPercent": 100,
+      "result": {
+        "count": 5,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 192,
+      "minPercent": 97,
+      "result": {
+        "count": 44,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 188,
+      "minPercent": 95,
+      "result": {
+        "count": 43,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 184,
+      "minPercent": 93,
+      "result": {
+        "count": 42,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 180,
+      "minPercent": 90,
+      "result": {
+        "count": 41,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 176,
+      "minPercent": 88,
+      "result": {
+        "count": 40,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 172,
+      "minPercent": 86,
+      "result": {
+        "count": 39,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 168,
+      "minPercent": 84,
+      "result": {
+        "count": 38,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 164,
+      "minPercent": 81,
+      "result": {
+        "count": 37,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 160,
+      "minPercent": 79,
+      "result": {
+        "count": 4,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 156,
+      "minPercent": 77,
+      "result": {
+        "count": 35,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 152,
+      "minPercent": 75,
+      "result": {
+        "count": 34,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 148,
+      "minPercent": 72,
+      "result": {
+        "count": 33,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 144,
+      "minPercent": 70,
+      "result": {
+        "count": 32,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 140,
+      "minPercent": 68,
+      "result": {
+        "count": 31,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 136,
+      "minPercent": 65,
+      "result": {
+        "count": 30,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 132,
+      "minPercent": 63,
+      "result": {
+        "count": 29,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 128,
+      "minPercent": 61,
+      "result": {
+        "count": 28,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 124,
+      "minPercent": 59,
+      "result": {
+        "count": 3,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 120,
+      "minPercent": 56,
+      "result": {
+        "count": 26,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 116,
+      "minPercent": 54,
+      "result": {
+        "count": 25,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 112,
+      "minPercent": 52,
+      "result": {
+        "count": 24,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 108,
+      "minPercent": 50,
+      "result": {
+        "count": 23,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 104,
+      "minPercent": 47,
+      "result": {
+        "count": 22,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 100,
+      "minPercent": 45,
+      "result": {
+        "count": 21,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 96,
+      "minPercent": 43,
+      "result": {
+        "count": 20,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 92,
+      "minPercent": 40,
+      "result": {
+        "count": 19,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 88,
+      "minPercent": 38,
+      "result": {
+        "count": 2,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 84,
+      "minPercent": 36,
+      "result": {
+        "count": 17,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 80,
+      "minPercent": 34,
+      "result": {
+        "count": 16,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 76,
+      "minPercent": 31,
+      "result": {
+        "count": 15,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 72,
+      "minPercent": 29,
+      "result": {
+        "count": 14,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 68,
+      "minPercent": 27,
+      "result": {
+        "count": 13,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 64,
+      "minPercent": 25,
+      "result": {
+        "count": 12,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 60,
+      "minPercent": 22,
+      "result": {
+        "count": 11,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 56,
+      "minPercent": 20,
+      "result": {
+        "count": 10,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 52,
+      "minPercent": 18,
+      "result": {
+        "count": 1,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 48,
+      "minPercent": 15,
+      "result": {
+        "count": 8,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 44,
+      "minPercent": 13,
+      "result": {
+        "count": 7,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 40,
+      "minPercent": 11,
+      "result": {
+        "count": 6,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 36,
+      "minPercent": 9,
+      "result": {
+        "count": 5,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 32,
+      "minPercent": 6,
+      "result": {
+        "count": 4,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 28,
+      "minPercent": 4,
+      "result": {
+        "count": 3,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 24,
+      "minPercent": 2,
+      "result": {
+        "count": 2,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 20,
+      "minPercent": 0,
+      "result": {
+        "count": 1,
+        "id": "minecraft:iron_nugget"
+      }
+    }
+  ]
+}
