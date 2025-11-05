@@ -23,6 +23,7 @@
     "PlayerMixin",
     "ServerLevelMixin",
     "ShulkerMixin",
+    "SnowballMixin",
     "ThrownTridentMixin",
     "TurtleEggBlockMixin",
     "ZombieMixin"
