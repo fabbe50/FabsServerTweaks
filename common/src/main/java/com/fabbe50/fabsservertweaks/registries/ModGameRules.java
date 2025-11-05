@@ -36,6 +36,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_BETTER_RAIL_PLACEMENT;
     public static final GameRules.Key<BooleanValue> RULE_SNOW_GOLEMS_SURVIVE_ON_ICE;
     public static final GameRules.Key<BooleanValue> RULE_SNOW_GOLEMS_GENERATE_SNOW;
+    public static final GameRules.Key<BooleanValue> RULE_NO_SOLICITING_SIGN;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -64,6 +65,7 @@ public class ModGameRules {
         RULE_BETTER_RAIL_PLACEMENT = GameRules.register("betterRailPlacement", Category.MISC, BooleanValue.create(false));
         RULE_SNOW_GOLEMS_SURVIVE_ON_ICE = GameRules.register("snow_golems_survive_on_ice", Category.MISC, BooleanValue.create(true));
         RULE_SNOW_GOLEMS_GENERATE_SNOW = GameRules.register("snow_golems_generate_snow", Category.MISC, BooleanValue.create(true));
+        RULE_NO_SOLICITING_SIGN = GameRules.register("no_soliciting_sign", Category.MISC, BooleanValue.create(true));
     }
 
     public static void init() {}

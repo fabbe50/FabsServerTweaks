@@ -2,6 +2,7 @@ package com.fabbe50.fabsservertweaks.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,23 @@ public class WorldUtil {
         }
 
         return blocks;
+    }
+
+    public static List<BlockPos> getBlockPositions(AABB box) {
+        List<BlockPos> positions = new ArrayList<>();
+
+        int minX = (int) Math.floor(box.minX);
+        int minY = (int) Math.floor(box.minY);
+        int minZ = (int) Math.floor(box.minZ);
+        int maxX = (int) Math.floor(box.maxX);
+        int maxY = (int) Math.floor(box.maxY);
+        int maxZ = (int) Math.floor(box.maxZ);
+
+        for (BlockPos pos : BlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
+            positions.add(pos.immutable()); // avoid mutable references
+        }
+
+        return positions;
     }
 
     public enum RelativePosition {

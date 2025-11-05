@@ -27,6 +27,7 @@
     "SnowGolemMixin",
     "ThrownTridentMixin",
     "TurtleEggBlockMixin",
+    "WanderingTraderSpawnerMixin",
     "ZombieMixin"
   ],
   "injectors": {

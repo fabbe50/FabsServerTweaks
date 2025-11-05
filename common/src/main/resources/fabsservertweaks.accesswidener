@@ -5,3 +5,4 @@ accessible method net/minecraft/world/level/GameRules$Type <init> (Ljava/util/fu
 accessible field net/minecraft/world/item/HoeItem TILLABLES Ljava/util/Map;
 accessible method net/minecraft/world/item/context/UseOnContext getHitResult ()Lnet/minecraft/world/phys/BlockHitResult;
 accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity recipesUsed Lit/unimi/dsi/fastutil/objects/Reference2IntOpenHashMap;
+accessible method net/minecraft/world/entity/npc/WanderingTraderSpawner spawn (Lnet/minecraft/server/level/ServerLevel;)Z

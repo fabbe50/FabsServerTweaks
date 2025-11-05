@@ -47,6 +47,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(true, minecraftServer);
             return true;
         }
     },
@@ -80,6 +81,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(false, minecraftServer);
             return true;
         }
     },
@@ -113,6 +115,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(true, minecraftServer);
             return true;
         }
     },
