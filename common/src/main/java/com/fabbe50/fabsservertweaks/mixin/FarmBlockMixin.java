@@ -4,14 +4,9 @@ import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
@@ -34,12 +29,12 @@ public class FarmBlockMixin extends Block {
             switch (trampleMode) {
                 case NO_TRAMPLE -> {
                     ci.cancel();
-                    super.stepOn(level, blockPos, blockState, entity);
+                    super.fallOn(level, blockState, blockPos, entity, d);
                 }
                 case FEATHER_FALLING -> {
                     if (EnchantmentUtil.hasFeatherFalling(livingEntity)) {
                         ci.cancel();
-                        super.stepOn(level, blockPos, blockState, entity);
+                        super.fallOn(level, blockState, blockPos, entity, d);
                     }
                 }
             }
