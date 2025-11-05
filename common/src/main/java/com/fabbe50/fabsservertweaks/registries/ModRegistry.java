@@ -3,6 +3,7 @@ package com.fabbe50.fabsservertweaks.registries;
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.loader.CauldronConversionLoader;
+import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.Registrar;
 import net.minecraft.core.registries.Registries;
@@ -24,5 +25,6 @@ public class ModRegistry {
     public static void init() {
         LogUtil.log("Setting up registry...");
         ReloadListenerRegistry.register(PackType.SERVER_DATA, CauldronConversionLoader.INSTANCE, Fabsservertweaks.location("cauldron_conversion"));
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, DurabilitySmeltLoader.INSTANCE, Fabsservertweaks.location("durability_smelting"));
     }
 }
