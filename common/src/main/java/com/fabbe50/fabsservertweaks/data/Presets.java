@@ -45,6 +45,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_RAIN_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             return true;
         }
     },
@@ -76,6 +78,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_RAIN_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             return true;
         }
     },
@@ -107,6 +111,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_RAIN_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_FILLS_CAULDRON).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_BETTER_RAIL_PLACEMENT).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             return true;
         }
     },
@@ -119,6 +125,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_RAIN_FILLS_CAULDRON).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_FILLS_CAULDRON).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(false, minecraftServer);
             return true;
         }
     };
