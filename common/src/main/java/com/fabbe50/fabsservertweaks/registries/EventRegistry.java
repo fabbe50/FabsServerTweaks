@@ -4,10 +4,7 @@ import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
-import com.fabbe50.fabsservertweaks.util.ChanceUtil;
-import com.fabbe50.fabsservertweaks.util.EffectUtil;
-import com.fabbe50.fabsservertweaks.util.ToolUtil;
-import com.fabbe50.fabsservertweaks.util.WorldUtil;
+import com.fabbe50.fabsservertweaks.util.*;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.networking.NetworkManager;
@@ -133,6 +130,15 @@ public class EventRegistry {
                 }
             }
             return InteractionResult.PASS;
+        });
+        BlockEvent.BREAK.register((level, pos, state, player, xp) -> {
+            if (level instanceof ServerLevel serverLevel) {
+                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+                if (EnchantmentUtil.hasTreeChopper(player, stack)) {
+                    EnchantmentUtil.performVeinMining(serverLevel, pos, 2, 256, player, stack, ModRegistry.TREE_CHOPPER_WHITELIST, ModRegistry.TREE_CHOPPER_ATTACHMENTS);
+                }
+            }
+            return EventResult.pass();
         });
     }
 

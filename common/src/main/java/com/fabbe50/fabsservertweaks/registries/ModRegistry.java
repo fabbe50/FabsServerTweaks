@@ -7,10 +7,12 @@ import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.Registrar;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 
 public class ModRegistry {
@@ -21,7 +23,12 @@ public class ModRegistry {
     public static final TagKey<Item> STACK_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_64"));
     public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("immune_to_cactus"));
+    public static final TagKey<Block> TREE_CHOPPER_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_whitelist"));
+    public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_attachments"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
+
+
+    public static final ResourceKey<Enchantment> TREE_CHOPPER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("tree_chopper"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");

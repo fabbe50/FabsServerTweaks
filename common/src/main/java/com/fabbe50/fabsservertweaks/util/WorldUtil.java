@@ -2,10 +2,24 @@ package com.fabbe50.fabsservertweaks.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GameMasterBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class WorldUtil {
     public static List<BlockPos> getBlocksInRadius(BlockPos center, int radius) {
@@ -65,6 +79,61 @@ public class WorldUtil {
         }
 
         return positions;
+    }
+
+    public static void breakBlocks(Level level, BlockPos dropPos, Set<BlockPos> positions, ServerPlayer player, ItemStack stack) {
+        List<ItemStack> drops = new ArrayList<>();
+        for (BlockPos pos : positions) {
+            BlockState state = level.getBlockState(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            Block block = state.getBlock();
+            if (checkGameMasterCondition(block, player)) {
+                level.sendBlockUpdated(pos, state, state, 3);
+                continue;
+            }
+            if (checkGameTypeCondition(player, level, pos)) {
+                continue;
+            }
+            if (!isPlayerInstaBuild(player)) {
+                drops.addAll(state.getDrops(new LootParams.Builder((ServerLevel) level).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, pos.getCenter())));
+                ToolUtil.hurtItem(1, (ServerLevel) level, stack, pos);
+            }
+            if (blockEntity != null) {
+                level.removeBlockEntity(pos);
+            }
+            level.removeBlock(pos, false);
+        }
+        Vec3 newDropPos = dropPos.getCenter();
+        for (ItemStack drop : drops) {
+            ItemEntity itemEntity = new ItemEntity(level, newDropPos.x(), newDropPos.y(), newDropPos.z(), drop);
+            itemEntity.setDeltaMovement(Vec3.ZERO);
+            level.addFreshEntity(itemEntity);
+        }
+    }
+
+    public static boolean checkGameMasterCondition(Block block, ServerPlayer player) {
+        if (block instanceof GameMasterBlock) {
+            if (player == null) {
+                return false;
+            }
+            return !player.canUseGameMasterBlocks();
+        }
+        return false;
+    }
+
+    public static boolean checkGameTypeCondition(ServerPlayer player, Level level, BlockPos pos) {
+        if (player == null) {
+            return false;
+        }
+        GameType type = isPlayerInstaBuild(player) ? GameType.CREATIVE : GameType.SURVIVAL;
+        return player.blockActionRestricted(level, pos, type);
+    }
+
+    public static boolean isPlayerInstaBuild(ServerPlayer player) {
+        if (player == null) {
+            return false;
+        }
+        return player.getAbilities().instabuild;
     }
 
     public enum RelativePosition {
