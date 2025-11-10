@@ -43,7 +43,7 @@ public class WanderingTraderSpawnerMixin {
     @Unique
     private boolean checkText(Component[] textLines) {
         for (Component component : textLines) {
-            if (component.getString().equals("No Soliciting")) {
+            if (component.getString().equalsIgnoreCase("No Soliciting")) {
                 return true;
             }
         }
