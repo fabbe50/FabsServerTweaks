@@ -21,6 +21,7 @@ public class ModRegistry {
     public static final TagKey<Item> STACK_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_64"));
     public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("immune_to_cactus"));
+    public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");
