@@ -135,7 +135,7 @@ public class EventRegistry {
             if (level instanceof ServerLevel serverLevel) {
                 ItemStack stack = player.getItemInHand(player.getUsedItemHand());
                 if (EnchantmentUtil.hasTreeChopper(player, stack)) {
-                    EnchantmentUtil.performVeinMining(serverLevel, pos, 2, 256, player, stack, ModRegistry.TREE_CHOPPER_WHITELIST, ModRegistry.TREE_CHOPPER_ATTACHMENTS);
+                    EnchantmentUtil.performTreeChop(serverLevel, pos, player, stack);
                 }
             }
             return EventResult.pass();
