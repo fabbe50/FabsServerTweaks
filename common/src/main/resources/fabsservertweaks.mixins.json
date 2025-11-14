@@ -7,6 +7,7 @@
     "AbstractFurnaceBlockEntityMixin",
     "ArgumentTypeInfosMixin",
     "BaseRailBlockMixin",
+    "BlockItemMixin",
     "BreakDoorGoalMixin",
     "CactusBlockMixin",
     "CauldronBlockMixin",
