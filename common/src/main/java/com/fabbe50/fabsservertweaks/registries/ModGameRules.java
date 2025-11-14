@@ -37,6 +37,11 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_SNOW_GOLEMS_SURVIVE_ON_ICE;
     public static final GameRules.Key<BooleanValue> RULE_SNOW_GOLEMS_GENERATE_SNOW;
     public static final GameRules.Key<BooleanValue> RULE_NO_SOLICITING_SIGN;
+    public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_AMETHYST_NODES;
+    public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_SPAWNERS;
+    public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS;
+    public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_TRIAL_VAULTS;
+    public static final GameRules.Key<BooleanValue> RULE_EXPANDED_BONE_MEAL;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -51,8 +56,8 @@ public class ModGameRules {
         RULE_SHULKERS_CAN_TELEPORT = GameRules.register("shulkersCanTeleport", Category.MOBS, BooleanValue.create(true));
         RULE_SHULKER_SHELL_DROP_AMOUNT = GameRules.register("shulkerShellDropAmount", Category.MOBS, IntegerValue.create(2));
         RULE_LOYALTY_TRIDENT_RETURNS_FROM_VOID = GameRules.register("tridentWithLoyaltyReturnsFromVoid", Category.MISC, BooleanValue.create(true));
-        RULE_ALWAYS_CONVERT_VILLAGERS = GameRules.register("villagerAlwaysTurnIntoZombies", Category.MISC, BooleanValue.create(true));
-        RULE_MOBS_SPAWN_WITH_EFFECTS = GameRules.register("mobsSpawnWithEffects", Category.MISC, BooleanValue.create(true));
+        RULE_ALWAYS_CONVERT_VILLAGERS = GameRules.register("villagerAlwaysTurnIntoZombies", Category.MOBS, BooleanValue.create(true));
+        RULE_MOBS_SPAWN_WITH_EFFECTS = GameRules.register("mobsSpawnWithEffects", Category.MOBS, BooleanValue.create(true));
         RULE_SPAWN_WITH_EFFECT_MODE = GameRules.register("spawnWithEffectMode", Category.MISC, DifficultyValue.create(Difficulty.SCALE_BY_DIFFICULTY));
         RULE_FRIENDLY_PHANTOMS = GameRules.register("friendlyPhantoms", Category.MOBS, BooleanValue.create(false));
         RULE_NO_COBBLE_GEN = GameRules.register("noCobbleGen", Category.MISC, BooleanValue.create(false));
@@ -63,13 +68,14 @@ public class ModGameRules {
         RULE_RAIN_FILLS_CAULDRON = GameRules.register("rainFillsCauldron", Category.MISC, BooleanValue.create(true));
         RULE_SNOW_FILLS_CAULDRON = GameRules.register("snowFillsCauldron", Category.MISC, BooleanValue.create(true));
         RULE_BETTER_RAIL_PLACEMENT = GameRules.register("betterRailPlacement", Category.MISC, BooleanValue.create(false));
-        RULE_SNOW_GOLEMS_SURVIVE_ON_ICE = GameRules.register("snow_golems_survive_on_ice", Category.MISC, BooleanValue.create(true));
-        RULE_SNOW_GOLEMS_GENERATE_SNOW = GameRules.register("snow_golems_generate_snow", Category.MISC, BooleanValue.create(true));
-        RULE_NO_SOLICITING_SIGN = GameRules.register("no_soliciting_sign", Category.MISC, BooleanValue.create(true));
+        RULE_SNOW_GOLEMS_SURVIVE_ON_ICE = GameRules.register("snow_golems_survive_on_ice", Category.MOBS, BooleanValue.create(true));
+        RULE_SNOW_GOLEMS_GENERATE_SNOW = GameRules.register("snow_golems_generate_snow", Category.MOBS, BooleanValue.create(true));
+        RULE_NO_SOLICITING_SIGN = GameRules.register("no_soliciting_sign", Category.MOBS, BooleanValue.create(true));
         RULE_SILK_TOUCHABLE_AMETHYST_NODES = GameRules.register("silk_touchable_amethyst_nodes", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_SPAWNERS = GameRules.register("silk_touchable_spawners", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS = GameRules.register("silk_touchable_trial_spawners", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_TRIAL_VAULTS = GameRules.register("silk_touchable_trial_vaults", Category.MISC, BooleanValue.create(false));
+        RULE_EXPANDED_BONE_MEAL = GameRules.register("expanded_bone_meal", Category.MISC, BooleanValue.create(false));
     }
 
     public static void init() {}
