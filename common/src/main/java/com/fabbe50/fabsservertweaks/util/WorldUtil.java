@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GameMasterBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -101,7 +102,8 @@ public class WorldUtil {
             if (blockEntity != null) {
                 level.removeBlockEntity(pos);
             }
-            level.removeBlock(pos, false);
+//            level.removeBlock(pos, false);
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
         Vec3 newDropPos = dropPos.getCenter();
         for (ItemStack drop : drops) {
