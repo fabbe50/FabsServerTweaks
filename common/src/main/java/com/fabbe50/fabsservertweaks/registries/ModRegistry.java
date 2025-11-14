@@ -27,6 +27,11 @@ public class ModRegistry {
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_attachments"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
 
+    public static final TagKey<Item> TUBE_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "tube_corals"));
+    public static final TagKey<Item> BRAIN_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "brain_corals"));
+    public static final TagKey<Item> BUBBLE_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "bubble_corals"));
+    public static final TagKey<Item> FIRE_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "fire_corals"));
+    public static final TagKey<Item> HORN_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "horn_corals"));
 
     public static final ResourceKey<Enchantment> TREE_CHOPPER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("tree_chopper"));
 

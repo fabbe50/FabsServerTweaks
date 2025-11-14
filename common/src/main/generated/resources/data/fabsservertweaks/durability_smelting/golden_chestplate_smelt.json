@@ -2,8 +2,8 @@
   "defaultCookTime": 200,
   "defaultXp": 0.7,
   "furnaceType": [
-    "furnace",
-    "blast_furnace"
+    "blast_furnace",
+    "furnace"
   ],
   "ingredient": "minecraft:golden_chestplate",
   "tiers": [

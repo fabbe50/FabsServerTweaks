@@ -5,7 +5,11 @@
       "conditions": {
         "items": [
           {
-            "items": "minecraft:calcite"
+            "items": [
+              "minecraft:coal_block",
+              "minecraft:bone_block",
+              "minecraft:snowball"
+            ]
           }
         ]
       },

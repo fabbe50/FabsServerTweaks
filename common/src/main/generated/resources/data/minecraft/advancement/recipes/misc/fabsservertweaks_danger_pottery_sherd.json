@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "danger_pottery_sherd": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:danger_pottery_sherd",
+              "minecraft:clay_ball"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fabsservertweaks_danger_pottery_sherd"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "danger_pottery_sherd"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fabsservertweaks_danger_pottery_sherd"
+    ]
+  }
+}

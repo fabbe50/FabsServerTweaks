@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "flow_pottery_sherd": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:flow_pottery_sherd",
+              "minecraft:clay_ball"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fabsservertweaks_flow_pottery_sherd"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "flow_pottery_sherd"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fabsservertweaks_flow_pottery_sherd"
+    ]
+  }
+}
