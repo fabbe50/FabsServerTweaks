@@ -8,9 +8,17 @@ import com.fabbe50.fabsservertweaks.util.*;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.networking.NetworkManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +27,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -29,11 +38,14 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventRegistry {
@@ -135,6 +147,55 @@ public class EventRegistry {
             }
             return InteractionResult.PASS;
         });
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            if (player.level() instanceof ServerLevel serverLevel) {
+                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+                if (stack.is(Items.BONE_MEAL) && !player.getCooldowns().isOnCooldown(stack)) {
+                    BlockState state = serverLevel.getBlockState(pos);
+                    if (state.is(ModRegistry.MOD_BONE_MEALABLE)) {
+                        RandomSource random = serverLevel.getRandom();
+                        if (state.is(Blocks.LILY_PAD)) {
+                            List<BlockPos> blockPositions = WorldUtil.getBlockPositions(new AABB(pos).inflate(1));
+                            for (BlockPos blockPos : blockPositions) {
+                                if (serverLevel.getRandom().nextInt(3) == 0) {
+                                    BlockState checkState = serverLevel.getBlockState(blockPos);
+                                    if (checkState.isAir() && (serverLevel.getBlockState(blockPos.below()).is(Blocks.WATER) && serverLevel.getFluidState(blockPos.below()).is(Fluids.WATER))) {
+                                        serverLevel.setBlockAndUpdate(blockPos, state);
+                                        handleBoneMealUsed(serverLevel, pos, player, stack, true);
+                                        return InteractionResult.SUCCESS;
+                                    }
+                                }
+                            }
+                        } else if (state.is(Blocks.SEA_PICKLE)) {
+                            int pickles = state.getValue(SeaPickleBlock.PICKLES);
+                            if (state.getValue(SeaPickleBlock.WATERLOGGED) && pickles < 4) {
+                                serverLevel.setBlockAndUpdate(pos, state.setValue(SeaPickleBlock.PICKLES, pickles + 1));
+                                handleBoneMealUsed(serverLevel, pos.above(), player, stack, true);
+                                return InteractionResult.SUCCESS;
+                            }
+                        } else if ((state.is(Blocks.SUGAR_CANE) || state.is(Blocks.CACTUS))) {
+                            if (growInColumn(serverLevel, pos, state.getBlock(), 3)) {
+                                handleBoneMealUsed(serverLevel, pos, player, stack, false);
+                                return InteractionResult.SUCCESS;
+                            }
+                        } else if (state.is(Blocks.PUMPKIN_STEM) || state.is(Blocks.MELON_STEM)) {
+                            Block fruit = state.is(Blocks.PUMPKIN_STEM) ? Blocks.PUMPKIN : Blocks.MELON;
+                            Block stem = state.is(Blocks.PUMPKIN_STEM) ? Blocks.ATTACHED_PUMPKIN_STEM : Blocks.ATTACHED_MELON_STEM;
+                            if (growFromStem(serverLevel, pos, state, random, fruit, stem)) {
+                                handleBoneMealUsed(serverLevel, pos, player, stack, true);
+                                return InteractionResult.SUCCESS;
+                            }
+                        } else {
+                            if (dropItem(serverLevel, pos, new ItemStack(state.getBlock()))) {
+                                handleBoneMealUsed(serverLevel, pos, player, stack, true);
+                                return InteractionResult.SUCCESS;
+                            }
+                        }
+                    }
+                }
+            }
+            return InteractionResult.PASS;
+        });
         BlockEvent.BREAK.register((level, pos, state, player, xp) -> {
             if (level instanceof ServerLevel serverLevel) {
                 ItemStack toolStack = player.getItemInHand(player.getUsedItemHand());
@@ -194,6 +255,101 @@ public class EventRegistry {
             }
             return EventResult.pass();
         });
+    }
+
+    private static void handleBoneMealUsed(ServerLevel serverLevel, BlockPos pos, Player player, ItemStack stack, boolean doParticle) {
+        if (doParticle) {
+            boneMealParticle(serverLevel, pos);
+        }
+        stack.shrink(1);
+        player.getCooldowns().addCooldown(stack, 4);
+    }
+
+    private static void boneMealParticle(ServerLevel serverLevel, BlockPos pos) {
+        RandomSource random = serverLevel.getRandom();
+        double offset = 0.5;
+        double posX = pos.getX() + offset;
+        double posY = pos.getY() + offset;
+        double posZ = pos.getZ() + offset;
+        double distX = random.nextDouble() / 2.5;
+        double distY = random.nextDouble() / 2.5;
+        double distZ = random.nextDouble() / 2.5;
+        serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, posX, posY, posZ, 10, distX, distY, distZ, 1);
+    }
+
+    private static boolean growFromStem(ServerLevel serverLevel, BlockPos pos, BlockState state, RandomSource random, Block fruit, Block stem) {
+        if (state.getValue(StemBlock.AGE) == StemBlock.MAX_AGE) {
+            if (random.nextInt(4) == 0) {
+                for (int i = 0; i < 6; i++) {
+                    Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+                    BlockPos blockPos2 = pos.relative(direction);
+                    BlockState blockState2 = serverLevel.getBlockState(blockPos2.below());
+                    if (serverLevel.getBlockState(blockPos2).isAir() && (blockState2.is(Blocks.FARMLAND) || blockState2.is(BlockTags.DIRT))) {
+                        serverLevel.setBlockAndUpdate(blockPos2, fruit.defaultBlockState());
+                        serverLevel.setBlockAndUpdate(pos, stem.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction));
+                        return true;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean growInColumn(ServerLevel serverLevel, BlockPos pos, Block block, int maxHeight) {
+        List<BlockPos> positions = WorldUtil.getBlockPositions(new AABB(pos).inflate(0, maxHeight - 1, 0));
+        int canesInColumn = 0;
+        for (BlockPos blockPos : positions) {
+            if (serverLevel.getBlockState(blockPos).is(block)) {
+                canesInColumn++;
+            }
+        }
+        RandomSource random = serverLevel.getRandom();
+        if (canesInColumn < maxHeight) {
+            BlockPos above = pos.above();
+            for (int i = 1; i < maxHeight; i++) {
+                BlockState newState = serverLevel.getBlockState(above);
+                if (newState.is(Blocks.CACTUS_FLOWER)) {
+                    return false;
+                }
+                if (newState.isAir()) {
+                    if (block == Blocks.CACTUS && random.nextInt(10) == 0) {
+                        block = Blocks.CACTUS_FLOWER;
+                    }
+                    if (random.nextBoolean()) {
+                        serverLevel.setBlockAndUpdate(above, block.defaultBlockState());
+                    }
+                    boneMealParticle(serverLevel, above);
+                    return true;
+                }
+                above = above.above();
+            }
+        } else if (block == Blocks.CACTUS && canesInColumn == maxHeight) {
+            return tryToGrowCactusFlower(serverLevel, pos, random, maxHeight);
+        }
+        return false;
+    }
+
+    private static boolean tryToGrowCactusFlower(ServerLevel serverLevel, BlockPos pos, RandomSource random, int maxHeight) {
+        BlockPos newPos = pos.above();
+        BlockState newState = serverLevel.getBlockState(newPos);
+        int tries = maxHeight + 1;
+        while (!newState.isAir()) {
+            if (newState.is(Blocks.CACTUS_FLOWER)) {
+                return false;
+            }
+            newPos = newPos.above();
+            newState = serverLevel.getBlockState(newPos);
+            if (tries == 0) {
+                break;
+            }
+            tries--;
+        }
+        if (random.nextInt(4) == 0) {
+            serverLevel.setBlockAndUpdate(newPos, Blocks.CACTUS_FLOWER.defaultBlockState());
+        }
+        boneMealParticle(serverLevel, newPos);
+        return true;
     }
 
     private static boolean dropItemWithData(Level level, BlockPos pos, ItemStack stack) {
