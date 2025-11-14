@@ -48,6 +48,10 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
             return true;
         }
     },
@@ -82,6 +86,10 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
             return true;
         }
     },
@@ -116,6 +124,10 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_NO_SOLICITING_SIGN).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(true, minecraftServer);
             return true;
         }
     },

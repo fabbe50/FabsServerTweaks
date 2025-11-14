@@ -66,6 +66,10 @@ public class ModGameRules {
         RULE_SNOW_GOLEMS_SURVIVE_ON_ICE = GameRules.register("snow_golems_survive_on_ice", Category.MISC, BooleanValue.create(true));
         RULE_SNOW_GOLEMS_GENERATE_SNOW = GameRules.register("snow_golems_generate_snow", Category.MISC, BooleanValue.create(true));
         RULE_NO_SOLICITING_SIGN = GameRules.register("no_soliciting_sign", Category.MISC, BooleanValue.create(true));
+        RULE_SILK_TOUCHABLE_AMETHYST_NODES = GameRules.register("silk_touchable_amethyst_nodes", Category.MISC, BooleanValue.create(false));
+        RULE_SILK_TOUCHABLE_SPAWNERS = GameRules.register("silk_touchable_spawners", Category.MISC, BooleanValue.create(false));
+        RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS = GameRules.register("silk_touchable_trial_spawners", Category.MISC, BooleanValue.create(false));
+        RULE_SILK_TOUCHABLE_TRIAL_VAULTS = GameRules.register("silk_touchable_trial_vaults", Category.MISC, BooleanValue.create(false));
     }
 
     public static void init() {}

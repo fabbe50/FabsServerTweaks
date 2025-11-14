@@ -42,6 +42,10 @@ public class EnchantmentUtil {
         return hasEnchantment(livingEntity, stack, ModRegistry.TREE_CHOPPER);
     }
 
+    public static boolean hasSilkTouch(LivingEntity livingEntity, ItemStack stack) {
+        return hasEnchantment(livingEntity, stack, Enchantments.SILK_TOUCH);
+    }
+
     public static boolean hasEnchantment(LivingEntity livingEntity, ItemStack stack, ResourceKey<Enchantment> enchantmentKey) {
         Holder<Enchantment> enchantmentHolder = livingEntity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantmentKey);
         if (stack.isEmpty()) {

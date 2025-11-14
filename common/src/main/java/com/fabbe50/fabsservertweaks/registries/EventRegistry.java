@@ -22,10 +22,14 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -133,13 +137,82 @@ public class EventRegistry {
         });
         BlockEvent.BREAK.register((level, pos, state, player, xp) -> {
             if (level instanceof ServerLevel serverLevel) {
-                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
-                if (EnchantmentUtil.hasTreeChopper(player, stack)) {
-                    EnchantmentUtil.performTreeChop(serverLevel, pos, player, stack);
+                ItemStack toolStack = player.getItemInHand(player.getUsedItemHand());
+                if (EnchantmentUtil.hasTreeChopper(player, toolStack)) {
+                    EnchantmentUtil.performTreeChop(serverLevel, pos, player, toolStack);
+                }
+                if (EnchantmentUtil.hasSilkTouch(player, toolStack)) {
+                    if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {
+                        if (dropItemWithData(level, pos, new ItemStack(Blocks.SPAWNER))) {
+                            return EventResult.interruptTrue();
+                        }
+                    }
+                    if (state.is(Blocks.BUDDING_AMETHYST) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES)) {
+                        Block.popResource(level, pos, new ItemStack(Items.BUDDING_AMETHYST));
+                        return EventResult.interruptTrue();
+                    }
+                    if (state.is(Blocks.TRIAL_SPAWNER) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS)) {
+                        if (dropItemWithData(level, pos, new ItemStack(Blocks.TRIAL_SPAWNER))) {
+                            return EventResult.interruptTrue();
+                        }
+                    }
+                    if (state.is(Blocks.VAULT) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS)) {
+                        if (dropItemWithData(level, pos, new ItemStack(Blocks.VAULT))) {
+                            return EventResult.interruptTrue();
+                        }
+                    }
                 }
             }
             return EventResult.pass();
         });
+        BlockEvent.PLACE.register((level, pos, state, placer) -> {
+            if (level instanceof ServerLevel && placer instanceof Player player && state.is(Blocks.SPAWNER)) {
+                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+                CustomData customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
+                if (!customData.isEmpty()) {
+                    BlockEntityType<?> blockEntityType = customData.parseEntityType(level.registryAccess(), Registries.BLOCK_ENTITY_TYPE);
+                    if (blockEntityType == null) {
+                        return EventResult.pass();
+                    }
+                    level.setBlockAndUpdate(pos, state);
+
+                    BlockEntity blockEntity = level.getBlockEntity(pos);
+                    if (blockEntity != null) {
+                        BlockEntityType<?> blockEntityType2 = blockEntity.getType();
+                        if (blockEntityType != blockEntityType2) {
+                            return EventResult.pass();
+                        }
+
+                        if (customData.loadInto(blockEntity, level.registryAccess())) {
+                            blockEntity.applyComponentsFromItemStack(stack);
+                            blockEntity.setChanged();
+                            stack.shrink(1);
+                            return EventResult.interruptTrue();
+                        }
+                    }
+                }
+            }
+            return EventResult.pass();
+        });
+    }
+
+    private static boolean dropItemWithData(Level level, BlockPos pos, ItemStack stack) {
+        BlockEntity spawnerBlockEntity = level.getBlockEntity(pos);
+        if (spawnerBlockEntity != null) {
+            TagValueOutput tagValueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+            spawnerBlockEntity.saveWithId(tagValueOutput);
+            stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(tagValueOutput.buildResult()));
+            Block.popResource(level, pos, stack);
+            level.removeBlockEntity(pos);
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean dropItem(Level level, BlockPos pos, ItemStack stack) {
+        ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        return level.addFreshEntity(itemEntity);
     }
 
     private static boolean shouldApplyEffect(ServerLevel level, RandomSource random, DifficultyValue.Difficulty difficulty) {
