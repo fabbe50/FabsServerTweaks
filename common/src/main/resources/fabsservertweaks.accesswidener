@@ -8,3 +8,4 @@ accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEnti
 accessible method net/minecraft/world/entity/npc/WanderingTraderSpawner spawn (Lnet/minecraft/server/level/ServerLevel;)Z
 accessible field net/minecraft/data/recipes/RecipeProvider items Lnet/minecraft/core/HolderGetter;
 accessible method net/minecraft/world/entity/projectile/ThrownExperienceBottle onHit (Lnet/minecraft/world/phys/HitResult;)V
+accessible method net/minecraft/world/entity/animal/wolf/Wolf getSoundVariant ()Lnet/minecraft/core/Holder;
