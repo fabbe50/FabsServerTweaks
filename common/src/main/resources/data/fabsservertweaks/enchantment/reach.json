@@ -30,6 +30,6 @@
   "slots": [
     "chest"
   ],
-  "supported_items": "#minecraft:enchantable/chest_armor",
+  "supported_items": "#fabsservertweaks:enchantable/chest_pieces",
   "weight": 1
 }
