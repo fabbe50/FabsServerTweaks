@@ -4,6 +4,7 @@ import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
+import com.fabbe50.fabsservertweaks.events.ItemStackEvent;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.*;
@@ -341,6 +342,22 @@ public class EventRegistry {
                 }
             }
             return EventResult.pass();
+        });
+        ItemStackEvent.CREATED.register(stack -> {
+            if (stack.is(ItemTags.BEDS)) {
+                ItemStackUtil.addLore(stack, "Naming a bed \"Sleeping Bag\", let's you sleep in it without setting your spawn.");
+            }
+            if (stack.is(ModRegistry.IMMUNE_TO_CACTUS_DAMAGE)) {
+                ItemStackUtil.addLore(stack, "Immune to cactus damage.");
+            }
+            if (stack.is(Items.COMPASS)) {
+                if (stack.get(DataComponents.LODESTONE_TRACKER) == null) {
+                    ItemStackUtil.addLore(stack, "Bind to a lodestone to be able to teleport to it using ender pearls.");
+                } else {
+                    ItemStackUtil.removeLore(stack, "Bind to a lodestone to be able to teleport to it using ender pearls.");
+                    ItemStackUtil.addLore(stack, "Right click to teleport using ender pearls.");
+                }
+            }
         });
     }
 
