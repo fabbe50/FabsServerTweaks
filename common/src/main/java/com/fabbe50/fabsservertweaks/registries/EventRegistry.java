@@ -152,6 +152,16 @@ public class EventRegistry {
             if (player.level() instanceof ServerLevel serverLevel) {
                 ItemStack stack = player.getItemInHand(player.getUsedItemHand());
                 BlockState state = serverLevel.getBlockState(pos);
+                if (stack.is(Items.GLASS_BOTTLE) && state.is(Blocks.ENCHANTING_TABLE) && !player.isShiftKeyDown()) {
+                    ItemStack xpBottle = new ItemStack(Items.EXPERIENCE_BOTTLE);
+                    CompoundTag tag = new CompoundTag();
+                    int exp = XPUtil.removeLevels(player, 1);
+                    tag.putInt("xp", exp);
+                    xpBottle.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+                    stack.shrink(1);
+                    player.addItem(xpBottle);
+                    return InteractionResult.SUCCESS;
+                }
                 if (stack.is(Items.BONE_MEAL) && !player.getCooldowns().isOnCooldown(stack)) {
                     if (state.is(ModRegistry.MOD_BONE_MEALABLE)) {
                         RandomSource random = serverLevel.getRandom();
@@ -277,6 +287,19 @@ public class EventRegistry {
                 }
             }
             return EventResult.pass();
+        });
+        InteractionEvent.RIGHT_CLICK_ITEM.register((player, hand) -> {
+            ItemStack stack = player.getItemInHand(hand);
+            if (stack.is(Items.EXPERIENCE_BOTTLE)) {
+                CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+                if (tag.contains("xp")) {
+                    int xpPoints = tag.getInt("xp").get();
+                    XPUtil.addExperiencePoints(player, xpPoints);
+                    stack.shrink(1);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            return InteractionResult.PASS;
         });
     }
 

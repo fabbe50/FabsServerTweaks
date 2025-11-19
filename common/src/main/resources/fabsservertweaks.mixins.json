@@ -27,6 +27,7 @@
     "SnowballMixin",
     "SnowGolemMixin",
     "SpiderMixin",
+    "ThrownExperienceBottleMixin",
     "ThrownTridentMixin",
     "TurtleEggBlockMixin",
     "WanderingTraderSpawnerMixin",
