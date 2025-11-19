@@ -23,6 +23,7 @@
     "PhantomMixin",
     "PlayerMixin",
     "ServerLevelMixin",
+    "ServerPlayerMixin",
     "ShulkerMixin",
     "SnowballMixin",
     "SnowGolemMixin",

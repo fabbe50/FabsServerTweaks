@@ -18,6 +18,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
@@ -26,6 +28,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
@@ -45,6 +51,7 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -305,6 +312,32 @@ public class EventRegistry {
             if (livingEntity.level() instanceof ServerLevel serverLevel) {
                 if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
                     return EventResult.interruptTrue();
+                }
+            }
+            return EventResult.pass();
+        });
+        PlayerEvent.ATTACK_ENTITY.register((player, level, target, hand, result) -> {
+            if (level instanceof ServerLevel serverLevel) {
+                if (!serverLevel.getGameRules().getBoolean(ModGameRules.RULE_PET_FRIENDLY_FIRE) && target instanceof TamableAnimal tamableAnimal) {
+                    if (tamableAnimal.isOwnedBy(player)) {
+                        switch (tamableAnimal) {
+                            case Wolf wolf -> {
+                                ServerUtil.sendSound(serverLevel, player, wolf, wolf.getSoundVariant().value().pantSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                ServerUtil.sendParticle(serverLevel, ParticleTypes.HEART, wolf, 15, 0.5, 0.3);
+                            }
+                            case Cat cat -> {
+                                ServerUtil.sendSound(serverLevel, player, cat, SoundEvents.CAT_PURR, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                ServerUtil.sendParticle(serverLevel, ParticleTypes.HEART, cat, new Vec3(0, -0.2, 0), 15, 0.5, 0.3);
+                            }
+                            case Parrot parrot -> {
+                                ServerUtil.sendSound(serverLevel, player, parrot, parrot.getAmbientSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                ServerUtil.sendParticle(serverLevel, ParticleTypes.HEART, parrot, new Vec3(0, -0.3, 0), 15, 0.3, 0.3);
+                            }
+                            default -> {
+                            }
+                        }
+                        return EventResult.interruptTrue();
+                    }
                 }
             }
             return EventResult.pass();

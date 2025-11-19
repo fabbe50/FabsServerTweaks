@@ -44,6 +44,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_EXPANDED_BONE_MEAL;
     public static final GameRules.Key<BooleanValue> RULE_SLEEPING_BAGS_ENABLED;
     public static final GameRules.Key<BooleanValue> RULE_SAFE_CANT_SLEEP;
+    public static final GameRules.Key<BooleanValue> RULE_PET_FRIENDLY_FIRE;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -80,6 +81,7 @@ public class ModGameRules {
         RULE_EXPANDED_BONE_MEAL = GameRules.register("expanded_bone_meal", Category.MISC, BooleanValue.create(true));
         RULE_SLEEPING_BAGS_ENABLED = GameRules.register("sleepingBagsEnabled", Category.MISC, BooleanValue.create(true));
         RULE_SAFE_CANT_SLEEP = GameRules.register("safeCantSleep", Category.MISC, BooleanValue.create(false));
+        RULE_PET_FRIENDLY_FIRE = GameRules.register("petFriendlyFire", Category.MISC, BooleanValue.create(false));
     }
 
     public static void init() {}
