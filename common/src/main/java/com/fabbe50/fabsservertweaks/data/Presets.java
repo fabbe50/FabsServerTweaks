@@ -52,6 +52,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(true, minecraftServer);
             return true;
         }
     },
@@ -90,6 +91,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(false, minecraftServer);
             return true;
         }
     },
@@ -128,6 +130,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(true, minecraftServer);
             return true;
         }
     },

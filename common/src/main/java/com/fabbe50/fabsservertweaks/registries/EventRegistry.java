@@ -2,6 +2,8 @@ package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
+import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
+import com.fabbe50.fabsservertweaks.events.BedEvents;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.*;
@@ -13,9 +15,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -147,8 +151,8 @@ public class EventRegistry {
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             if (player.level() instanceof ServerLevel serverLevel) {
                 ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+                BlockState state = serverLevel.getBlockState(pos);
                 if (stack.is(Items.BONE_MEAL) && !player.getCooldowns().isOnCooldown(stack)) {
-                    BlockState state = serverLevel.getBlockState(pos);
                     if (state.is(ModRegistry.MOD_BONE_MEALABLE)) {
                         RandomSource random = serverLevel.getRandom();
                         if (state.is(Blocks.LILY_PAD)) {
@@ -199,7 +203,7 @@ public class EventRegistry {
                 if (EnchantmentUtil.hasTreeChopper(player, toolStack)) {
                     EnchantmentUtil.performTreeChop(serverLevel, pos, player, toolStack);
                 }
-                if (EnchantmentUtil.hasSilkTouch(player, toolStack)) {
+                if (EnchantmentUtil.hasSilkTouch(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
                     if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {
                         if (dropItemWithData(level, pos, new ItemStack(Blocks.SPAWNER))) {
                             return EventResult.interruptTrue();
@@ -220,32 +224,54 @@ public class EventRegistry {
                         }
                     }
                 }
+                if (state.is(BlockTags.BEDS) && !WorldUtil.isPlayerInstaBuild(player)) {
+                    BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
+                    Component customName = BedNameStore.getAndRemove(level, bedOrigin);
+                    if (customName != null) {
+                        ItemStack stack = new ItemStack(state.getBlock().asItem());
+                        if (stack.is(ItemTags.BEDS)) {
+                            BedUtil.breakBed(level, pos, state);
+                            stack.set(DataComponents.CUSTOM_NAME, customName);
+                            dropItem(level, pos, stack);
+                        }
+                        return EventResult.interruptTrue();
+                    }
+                }
             }
             return EventResult.pass();
         });
         BlockEvent.PLACE.register((level, pos, state, placer) -> {
-            if (level instanceof ServerLevel && placer instanceof Player player && state.is(Blocks.SPAWNER)) {
+            if (level instanceof ServerLevel && placer instanceof Player player) {
                 ItemStack stack = player.getItemInHand(player.getUsedItemHand());
-                CustomData customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
-                if (!customData.isEmpty()) {
-                    BlockEntityType<?> blockEntityType = customData.parseEntityType(level.registryAccess(), Registries.BLOCK_ENTITY_TYPE);
-                    if (blockEntityType == null) {
-                        return EventResult.pass();
+                if (state.is(BlockTags.BEDS)) {
+                    Component component = stack.getCustomName();
+                    if (component != null) {
+                        BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
+                        BedNameStore.put(level, bedOrigin, component);
                     }
-                    level.setBlockAndUpdate(pos, state);
-
-                    BlockEntity blockEntity = level.getBlockEntity(pos);
-                    if (blockEntity != null) {
-                        BlockEntityType<?> blockEntityType2 = blockEntity.getType();
-                        if (blockEntityType != blockEntityType2) {
+                }
+                if (state.is(Blocks.SPAWNER)) {
+                    CustomData customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
+                    if (!customData.isEmpty()) {
+                        BlockEntityType<?> blockEntityType = customData.parseEntityType(level.registryAccess(), Registries.BLOCK_ENTITY_TYPE);
+                        if (blockEntityType == null) {
                             return EventResult.pass();
                         }
+                        level.setBlockAndUpdate(pos, state);
 
-                        if (customData.loadInto(blockEntity, level.registryAccess())) {
-                            blockEntity.applyComponentsFromItemStack(stack);
-                            blockEntity.setChanged();
-                            stack.shrink(1);
-                            return EventResult.interruptTrue();
+                        BlockEntity blockEntity = level.getBlockEntity(pos);
+                        if (blockEntity != null) {
+                            BlockEntityType<?> blockEntityType2 = blockEntity.getType();
+                            if (blockEntityType != blockEntityType2) {
+                                return EventResult.pass();
+                            }
+
+                            if (customData.loadInto(blockEntity, level.registryAccess())) {
+                                blockEntity.applyComponentsFromItemStack(stack);
+                                blockEntity.setChanged();
+                                stack.shrink(1);
+                                return EventResult.interruptTrue();
+                            }
                         }
                     }
                 }

@@ -42,6 +42,7 @@ public class ModGameRules {
     public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS;
     public static final GameRules.Key<BooleanValue> RULE_SILK_TOUCHABLE_TRIAL_VAULTS;
     public static final GameRules.Key<BooleanValue> RULE_EXPANDED_BONE_MEAL;
+    public static final GameRules.Key<BooleanValue> RULE_SLEEPING_BAGS_ENABLED;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = GameRules.register("mobGriefEnderman", Category.MOBS, BooleanValue.create(true));
@@ -76,6 +77,7 @@ public class ModGameRules {
         RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS = GameRules.register("silk_touchable_trial_spawners", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_TRIAL_VAULTS = GameRules.register("silk_touchable_trial_vaults", Category.MISC, BooleanValue.create(false));
         RULE_EXPANDED_BONE_MEAL = GameRules.register("expanded_bone_meal", Category.MISC, BooleanValue.create(false));
+        RULE_SLEEPING_BAGS_ENABLED = GameRules.register("sleepingBagsEnabled", Category.MISC, BooleanValue.create(true));
     }
 
     public static void init() {}
