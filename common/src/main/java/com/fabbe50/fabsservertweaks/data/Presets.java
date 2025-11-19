@@ -10,6 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.GameRules;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -150,6 +151,19 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_RAIN_FILLS_CAULDRON).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_FILLS_CAULDRON).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW).set(false, minecraftServer);
+            return true;
+        }
+    },
+    CREATIVE_DEFAULTS(4, "creative_defaults") {
+        @Override
+        public boolean adjustRules(ServerLevel serverLevel) {
+            MinecraftServer minecraftServer = serverLevel.getServer();
+            serverLevel.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(GameRules.RULE_WEATHER_CYCLE).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(GameRules.RULE_DO_TRADER_SPAWNING).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(GameRules.RULE_DOFIRETICK).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).set(true, minecraftServer);
             return true;
         }
     };
