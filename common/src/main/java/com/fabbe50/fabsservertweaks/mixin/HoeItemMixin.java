@@ -5,6 +5,7 @@ import com.fabbe50.fabsservertweaks.util.ToolUtil;
 import com.fabbe50.fabsservertweaks.util.WorldUtil;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -56,6 +59,7 @@ public abstract class HoeItemMixin extends Item {
         if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
             BlockPos blockPos = useOnContext.getClickedPos();
             ItemStack toolStack = useOnContext.getItemInHand();
+            Direction face = useOnContext.getClickedFace();
             AtomicBoolean flag = new AtomicBoolean(false);
             BlockState originState = level.getBlockState(blockPos);
             if (TILLABLES.get(originState.getBlock()) != null) {
@@ -76,7 +80,7 @@ public abstract class HoeItemMixin extends Item {
                         }
                     }
                 });
-            } else if (originState.is(BlockTags.CROPS)){
+            } else if (originState.is(BlockTags.CROPS)) {
                 WorldUtil.getBlocksInRadius(blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(blockPos1 -> {
                     BlockState state = level.getBlockState(blockPos1);
                     if (state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state)) {
@@ -86,6 +90,21 @@ public abstract class HoeItemMixin extends Item {
                             level.addFreshEntity(itemEntity);
                         }
                         level.setBlockAndUpdate(blockPos1, cropBlock.getStateForAge(0));
+                    }
+                });
+            } else if (originState.is(Blocks.COCOA)) {
+                WorldUtil.getBlocksInRadius(face, blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(pos -> {
+                    BlockState state = level.getBlockState(pos);
+                    if (state.getBlock() instanceof CocoaBlock) {
+                        int age = state.getValue(CocoaBlock.AGE);
+                        if (age == CocoaBlock.MAX_AGE) {
+                            List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, toolStack).withParameter(LootContextParams.ORIGIN, pos.getCenter()));
+                            for (ItemStack dropStack : stacks) {
+                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
+                                level.addFreshEntity(itemEntity);
+                            }
+                            level.setBlockAndUpdate(pos, state.setValue(CocoaBlock.AGE, 0));
+                        }
                     }
                 });
             }
