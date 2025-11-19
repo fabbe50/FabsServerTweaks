@@ -54,6 +54,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_EXPANDED_BONE_MEAL).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SAFE_CANT_SLEEP).set(false, minecraftServer);
             return true;
         }
     },
@@ -94,6 +95,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_EXPANDED_BONE_MEAL).set(false, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(false, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SAFE_CANT_SLEEP).set(false, minecraftServer);
             return true;
         }
     },
@@ -134,6 +136,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_EXPANDED_BONE_MEAL).set(true, minecraftServer);
             serverLevel.getGameRules().getRule(ModGameRules.RULE_SLEEPING_BAGS_ENABLED).set(true, minecraftServer);
+            serverLevel.getGameRules().getRule(ModGameRules.RULE_SAFE_CANT_SLEEP).set(false, minecraftServer);
             return true;
         }
     },

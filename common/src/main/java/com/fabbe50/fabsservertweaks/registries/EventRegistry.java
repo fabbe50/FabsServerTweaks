@@ -301,6 +301,14 @@ public class EventRegistry {
             }
             return InteractionResult.PASS;
         });
+        BedEvents.START_SLEEPING.register((livingEntity, pos) -> {
+            if (livingEntity.level() instanceof ServerLevel serverLevel) {
+                if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
+                    return EventResult.interruptTrue();
+                }
+            }
+            return EventResult.pass();
+        });
     }
 
     private static void handleBoneMealUsed(ServerLevel serverLevel, BlockPos pos, Player player, ItemStack stack, boolean doParticle) {
