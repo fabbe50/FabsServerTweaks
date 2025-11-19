@@ -24,6 +24,10 @@ import java.util.Set;
 
 public class WorldUtil {
     public static List<BlockPos> getBlocksInRadius(BlockPos center, int radius) {
+        return getBlocksInRadius(Direction.UP, center, radius);
+    }
+
+    public static List<BlockPos> getBlocksInRadius(Direction facing, BlockPos center, int radius) {
         List<BlockPos> blocks = new ArrayList<>();
 
         int cx = center.getX();
@@ -35,7 +39,11 @@ public class WorldUtil {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 if (x * x + z * z <= rSq) {
-                    blocks.add(new BlockPos(cx + x, cy, cz + z));
+                    switch (facing) {
+                        case NORTH, SOUTH -> blocks.add(new BlockPos(cx + x, cz + z, cy));
+                        case EAST, WEST -> blocks.add(new BlockPos(cy, cx + x, cz + z));
+                        case null, default -> blocks.add(new BlockPos(cx + x, cy, cz + z));
+                    }
                 }
             }
         }
@@ -102,7 +110,6 @@ public class WorldUtil {
             if (blockEntity != null) {
                 level.removeBlockEntity(pos);
             }
-//            level.removeBlock(pos, false);
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
         Vec3 newDropPos = dropPos.getCenter();

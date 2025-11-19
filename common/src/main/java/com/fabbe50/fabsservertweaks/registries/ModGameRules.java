@@ -76,7 +76,7 @@ public class ModGameRules {
         RULE_SILK_TOUCHABLE_SPAWNERS = GameRules.register("silk_touchable_spawners", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS = GameRules.register("silk_touchable_trial_spawners", Category.MISC, BooleanValue.create(false));
         RULE_SILK_TOUCHABLE_TRIAL_VAULTS = GameRules.register("silk_touchable_trial_vaults", Category.MISC, BooleanValue.create(false));
-        RULE_EXPANDED_BONE_MEAL = GameRules.register("expanded_bone_meal", Category.MISC, BooleanValue.create(false));
+        RULE_EXPANDED_BONE_MEAL = GameRules.register("expanded_bone_meal", Category.MISC, BooleanValue.create(true));
         RULE_SLEEPING_BAGS_ENABLED = GameRules.register("sleepingBagsEnabled", Category.MISC, BooleanValue.create(true));
     }
 
