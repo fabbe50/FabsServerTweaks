@@ -76,12 +76,16 @@ public class Recipes extends RecipeProvider {
                 new ModIngredient(Items.BLUE_DYE, 2),
                 new ModIngredient(Items.YELLOW_DYE)
         );
-        shapeless(RecipeCategory.MISC, Items.CLAY, 2, "clay", "has_dirt_and_sand",
-                new ModIngredient(Items.DIRT),
+        shapeless(RecipeCategory.MISC, Items.CLAY, 2, "clay", "has_mud_and_sand",
+                new ModIngredient(Items.MUD),
                 new ModIngredient(Items.SAND)
         );
         shapeless(RecipeCategory.MISC, Items.MAGENTA_DYE, 2, "spore_blossom", "magenta_dye", "has_spore_blossom",
                 new ModIngredient(Items.SPORE_BLOSSOM)
+        );
+        shapeless(RecipeCategory.MISC, Items.RED_SAND, 1, "dye_sand_red", "has_sand_and_red_dye",
+                new ModIngredient(Items.SAND),
+                new ModIngredient(Items.RED_DYE)
         );
         shapeless9x9(RecipeCategory.MISC, Items.TUBE_CORAL_BLOCK, "has_tube_coral_block", ModRegistry.TUBE_CORALS);
         shapeless9x9(RecipeCategory.MISC, Items.BRAIN_CORAL_BLOCK, "has_brain_coral_block", ModRegistry.BRAIN_CORALS);
@@ -89,8 +93,9 @@ public class Recipes extends RecipeProvider {
         shapeless9x9(RecipeCategory.MISC, Items.FIRE_CORAL_BLOCK, "has_fire_coral_block", ModRegistry.FIRE_CORALS);
         shapeless9x9(RecipeCategory.MISC, Items.HORN_CORAL_BLOCK, "has_horn_coral_block", ModRegistry.HORN_CORALS);
 
-        woodOverrides();
         stoneTypeStairOverrides();
+        woodOverrides();
+        combineSlabs();
         potterySherdRecipes();
     }
 
@@ -173,6 +178,70 @@ public class Recipes extends RecipeProvider {
         trapdoorRecipe(Items.CRIMSON_TRAPDOOR, Items.CRIMSON_PLANKS, "wooden", "crimson");
         trapdoorRecipe(Items.WARPED_TRAPDOOR, Items.WARPED_PLANKS, "wooden", "warped");
         trapdoorRecipe(Items.BAMBOO_TRAPDOOR, Items.BAMBOO_PLANKS, "wooden", "bamboo");
+    }
+
+    private void combineSlabs() {
+        combineSlabRecipeWhenChiseled(Items.TUFF, Items.TUFF_SLAB, "tuff");
+        combineSlabRecipe(Items.POLISHED_TUFF, Items.POLISHED_TUFF_SLAB, "polished_tuff");
+        combineSlabRecipeWhenChiseled(Items.TUFF_BRICKS, Items.TUFF_BRICK_SLAB, "tuff_brick");
+        combineSlabRecipeWhenChiseled(Items.CUT_COPPER, Items.CUT_COPPER_SLAB, "cut_copper");
+        combineSlabRecipeWhenChiseled(Items.EXPOSED_CUT_COPPER, Items.EXPOSED_CUT_COPPER_SLAB, "exposed_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.WEATHERED_CUT_COPPER, Items.WEATHERED_CUT_COPPER_SLAB, "weathered_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.OXIDIZED_CUT_COPPER, Items.OXIDIZED_CUT_COPPER_SLAB, "oxidized_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.WAXED_CUT_COPPER, Items.WAXED_CUT_COPPER_SLAB, "waxed_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.WAXED_EXPOSED_CUT_COPPER, Items.WAXED_EXPOSED_CUT_COPPER_SLAB, "waxed_exposed_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.WAXED_WEATHERED_CUT_COPPER, Items.WAXED_WEATHERED_CUT_COPPER_SLAB, "waxed_weathered_cut_copper");
+        combineSlabRecipeWhenChiseled(Items.WAXED_OXIDIZED_CUT_COPPER, Items.WAXED_OXIDIZED_CUT_COPPER_SLAB, "waxed_oxidized_cut_copper");
+        combineSlabRecipe(Items.OAK_PLANKS, Items.OAK_SLAB, "oak_slab");
+        combineSlabRecipe(Items.SPRUCE_PLANKS, Items.SPRUCE_SLAB, "spruce_slab");
+        combineSlabRecipe(Items.BIRCH_PLANKS, Items.BIRCH_SLAB, "birch_slab");
+        combineSlabRecipe(Items.JUNGLE_PLANKS, Items.JUNGLE_SLAB, "jungle_slab");
+        combineSlabRecipe(Items.ACACIA_PLANKS, Items.ACACIA_SLAB, "acacia_slab");
+        combineSlabRecipe(Items.CHERRY_PLANKS, Items.CHERRY_SLAB, "cherry_slab");
+        combineSlabRecipe(Items.DARK_OAK_PLANKS, Items.DARK_OAK_SLAB, "dark_oak_slab");
+        combineSlabRecipe(Items.PALE_OAK_PLANKS, Items.PALE_OAK_SLAB, "pale_oak_slab");
+        combineSlabRecipe(Items.MANGROVE_PLANKS, Items.MANGROVE_SLAB, "mangrove_slab");
+        combineSlabRecipeWhenChiseled(Items.BAMBOO_PLANKS, Items.BAMBOO_SLAB, "bamboo_slab");
+        combineSlabRecipe(Items.BAMBOO_MOSAIC, Items.BAMBOO_MOSAIC_SLAB, "bamboo_mosaic_slab");
+        combineSlabRecipe(Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB, "crimson_slab");
+        combineSlabRecipe(Items.WARPED_PLANKS, Items.WARPED_SLAB, "warped_slab");
+        combineSlabRecipe(Items.STONE, Items.STONE_SLAB, "stone");
+        combineSlabRecipe(Items.SMOOTH_STONE, Items.SMOOTH_STONE_SLAB, "smooth_stone");
+        combineSlabRecipeWhenChiseled(Items.SANDSTONE, Items.SANDSTONE_SLAB, "sandstone");
+        combineSlabRecipe(Items.CUT_SANDSTONE, Items.SMOOTH_SANDSTONE_SLAB, "cut_sandstone");
+        combineSlabRecipe(Items.COBBLESTONE, Items.COBBLESTONE_SLAB, "cobblestone");
+        combineSlabRecipe(Items.BRICKS, Items.BRICK_SLAB, "brick");
+        combineSlabRecipeWhenChiseled(Items.STONE_BRICKS, Items.STONE_BRICK_SLAB, "stone_brick");
+        combineSlabRecipe(Items.MUD_BRICKS, Items.MUD_BRICK_SLAB, "mud_brick");
+        combineSlabRecipeWhenChiseled(Items.NETHER_BRICKS, Items.NETHER_BRICK_SLAB, "nether_brick");
+        combineSlabRecipeWhenChiseled(Items.QUARTZ_BLOCK, Items.QUARTZ_SLAB, "quartz");
+        combineSlabRecipeWhenChiseled(Items.RED_SANDSTONE, Items.RED_SANDSTONE_SLAB, "red_sandstone");
+        combineSlabRecipe(Items.CUT_RED_SANDSTONE, Items.CUT_RED_SANDSTONE_SLAB, "cut_red_sandstone");
+        combineSlabRecipeWhenChiseled(Items.PURPUR_BLOCK, Items.PURPUR_SLAB, "purpur");
+        combineSlabRecipe(Items.PRISMARINE, Items.PRISMARINE_SLAB, "prismarine");
+        combineSlabRecipe(Items.PRISMARINE_BRICKS, Items.PRISMARINE_BRICK_SLAB, "prismarine_brick");
+        combineSlabRecipe(Items.DARK_PRISMARINE, Items.DARK_PRISMARINE_SLAB, "dark_prismarine");
+        combineSlabRecipeWhenChiseled(Items.RESIN_BRICKS, Items.RESIN_BRICK_SLAB, "resin_brick");
+        combineSlabRecipe(Items.POLISHED_GRANITE, Items.POLISHED_GRANITE_SLAB, "polished_granite");
+        combineSlabRecipe(Items.SMOOTH_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE_SLAB, "smooth_red_sandstone");
+        combineSlabRecipe(Items.MOSSY_STONE_BRICKS, Items.MOSSY_STONE_BRICK_SLAB, "mossy_stone_brick");
+        combineSlabRecipe(Items.POLISHED_DIORITE, Items.POLISHED_DIORITE_SLAB, "polished_diorite");
+        combineSlabRecipe(Items.MOSSY_COBBLESTONE, Items.MOSSY_COBBLESTONE_SLAB, "mossy_cobblestone");
+        combineSlabRecipe(Items.END_STONE_BRICKS, Items.END_STONE_BRICK_SLAB, "end_stone_brick");
+        combineSlabRecipe(Items.SMOOTH_SANDSTONE, Items.SMOOTH_SANDSTONE_SLAB, "smooth_sandstone");
+        combineSlabRecipe(Items.SMOOTH_QUARTZ, Items.SMOOTH_QUARTZ_SLAB, "smooth_quartz");
+        combineSlabRecipe(Items.GRANITE, Items.GRANITE_SLAB, "granite");
+        combineSlabRecipe(Items.ANDESITE, Items.ANDESITE_SLAB, "andesite");
+        combineSlabRecipe(Items.RED_NETHER_BRICKS, Items.RED_NETHER_BRICK_SLAB, "red_nether_brick");
+        combineSlabRecipe(Items.POLISHED_ANDESITE, Items.POLISHED_ANDESITE_SLAB, "polished_andesite");
+        combineSlabRecipe(Items.DIORITE, Items.DIORITE_SLAB, "diorite");
+        combineSlabRecipeWhenChiseled(Items.COBBLED_DEEPSLATE, Items.COBBLED_DEEPSLATE_SLAB, "cobbled_deepslate");
+        combineSlabRecipe(Items.POLISHED_DEEPSLATE, Items.POLISHED_DEEPSLATE_SLAB, "polished_deepslate");
+        combineSlabRecipe(Items.DEEPSLATE_BRICKS, Items.DEEPSLATE_BRICK_SLAB, "deepslate_brick");
+        combineSlabRecipe(Items.DEEPSLATE_TILES, Items.DEEPSLATE_TILE_SLAB, "deepslate_tile");
+        combineSlabRecipe(Items.BLACKSTONE, Items.BLACKSTONE_SLAB, "blackstone");
+        combineSlabRecipeWhenChiseled(Items.POLISHED_BLACKSTONE, Items.POLISHED_BLACKSTONE_SLAB, "polished_blackstone");
+        combineSlabRecipe(Items.POLISHED_BLACKSTONE_BRICKS, Items.POLISHED_BLACKSTONE_BRICK_SLAB, "polished_blackstone_brick");
     }
 
     private final List<Item> sherds = List.of(
@@ -271,6 +340,32 @@ public class Recipes extends RecipeProvider {
         recipeName = recipeName + "_stairs";
         smallStair(item, ingredient).group(group).unlockedBy(unlockedBy, trigger).save(this.output, recipeName + "_small");
         bigStair(item, ingredient).group(group).unlockedBy(unlockedBy, trigger).save(this.output);
+    }
+
+    private void combineSlabRecipe(ItemLike item, ItemLike ingredient, String recipeName) {
+        combineSlabRecipe(item, Ingredient.of(ingredient), has(ingredient), recipeName);
+    }
+
+    private void combineSlabRecipe(ItemLike item, Ingredient ingredient, Criterion<InventoryChangeTrigger.TriggerInstance> trigger, String recipeName) {
+        shaped(RecipeCategory.BUILDING_BLOCKS, item)
+                .pattern("S")
+                .pattern("S")
+                .define('S', ingredient)
+                .unlockedBy("has_" + recipeName + "_slab", trigger)
+                .save(this.output, Fabsservertweaks.MOD_ID + "_combine_" + recipeName + "_slabs");
+    }
+
+    private void combineSlabRecipeWhenChiseled(ItemLike item, ItemLike ingredient, String recipeName) {
+        combineSlabRecipeWhenChiseled(item, Ingredient.of(ingredient), has(ingredient), recipeName);
+    }
+
+    private void combineSlabRecipeWhenChiseled(ItemLike item, Ingredient ingredient, Criterion<InventoryChangeTrigger.TriggerInstance> trigger, String recipeName) {
+        shaped(RecipeCategory.BUILDING_BLOCKS, item, 2)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ingredient)
+                .unlockedBy("has_" + recipeName + "_slab", trigger)
+                .save(this.output, Fabsservertweaks.MOD_ID + "_combine_" + recipeName + "_slabs");
     }
 
     protected @NotNull RecipeBuilder smallStair(@NotNull ItemLike item, @NotNull Ingredient ingredient) {

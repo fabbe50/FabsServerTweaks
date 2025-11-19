@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_dirt_and_sand": {
+    "has_mud_and_sand": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:dirt",
+              "minecraft:mud",
               "minecraft:sand"
             ]
           }
@@ -24,7 +24,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_dirt_and_sand"
+      "has_mud_and_sand"
     ]
   ],
   "rewards": {

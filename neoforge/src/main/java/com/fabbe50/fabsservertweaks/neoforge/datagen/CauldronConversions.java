@@ -35,6 +35,7 @@ public class CauldronConversions extends JsonCodecProvider<CauldronConversionDat
         cauldronConversion("purple_concrete_powder_to_concrete", Items.PURPLE_CONCRETE_POWDER, Items.PURPLE_CONCRETE);
         cauldronConversion("magenta_concrete_powder_to_concrete", Items.MAGENTA_CONCRETE_POWDER, Items.MAGENTA_CONCRETE);
         cauldronConversion("pink_concrete_powder_to_concrete", Items.PINK_CONCRETE_POWDER, Items.PINK_CONCRETE);
+        cauldronConversion("dirt_to_mud", Items.DIRT, Items.MUD);
     }
 
     private void cauldronConversion(String location, Item input, Item output) {
