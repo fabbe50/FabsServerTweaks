@@ -1,0 +1,19 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "LGPLv3"
+issueTrackerURL="https://fabbe50/FabsServerTweaks/issues"
+
+[[mods]]
+modId = "fabsservertweaks"
+version = "${version}"
+displayName = "${name}"
+authors = "fabbe50"
+description = ""
+logoFile = "assets/fabsservertweaks/icon.png"
+logoBlur = false
+
+[[mixins]]
+config = "fabsservertweaks-common.mixins.json"
+
+[[mixins]]
+config = "fabsservertweaks-neoforge.mixins.json"
