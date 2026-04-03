@@ -6,6 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.repository.Pack;
 
 public enum BuiltinDatapack {
+    VANILLA_ENCHANTMENTS_OVERRIDES("vanilla_enchantments_overrides", "Vanilla Enchantments Overrides", Pack.Position.TOP, false, true),
     CUSTOM_ENCHANTMENTS("custom_enchantments", "Custom Enchantments", Pack.Position.TOP, true, true),
     CUSTOM_RECIPES("custom_recipes", "Custom Recipes", Pack.Position.BOTTOM, true, false),
     CAULDRON_CONVERSIONS("cauldron_conversions", "Cauldron Conversions", Pack.Position.TOP, true, false),
@@ -16,6 +17,7 @@ public enum BuiltinDatapack {
     WOOD_OVERRIDE_RECIPES("wood_override_recipes", "Wood Override Recipes", Pack.Position.TOP, true, false),
     COMBINE_SLABS_RECIPES("combine_slabs_recipes", "Combine Slab Recipes", Pack.Position.TOP, true, false),
     POTTERY_SHERD_DUPLICATION("pottery_sherd_duplication", "Pottery Sherd Duplication", Pack.Position.TOP, true, false),
+    ORE_MINER("ore_miner", "Ore Miner", Pack.Position.TOP, false, true),
     ;
 
     private final String path;

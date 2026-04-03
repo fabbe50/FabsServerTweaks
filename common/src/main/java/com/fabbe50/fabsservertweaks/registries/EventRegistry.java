@@ -1,7 +1,10 @@
 package com.fabbe50.fabsservertweaks.registries;
 
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
+import com.fabbe50.fabsservertweaks.commands.NicknameCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
+import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
 import com.fabbe50.fabsservertweaks.events.ItemStackEvent;
@@ -17,8 +20,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.HoverEvent.ShowText;
+import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -26,12 +32,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -41,7 +44,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -58,6 +63,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventRegistry {
+    private static final ThreadLocal<Boolean> REBROADCASTING_CHAT = ThreadLocal.withInitial(() -> false);
     public static void init() {
         EntityEvent.ADD.register((entity, level) -> {
             if (level instanceof ServerLevel serverLevel) {
@@ -121,6 +127,7 @@ public class EventRegistry {
         CommandRegistrationEvent.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> {
             GotoCommand.register(commandDispatcher);
             PresetCommand.register(commandDispatcher);
+            NicknameCommand.register(commandDispatcher);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
             if (Fabsservertweaks.CONFIG.shareSeed) {
@@ -354,6 +361,35 @@ public class EventRegistry {
                 }
             }
         });
+        ChatEvent.RECEIVED.register((player, component) -> {
+            if (!(player instanceof ServerPlayer serverPlayer)) {
+                return EventResult.pass();
+            }
+            if (REBROADCASTING_CHAT.get()) {
+                return EventResult.pass();
+            }
+            String nickname = NicknameRegistry.getNickname(serverPlayer);
+            if (nickname.equals(serverPlayer.getName().getString())) {
+                return EventResult.pass();
+            }
+
+            try {
+                REBROADCASTING_CHAT.set(true);
+                Component nicknameComponent = Component.literal(nickname).withStyle(style -> style.withHoverEvent(new ShowText(serverPlayer.getName())).withColor(NicknameRegistry.getNicknameColor(serverPlayer)));
+//                PlayerChatMessage unsignedMessage = PlayerChatMessage.unsigned(serverPlayer.getUUID(), component.getString()).withUnsignedContent(component);
+                ChatType.Bound bound = ChatType.bind(ChatType.CHAT, serverPlayer.registryAccess(), nicknameComponent);
+//                serverPlayer.level().getServer().getPlayerList().broadcastChatMessage(unsignedMessage, serverPlayer, bound);
+                ClientboundDisguisedChatPacket packet = new ClientboundDisguisedChatPacket(component, bound);
+                for (ServerPlayer target : serverPlayer.level().getServer().getPlayerList().getPlayers()) {
+                    target.connection.send(packet);
+                }
+
+                return EventResult.interruptFalse();
+            } finally {
+                REBROADCASTING_CHAT.set(false);
+            }
+        });
+    }
     }
 
     private static void handleBoneMealUsed(ServerLevel serverLevel, BlockPos pos, Player player, ItemStack stack, boolean doParticle) {
