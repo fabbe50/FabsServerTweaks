@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsservertweaks_nautilus_armor",
+  "key": {
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "II ",
+    "II ",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:iron_nautilus_armor"
+  }
+}

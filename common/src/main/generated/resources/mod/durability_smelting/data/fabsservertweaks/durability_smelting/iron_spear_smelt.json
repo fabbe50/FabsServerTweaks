@@ -1,0 +1,83 @@
+{
+  "defaultCookTime": 200,
+  "defaultXp": 0.7,
+  "furnaceType": [
+    "furnace",
+    "blast_furnace"
+  ],
+  "ingredient": "minecraft:iron_spear",
+  "tiers": [
+    {
+      "cookTime": 196,
+      "minPercent": 100,
+      "result": {
+        "count": 1,
+        "id": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "cookTime": 174,
+      "minPercent": 87,
+      "result": {
+        "count": 8,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 152,
+      "minPercent": 75,
+      "result": {
+        "count": 7,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 130,
+      "minPercent": 62,
+      "result": {
+        "count": 6,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 108,
+      "minPercent": 50,
+      "result": {
+        "count": 5,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 86,
+      "minPercent": 37,
+      "result": {
+        "count": 4,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 64,
+      "minPercent": 25,
+      "result": {
+        "count": 3,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 42,
+      "minPercent": 12,
+      "result": {
+        "count": 2,
+        "id": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "cookTime": 20,
+      "minPercent": 0,
+      "result": {
+        "count": 1,
+        "id": "minecraft:iron_nugget"
+      }
+    }
+  ]
+}

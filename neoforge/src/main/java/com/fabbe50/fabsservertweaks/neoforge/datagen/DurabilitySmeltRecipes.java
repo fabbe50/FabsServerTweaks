@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.data.JsonCodecProvider;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,16 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class DurabilitySmeltRecipes extends JsonCodecProvider<DurabilitySmeltData> {
-    public DurabilitySmeltRecipes(PackOutput output, PackOutput.Target target, Codec<DurabilitySmeltData> codec, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    private final String type;
+
+    public DurabilitySmeltRecipes(PackOutput output, String type, PackOutput.Target target, Codec<DurabilitySmeltData> codec, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, target, Fabsservertweaks.location("durability_smelting").getPath(), codec, lookupProvider, Fabsservertweaks.MOD_ID);
+        this.type = type;
+    }
+
+    @Override
+    public @NonNull String getName() {
+        return super.getName() + "_" + this.type;
     }
 
     @Override
@@ -31,16 +40,33 @@ public class DurabilitySmeltRecipes extends JsonCodecProvider<DurabilitySmeltDat
                 new ToolValueData(Items.CHAINMAIL_LEGGINGS, "leggings", 3, 9),
                 new ToolValueData(Items.CHAINMAIL_BOOTS, "boots", 2, 9)
         ), Set.of("furnace", "blast_furnace"), 200, 0.7f, Items.IRON_INGOT, Items.IRON_NUGGET);
+        toolGroupRecipe("copper", List.of(
+                new ToolValueData(Items.COPPER_SWORD, "sword", 2, 9),
+                new ToolValueData(Items.COPPER_PICKAXE, "pickaxe", 3, 9),
+                new ToolValueData(Items.COPPER_AXE, "axe", 3, 9),
+                new ToolValueData(Items.COPPER_SHOVEL, "shovel", 1, 9),
+                new ToolValueData(Items.COPPER_HOE, "hoe", 2, 9),
+                new ToolValueData(Items.COPPER_SPEAR, "spear", 1, 9),
+                new ToolValueData(Items.COPPER_HELMET, "helmet", 5, 9),
+                new ToolValueData(Items.COPPER_CHESTPLATE, "chestplate", 8, 9),
+                new ToolValueData(Items.COPPER_LEGGINGS, "leggings", 7, 9),
+                new ToolValueData(Items.COPPER_BOOTS, "boots", 4, 9),
+                new ToolValueData(Items.COPPER_HORSE_ARMOR, "horse_armor", 7, 9),
+                new ToolValueData(Items.COPPER_NAUTILUS_ARMOR, "nautilus_armor", 7, 9)
+        ), Set.of("furnace", "blast_furnace"), 200, 0.7f, Items.COPPER_INGOT, Items.COPPER_NUGGET);
         toolGroupRecipe("iron", List.of(
                 new ToolValueData(Items.IRON_SWORD, "sword", 2, 9),
                 new ToolValueData(Items.IRON_PICKAXE, "pickaxe", 3, 9),
                 new ToolValueData(Items.IRON_AXE, "axe", 3, 9),
                 new ToolValueData(Items.IRON_SHOVEL, "shovel", 1, 9),
                 new ToolValueData(Items.IRON_HOE, "hoe", 2, 9),
+                new ToolValueData(Items.IRON_SPEAR, "spear", 1, 9),
                 new ToolValueData(Items.IRON_HELMET, "helmet", 5, 9),
                 new ToolValueData(Items.IRON_CHESTPLATE, "chestplate", 8, 9),
                 new ToolValueData(Items.IRON_LEGGINGS, "leggings", 7, 9),
-                new ToolValueData(Items.IRON_BOOTS, "boots", 4, 9)
+                new ToolValueData(Items.IRON_BOOTS, "boots", 4, 9),
+                new ToolValueData(Items.IRON_HORSE_ARMOR, "horse_armor", 7, 9),
+                new ToolValueData(Items.IRON_NAUTILUS_ARMOR, "nautilus_armor", 7, 9)
         ), Set.of("furnace", "blast_furnace"), 200, 0.7f, Items.IRON_INGOT, Items.IRON_NUGGET);
         toolGroupRecipe("golden", List.of(
                 new ToolValueData(Items.GOLDEN_SWORD, "sword", 2, 9),
@@ -48,10 +74,13 @@ public class DurabilitySmeltRecipes extends JsonCodecProvider<DurabilitySmeltDat
                 new ToolValueData(Items.GOLDEN_AXE, "axe", 3, 9),
                 new ToolValueData(Items.GOLDEN_SHOVEL, "shovel", 1, 9),
                 new ToolValueData(Items.GOLDEN_HOE, "hoe", 2, 9),
+                new ToolValueData(Items.GOLDEN_SPEAR, "spear", 1, 9),
                 new ToolValueData(Items.GOLDEN_HELMET, "helmet", 5, 9),
                 new ToolValueData(Items.GOLDEN_CHESTPLATE, "chestplate", 8, 9),
                 new ToolValueData(Items.GOLDEN_LEGGINGS, "leggings", 7, 9),
-                new ToolValueData(Items.GOLDEN_BOOTS, "boots", 4, 9)
+                new ToolValueData(Items.GOLDEN_BOOTS, "boots", 4, 9),
+                new ToolValueData(Items.GOLDEN_HORSE_ARMOR, "horse_armor", 7, 9),
+                new ToolValueData(Items.GOLDEN_NAUTILUS_ARMOR, "nautilus_armor", 7, 9)
         ), Set.of("furnace", "blast_furnace"), 200, 0.7f, Items.GOLD_INGOT, Items.GOLD_NUGGET);
     }
 

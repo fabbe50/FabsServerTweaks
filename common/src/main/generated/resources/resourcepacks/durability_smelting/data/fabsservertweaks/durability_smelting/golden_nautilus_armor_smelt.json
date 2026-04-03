@@ -1,0 +1,515 @@
+{
+  "defaultCookTime": 200,
+  "defaultXp": 0.7,
+  "furnaceType": [
+    "furnace",
+    "blast_furnace"
+  ],
+  "ingredient": "minecraft:golden_nautilus_armor",
+  "tiers": [
+    {
+      "cookTime": 200,
+      "minPercent": 100,
+      "result": {
+        "count": 7,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 200,
+      "minPercent": 98,
+      "result": {
+        "count": 62,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 200,
+      "minPercent": 96,
+      "result": {
+        "count": 61,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 197,
+      "minPercent": 95,
+      "result": {
+        "count": 60,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 194,
+      "minPercent": 93,
+      "result": {
+        "count": 59,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 191,
+      "minPercent": 91,
+      "result": {
+        "count": 58,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 188,
+      "minPercent": 90,
+      "result": {
+        "count": 57,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 185,
+      "minPercent": 88,
+      "result": {
+        "count": 56,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 182,
+      "minPercent": 87,
+      "result": {
+        "count": 55,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 179,
+      "minPercent": 85,
+      "result": {
+        "count": 6,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 176,
+      "minPercent": 83,
+      "result": {
+        "count": 53,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 173,
+      "minPercent": 82,
+      "result": {
+        "count": 52,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 170,
+      "minPercent": 80,
+      "result": {
+        "count": 51,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 167,
+      "minPercent": 79,
+      "result": {
+        "count": 50,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 164,
+      "minPercent": 77,
+      "result": {
+        "count": 49,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 161,
+      "minPercent": 75,
+      "result": {
+        "count": 48,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 158,
+      "minPercent": 74,
+      "result": {
+        "count": 47,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 155,
+      "minPercent": 72,
+      "result": {
+        "count": 46,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 152,
+      "minPercent": 70,
+      "result": {
+        "count": 5,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 149,
+      "minPercent": 69,
+      "result": {
+        "count": 44,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 146,
+      "minPercent": 67,
+      "result": {
+        "count": 43,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 143,
+      "minPercent": 66,
+      "result": {
+        "count": 42,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 140,
+      "minPercent": 64,
+      "result": {
+        "count": 41,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 137,
+      "minPercent": 62,
+      "result": {
+        "count": 40,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 134,
+      "minPercent": 61,
+      "result": {
+        "count": 39,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 131,
+      "minPercent": 59,
+      "result": {
+        "count": 38,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 128,
+      "minPercent": 58,
+      "result": {
+        "count": 37,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 125,
+      "minPercent": 56,
+      "result": {
+        "count": 4,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 122,
+      "minPercent": 54,
+      "result": {
+        "count": 35,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 119,
+      "minPercent": 53,
+      "result": {
+        "count": 34,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 116,
+      "minPercent": 51,
+      "result": {
+        "count": 33,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 113,
+      "minPercent": 50,
+      "result": {
+        "count": 32,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 110,
+      "minPercent": 48,
+      "result": {
+        "count": 31,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 107,
+      "minPercent": 46,
+      "result": {
+        "count": 30,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 104,
+      "minPercent": 45,
+      "result": {
+        "count": 29,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 101,
+      "minPercent": 43,
+      "result": {
+        "count": 28,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 98,
+      "minPercent": 41,
+      "result": {
+        "count": 3,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 95,
+      "minPercent": 40,
+      "result": {
+        "count": 26,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 92,
+      "minPercent": 38,
+      "result": {
+        "count": 25,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 89,
+      "minPercent": 37,
+      "result": {
+        "count": 24,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 86,
+      "minPercent": 35,
+      "result": {
+        "count": 23,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 83,
+      "minPercent": 33,
+      "result": {
+        "count": 22,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 80,
+      "minPercent": 32,
+      "result": {
+        "count": 21,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 77,
+      "minPercent": 30,
+      "result": {
+        "count": 20,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 74,
+      "minPercent": 29,
+      "result": {
+        "count": 19,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 71,
+      "minPercent": 27,
+      "result": {
+        "count": 2,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 68,
+      "minPercent": 25,
+      "result": {
+        "count": 17,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 65,
+      "minPercent": 24,
+      "result": {
+        "count": 16,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 62,
+      "minPercent": 22,
+      "result": {
+        "count": 15,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 59,
+      "minPercent": 20,
+      "result": {
+        "count": 14,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 56,
+      "minPercent": 19,
+      "result": {
+        "count": 13,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 53,
+      "minPercent": 17,
+      "result": {
+        "count": 12,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 50,
+      "minPercent": 16,
+      "result": {
+        "count": 11,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 47,
+      "minPercent": 14,
+      "result": {
+        "count": 10,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 44,
+      "minPercent": 12,
+      "result": {
+        "count": 1,
+        "id": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "cookTime": 41,
+      "minPercent": 11,
+      "result": {
+        "count": 8,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 38,
+      "minPercent": 9,
+      "result": {
+        "count": 7,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 35,
+      "minPercent": 8,
+      "result": {
+        "count": 6,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 32,
+      "minPercent": 6,
+      "result": {
+        "count": 5,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 29,
+      "minPercent": 4,
+      "result": {
+        "count": 4,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 26,
+      "minPercent": 3,
+      "result": {
+        "count": 3,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 23,
+      "minPercent": 1,
+      "result": {
+        "count": 2,
+        "id": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "cookTime": 20,
+      "minPercent": 0,
+      "result": {
+        "count": 1,
+        "id": "minecraft:gold_nugget"
+      }
+    }
+  ]
+}

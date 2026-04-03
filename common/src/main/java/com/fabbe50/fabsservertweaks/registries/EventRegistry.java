@@ -61,7 +61,7 @@ public class EventRegistry {
     public static void init() {
         EntityEvent.ADD.register((entity, level) -> {
             if (level instanceof ServerLevel serverLevel) {
-                if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
+                if (serverLevel.getGameRules().get(ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
                     if (entity instanceof Monster monster) {
                         if (entity.getType().is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
                             return EventResult.pass();
@@ -92,8 +92,8 @@ public class EventRegistry {
             return EventResult.pass();
         });
         EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
+            Level level = livingEntity.level();
             if (livingEntity instanceof Mob mob) {
-                Level level = mob.level();
                 if (level instanceof ServerLevel serverLevel) {
                     GameRules gameRules = serverLevel.getGameRules();
                     if (!gameRules.get(ModGameRules.RULE_MOB_DROP_EQUIPABLE)) {

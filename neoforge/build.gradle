@@ -3,6 +3,7 @@ plugins {
 }
 
 def generatedResources = project(":common").file("src/main/generated/resources")
+def commonBuiltinModPacks = project(":common").file("src/main/resources/mod")
 def accessWidener = project(":common").file("src/main/resources/${mod_id}.accesswidener")
 
 sourceSets {
@@ -71,6 +72,10 @@ dependencies {
 
 processResources {
     inputs.property 'version', project.version
+
+    from(commonBuiltinModPacks) {
+        into("mod")
+    }
 
     filesMatching('META-INF/neoforge.mods.toml') {
         expand version: project.version

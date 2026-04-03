@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "Fab's Server Tweaks Raw Block Smelting",
+    "max_format": 94,
+    "min_format": [
+      94,
+      1
+    ]
+  }
+}

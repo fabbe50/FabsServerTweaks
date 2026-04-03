@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_dye_sand_red",
+  "ingredients": [
+    "minecraft:sand",
+    "minecraft:red_dye"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:red_sand"
+  }
+}

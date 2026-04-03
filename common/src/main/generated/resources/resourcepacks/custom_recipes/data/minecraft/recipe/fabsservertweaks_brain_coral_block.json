@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals",
+    "#c:brain_corals"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:brain_coral_block"
+  }
+}

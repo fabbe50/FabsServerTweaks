@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fabsservertweaks_shelter_pottery_sherd"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "shelter_pottery_sherd": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:shelter_pottery_sherd",
+              "minecraft:clay_ball"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "shelter_pottery_sherd"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fabsservertweaks_shelter_pottery_sherd"
+    ]
+  }
+}

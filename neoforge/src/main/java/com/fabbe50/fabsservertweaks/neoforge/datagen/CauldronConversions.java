@@ -9,12 +9,21 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.JsonCodecProvider;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
 public class CauldronConversions extends JsonCodecProvider<CauldronConversionData> {
-    public CauldronConversions(PackOutput output, PackOutput.Target target, Codec<CauldronConversionData> codec, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    private final String type;
+
+    public CauldronConversions(PackOutput output, String type, PackOutput.Target target, Codec<CauldronConversionData> codec, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, target, Fabsservertweaks.location("cauldron_conversion").getPath(), codec, lookupProvider, Fabsservertweaks.MOD_ID);
+        this.type = type;
+    }
+
+    @Override
+    public @NonNull String getName() {
+        return super.getName() + "_" + this.type;
     }
 
     @Override

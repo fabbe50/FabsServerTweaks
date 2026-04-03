@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "fabsservertweaks_nautilus_armor",
+  "key": {
+    "I": "minecraft:diamond"
+  },
+  "pattern": [
+    "II ",
+    "II ",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:diamond_nautilus_armor"
+  }
+}
