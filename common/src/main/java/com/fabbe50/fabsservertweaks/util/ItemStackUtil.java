@@ -32,4 +32,13 @@ public class ItemStackUtil {
             stack.set(DataComponents.LORE, lore);
         }
     }
+
+    public static void removeLoreFuzzy(ItemStack stack, String loreText) {
+        ItemLore lore = stack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
+        List<Component> components = new ArrayList<>(lore.lines());
+        if (components.removeIf(component -> component.getString().contains(loreText))) {
+            lore = new ItemLore(components);
+            stack.set(DataComponents.LORE, lore);
+        }
+    }
 }

@@ -16,7 +16,7 @@ public abstract class EndermanTakeBlockGoalMixin extends Goal {
 
     @Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
     private void injectCanUse(CallbackInfoReturnable<Boolean> cir) {
-        if (!getServerLevel(this.enderman).getGameRules().getBoolean(ModGameRules.RULE_MOB_GRIEF_ENDERMAN)) {
+        if (!getServerLevel(this.enderman).getGameRules().get(ModGameRules.RULE_MOB_GRIEF_ENDERMAN)) {
             cir.setReturnValue(false);
         }
     }

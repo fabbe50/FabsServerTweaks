@@ -4,7 +4,7 @@ import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.DurabilitySmeltData;
 import com.google.gson.JsonElement;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
@@ -17,16 +17,16 @@ import java.util.*;
 public class DurabilitySmeltLoader extends SimpleJsonResourceReloadListener<JsonElement> {
     public static final DurabilitySmeltLoader INSTANCE = new DurabilitySmeltLoader();
     
-    private final Map<ResourceLocation, DurabilitySmeltData> dataMap = new HashMap<>();
+    private final Map<Identifier, DurabilitySmeltData> dataMap = new HashMap<>();
 
     public DurabilitySmeltLoader() {
         super(ExtraCodecs.JSON, FileToIdConverter.json("durability_smelting"));
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         dataMap.clear();
-        for (Map.Entry<ResourceLocation, JsonElement> entry : map.entrySet()) {
+        for (Map.Entry<Identifier, JsonElement> entry : map.entrySet()) {
             try {
                 DurabilitySmeltData data = DurabilitySmeltData.fromJson(entry.getValue().getAsJsonObject());
                 dataMap.put(entry.getKey(), data);
@@ -39,8 +39,8 @@ public class DurabilitySmeltLoader extends SimpleJsonResourceReloadListener<Json
     }
 
     public static @Nullable DurabilitySmeltData find(ItemStack input, String furnaceKind) {
-        Map<ResourceLocation, DurabilitySmeltData> data = INSTANCE.getDataMap();
-        for (ResourceLocation resourceLocation : data.keySet()) {
+        Map<Identifier, DurabilitySmeltData> data = INSTANCE.getDataMap();
+        for (Identifier resourceLocation : data.keySet()) {
             if (data.get(resourceLocation).furnaceType().contains(furnaceKind) && data.get(resourceLocation).ingredient().test(input)) {
                 return data.get(resourceLocation);
             }
@@ -58,7 +58,7 @@ public class DurabilitySmeltLoader extends SimpleJsonResourceReloadListener<Json
         return null;
     }
 
-    public Map<ResourceLocation, DurabilitySmeltData> getDataMap() {
+    public Map<Identifier, DurabilitySmeltData> getDataMap() {
         return dataMap;
     }
 }

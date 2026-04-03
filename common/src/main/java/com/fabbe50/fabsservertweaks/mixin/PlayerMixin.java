@@ -1,7 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,14 +21,14 @@ public class PlayerMixin {
         AttributeInstance miningSpeed = instance.getAttribute(Attributes.BLOCK_BREAK_SPEED);
         AttributeInstance submergedMiningSpeedAttribute = instance.getAttribute(Attributes.SUBMERGED_MINING_SPEED);
         if (miningSpeed != null && submergedMiningSpeedAttribute != null) {
-            miningSpeed.addOrReplacePermanentModifier(new AttributeModifier(ResourceLocation.parse("minecraft:enchantment.aqua_affinity"), 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            miningSpeed.addOrReplacePermanentModifier(new AttributeModifier(Identifier.parse("minecraft:enchantment.aqua_affinity"), 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             if (instance.isInWater() && EnchantmentUtil.hasAquaAffinity(instance) && !instance.onGround()) {
                 if (!instance.isEyeInFluid(FluidTags.WATER)) {
-                    miningSpeed.addOrReplacePermanentModifier(new AttributeModifier(ResourceLocation.parse("minecraft:enchantment.aqua_affinity"), 5.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                    miningSpeed.addOrReplacePermanentModifier(new AttributeModifier(Identifier.parse("minecraft:enchantment.aqua_affinity"), 5.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
                 }
-                submergedMiningSpeedAttribute.addOrReplacePermanentModifier(new AttributeModifier(ResourceLocation.parse("minecraft:enchantment.aqua_affinity"), 3.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                submergedMiningSpeedAttribute.addOrReplacePermanentModifier(new AttributeModifier(Identifier.parse("minecraft:enchantment.aqua_affinity"), 3.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             } else {
-                submergedMiningSpeedAttribute.addOrReplacePermanentModifier(new AttributeModifier(ResourceLocation.parse("minecraft:enchantment.aqua_affinity"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                submergedMiningSpeedAttribute.addOrReplacePermanentModifier(new AttributeModifier(Identifier.parse("minecraft:enchantment.aqua_affinity"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }

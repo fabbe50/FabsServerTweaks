@@ -45,12 +45,24 @@ public class EnchantmentUtil {
         return hasEnchantment(livingEntity, stack, Enchantments.SILK_TOUCH);
     }
 
+    public static boolean hasFortune(LivingEntity livingEntity, ItemStack stack) {
+        return hasEnchantment(livingEntity, stack, Enchantments.FORTUNE);
+    }
+
     public static boolean hasEnchantment(LivingEntity livingEntity, ItemStack stack, ResourceKey<Enchantment> enchantmentKey) {
         Holder<Enchantment> enchantmentHolder = livingEntity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantmentKey);
         if (stack.isEmpty()) {
             return false;
         }
         return EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, stack) > 0;
+    }
+
+    public static int getEnchantmentLevel(LivingEntity livingEntity, ItemStack stack, ResourceKey<Enchantment> enchantmentKey) {
+        Holder<Enchantment> enchantmentHolder = livingEntity.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantmentKey);
+        if (stack.isEmpty()) {
+            return 0;
+        }
+        return EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, stack);
     }
 
     public static void performTreeChop(ServerLevel level, BlockPos pos, ServerPlayer player, ItemStack toolStack) {

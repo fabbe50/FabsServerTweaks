@@ -5,6 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 public class GotoCommand {
     public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
         commandDispatcher.register(
-                Commands.literal("goto").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+                Commands.literal("goto").requires(commandSourceStack -> commandSourceStack.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                         .then(Commands.argument("dimension", DimensionArgument.dimension()).executes(context -> {
                             ServerLevel level = DimensionArgument.getDimension(context, "dimension");
                             Player player = context.getSource().getPlayer();

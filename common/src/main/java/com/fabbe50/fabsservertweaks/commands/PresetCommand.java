@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +22,7 @@ public class PresetCommand {
         };
 
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("preset")
-                .requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+                .requires(commandSourceStack -> commandSourceStack.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                 .then(Commands.argument("preset", StringArgumentType.word())
                 .suggests(presetSuggestionProvider)
                 .executes(context -> {

@@ -67,7 +67,7 @@ public class EventRegistry {
                             return EventResult.pass();
                         }
                         RandomSource random = entity.getRandom();
-                        DifficultyValue.Difficulty difficulty = serverLevel.getGameRules().getRule(ModGameRules.RULE_SPAWN_WITH_EFFECT_MODE).getValue();
+                        DifficultyValue.Difficulty difficulty = Fabsservertweaks.CONFIG.difficulty;
                         if (shouldApplyEffect(serverLevel, random, difficulty)) {
                             if (serverLevel.dimension().equals(Level.NETHER)) {
                                 if (random.nextDouble() < 0.75d) {
@@ -96,7 +96,7 @@ public class EventRegistry {
                 Level level = mob.level();
                 if (level instanceof ServerLevel serverLevel) {
                     GameRules gameRules = serverLevel.getGameRules();
-                    if (!gameRules.getBoolean(ModGameRules.RULE_MOB_DROP_EQUIPABLE)) {
+                    if (!gameRules.get(ModGameRules.RULE_MOB_DROP_EQUIPABLE)) {
                         for (EquipmentSlot slot : EquipmentSlot.values()) {
                             if (!mob.getDropChances().isPreserved(slot)) {
                                 ItemStack stack = mob.getItemBySlot(slot);
@@ -107,7 +107,7 @@ public class EventRegistry {
                         }
                     }
                     if (mob instanceof Shulker shulker) {
-                        int shulker_shells = gameRules.getInt(ModGameRules.RULE_SHULKER_SHELL_DROP_AMOUNT);
+                        int shulker_shells = gameRules.get(ModGameRules.RULE_SHULKER_SHELL_DROP_AMOUNT);
                         if (shulker_shells > 0) {
                             shulker.spawnAtLocation(serverLevel, new ItemStack(Items.SHULKER_SHELL, shulker_shells));
                             shulker.remove(Entity.RemovalReason.DISCARDED);
@@ -123,7 +123,7 @@ public class EventRegistry {
             PresetCommand.register(commandDispatcher);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
-            if (serverPlayer.level().getGameRules().getBoolean(ModGameRules.RULE_SHARE_SEED)) {
+            if (Fabsservertweaks.CONFIG.shareSeed) {
                 long seed = serverPlayer.level().getSeed();
                 try {
                     NetworkManager.sendToPlayer(serverPlayer, new SeedPacket.Client.PacketPayload(seed));
@@ -135,7 +135,7 @@ public class EventRegistry {
         InteractionEvent.LEFT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             Level level = player.level();
             ItemStack stack = player.getItemInHand(hand);
-            if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
+            if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
                 AtomicBoolean flag = new AtomicBoolean(false);
                 WorldUtil.getBlocksInSphericalRadius(pos, ToolUtil.getScytheRadiusFromHoe(stack))
                         .forEach(blockPos1 -> {
@@ -222,21 +222,21 @@ public class EventRegistry {
                     EnchantmentUtil.performTreeChop(serverLevel, pos, player, toolStack);
                 }
                 if (EnchantmentUtil.hasSilkTouch(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
-                    if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {
+                    if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {
                         if (dropItemWithData(level, pos, new ItemStack(Blocks.SPAWNER))) {
                             return EventResult.interruptTrue();
                         }
                     }
-                    if (state.is(Blocks.BUDDING_AMETHYST) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES)) {
+                    if (state.is(Blocks.BUDDING_AMETHYST) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES)) {
                         Block.popResource(level, pos, new ItemStack(Items.BUDDING_AMETHYST));
                         return EventResult.interruptTrue();
                     }
-                    if (state.is(Blocks.TRIAL_SPAWNER) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS)) {
+                    if (state.is(Blocks.TRIAL_SPAWNER) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS)) {
                         if (dropItemWithData(level, pos, new ItemStack(Blocks.TRIAL_SPAWNER))) {
                             return EventResult.interruptTrue();
                         }
                     }
-                    if (state.is(Blocks.VAULT) && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS)) {
+                    if (state.is(Blocks.VAULT) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS)) {
                         if (dropItemWithData(level, pos, new ItemStack(Blocks.VAULT))) {
                             return EventResult.interruptTrue();
                         }
@@ -269,27 +269,22 @@ public class EventRegistry {
                     }
                 }
                 if (state.is(Blocks.SPAWNER)) {
-                    CustomData customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
-                    if (!customData.isEmpty()) {
-                        BlockEntityType<?> blockEntityType = customData.parseEntityType(level.registryAccess(), Registries.BLOCK_ENTITY_TYPE);
-                        if (blockEntityType == null) {
+                    TypedEntityData<BlockEntityType<?>> customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(BlockEntityType.MOB_SPAWNER, new CompoundTag()));
+                    BlockEntityType<?> blockEntityType = customData.type();
+                    level.setBlockAndUpdate(pos, state);
+
+                    BlockEntity blockEntity = level.getBlockEntity(pos);
+                    if (blockEntity != null) {
+                        BlockEntityType<?> blockEntityType2 = blockEntity.getType();
+                        if (blockEntityType != blockEntityType2) {
                             return EventResult.pass();
                         }
-                        level.setBlockAndUpdate(pos, state);
 
-                        BlockEntity blockEntity = level.getBlockEntity(pos);
-                        if (blockEntity != null) {
-                            BlockEntityType<?> blockEntityType2 = blockEntity.getType();
-                            if (blockEntityType != blockEntityType2) {
-                                return EventResult.pass();
-                            }
-
-                            if (customData.loadInto(blockEntity, level.registryAccess())) {
-                                blockEntity.applyComponentsFromItemStack(stack);
-                                blockEntity.setChanged();
-                                stack.shrink(1);
-                                return EventResult.interruptTrue();
-                            }
+                        if (customData.loadInto(blockEntity, level.registryAccess())) {
+                            blockEntity.applyComponentsFromItemStack(stack);
+                            blockEntity.setChanged();
+                            stack.shrink(1);
+                            return EventResult.interruptTrue();
                         }
                     }
                 }
@@ -311,7 +306,7 @@ public class EventRegistry {
         });
         BedEvents.START_SLEEPING.register((livingEntity, pos) -> {
             if (livingEntity.level() instanceof ServerLevel serverLevel) {
-                if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
+                if (serverLevel.getGameRules().get(ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
                     return EventResult.interruptTrue();
                 }
             }
@@ -319,7 +314,7 @@ public class EventRegistry {
         });
         PlayerEvent.ATTACK_ENTITY.register((player, level, target, hand, result) -> {
             if (level instanceof ServerLevel serverLevel) {
-                if (!serverLevel.getGameRules().getBoolean(ModGameRules.RULE_PET_FRIENDLY_FIRE) && target instanceof TamableAnimal tamableAnimal) {
+                if (!serverLevel.getGameRules().get(ModGameRules.RULE_PET_FRIENDLY_FIRE) && target instanceof TamableAnimal tamableAnimal) {
                     if (tamableAnimal.isOwnedBy(player)) {
                         switch (tamableAnimal) {
                             case Wolf wolf -> {
@@ -461,7 +456,7 @@ public class EventRegistry {
         if (spawnerBlockEntity != null) {
             TagValueOutput tagValueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
             spawnerBlockEntity.saveWithId(tagValueOutput);
-            stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(tagValueOutput.buildResult()));
+            stack.set(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(spawnerBlockEntity.getType(), tagValueOutput.buildResult()));
             Block.popResource(level, pos, stack);
             level.removeBlockEntity(pos);
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

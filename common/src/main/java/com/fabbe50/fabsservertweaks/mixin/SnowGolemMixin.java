@@ -6,8 +6,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.AbstractGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.golem.AbstractGolem;
+import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,9 +22,9 @@ public abstract class SnowGolemMixin extends AbstractGolem {
         super(entityType, level);
     }
 
-    @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/SnowGolem;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+    @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/golem/SnowGolem;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean redirectHurtServer(SnowGolem instance, ServerLevel serverLevel, DamageSource damageSource, float v) {
-        if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE)) {
+        if (serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE)) {
             BlockState standingOnBlock = instance.level().getBlockState(instance.blockPosition().relative(Direction.DOWN));
             if (standingOnBlock.is(BlockTags.ICE)) {
                 return false;
@@ -35,7 +35,7 @@ public abstract class SnowGolemMixin extends AbstractGolem {
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"), cancellable = true)
     private void injectAiStep(CallbackInfo ci) {
-        if (this.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW)) {
+        if (this.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW)) {
             ci.cancel();
         }
     }

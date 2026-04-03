@@ -31,7 +31,7 @@ public abstract class LiquidBlockMixin {
     @Inject(method = "shouldSpreadLiquid", at = @At("HEAD"), cancellable = true)
     private void injectShouldSpreadLiquid(Level level, BlockPos blockPos, BlockState blockState, CallbackInfoReturnable<Boolean> cir) {
         if (level instanceof ServerLevel serverLevel) {
-            if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_NO_COBBLE_GEN)) {
+            if (serverLevel.getGameRules().get(ModGameRules.RULE_NO_COBBLE_GEN)) {
                 if (this.fluid.is(FluidTags.LAVA)) {
                     boolean bl = level.getBlockState(blockPos.below()).is(Blocks.SOUL_SOIL);
                     if (!bl) {

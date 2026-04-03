@@ -22,9 +22,9 @@ public class CauldronBlockMixin {
             ci.cancel();
         } else {
             ServerLevel serverLevel = (ServerLevel) level;
-            if (precipitation.equals(Biome.Precipitation.RAIN) && !serverLevel.getGameRules().getBoolean(ModGameRules.RULE_RAIN_FILLS_CAULDRON)) {
+            if (precipitation.equals(Biome.Precipitation.RAIN) && !serverLevel.getGameRules().get(ModGameRules.RULE_RAIN_FILLS_CAULDRON)) {
                 ci.cancel();
-            } else if (precipitation.equals(Biome.Precipitation.SNOW) && !serverLevel.getGameRules().getBoolean(ModGameRules.RULE_SNOW_FILLS_CAULDRON)) {
+            } else if (precipitation.equals(Biome.Precipitation.SNOW) && !serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_FILLS_CAULDRON)) {
                 ci.cancel();
             }
         }
@@ -36,9 +36,9 @@ public class CauldronBlockMixin {
             ci.cancel();
         } else {
             ServerLevel serverLevel = (ServerLevel) level;
-            if (fluid.equals(Fluids.WATER) && !serverLevel.getGameRules().getBoolean(ModGameRules.RULE_WATER_DRIPSTONE_FILL_CAULDRON)) {
+            if (fluid.equals(Fluids.WATER) && !serverLevel.getGameRules().get(ModGameRules.RULE_WATER_DRIPSTONE_FILL_CAULDRON)) {
                 ci.cancel();
-            } else if (fluid.equals(Fluids.LAVA) && !serverLevel.getGameRules().getBoolean(ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON)) {
+            } else if (fluid.equals(Fluids.LAVA) && !serverLevel.getGameRules().get(ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON)) {
                 ci.cancel();
             }
         }

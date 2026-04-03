@@ -16,7 +16,7 @@ loom {
 
     runs {
         data {
-            clientData()
+            serverData()
             programArgs("--all", "--mod", "${mod_id}")
             programArgs("--output", generatedResources.absolutePath)
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
@@ -63,7 +63,7 @@ dependencies {
     //modRuntimeOnly "vazkii.patchouli:Patchouli:${patchouli_version_neoforge}"
     //modCompileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
     //modRuntimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
-    //modImplementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    modImplementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

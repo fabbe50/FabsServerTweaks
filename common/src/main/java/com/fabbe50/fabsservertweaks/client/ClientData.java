@@ -1,9 +1,13 @@
 package com.fabbe50.fabsservertweaks.client;
 
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
+import com.fabbe50.fabsservertweaks.client.debug.DebugSlimeChunk;
 import dev.architectury.event.events.client.ClientGuiEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -22,38 +26,5 @@ public class ClientData {
         return currentSeed;
     }
 
-    public static void createDebugInfo() {
-        ClientGuiEvent.DEBUG_TEXT_LEFT.register(list -> {
-            long seed = ClientData.getCurrentSeed();
-            String seedString = "Unknown";
-            if (seed != 0L) {
-                seedString = String.valueOf(seed);
-            }
-            list.add("Seed: " + seedString);
-
-            Minecraft client = Minecraft.getInstance();
-            final Entity cameraEntity = client.getCameraEntity();
-            final IntegratedServer integratedServer = client.getSingleplayerServer();
-            final Level serverWorld;
-            if (client.level != null) {
-                assert cameraEntity != null;
-                final BlockPos blockPos = cameraEntity.blockPosition();
-                final ChunkPos chunkPos = new ChunkPos(blockPos);
-
-                boolean isIntegrated = integratedServer != null;
-
-                serverWorld = isIntegrated ? integratedServer.getLevel(client.level.dimension()) : null;
-                if (serverWorld instanceof ServerLevel serverLevel) {
-                    ClientData.setCurrentSeed(serverLevel.getSeed());
-                }
-
-                if (ClientData.getCurrentSeed() != 0L) {
-                    final RandomSource slimeChunk = WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, ClientData.getCurrentSeed(), 0x3ad8025fL);
-                    list.add("Slime Chunk: " + ((slimeChunk.nextInt(10) == 0) ? "True" : "False"));
-                } else {
-                    list.add("Slime Chunk: Unknown");
-                }
-            }
-        });
-    }
+    public static final Identifier SLIME_CHUNK = DebugScreenEntries.register(Fabsservertweaks.location("slime_chunk"), new DebugSlimeChunk());
 }

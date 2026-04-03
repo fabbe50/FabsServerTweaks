@@ -21,7 +21,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
     private void injectDropAllDeathLoot(ServerLevel serverLevel, DamageSource damageSource, CallbackInfo ci) {
-        if (serverLevel.getGameRules().getBoolean(ModGameRules.RULE_MOB_DROPS_REQUIRE_PLAYER_KILL)) {
+        if (serverLevel.getGameRules().get(ModGameRules.RULE_MOB_DROPS_REQUIRE_PLAYER_KILL)) {
             if (!damageSource.is(DamageTypes.PLAYER_ATTACK) && !damageSource.is(DamageTypes.PLAYER_EXPLOSION)) {
                 ci.cancel();
             }

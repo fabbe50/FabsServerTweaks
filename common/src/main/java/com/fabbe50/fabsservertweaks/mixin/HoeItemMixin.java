@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
@@ -56,7 +56,7 @@ public abstract class HoeItemMixin extends Item {
         if (player == null) {
             return;
         }
-        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().getBoolean(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
+        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
             BlockPos blockPos = useOnContext.getClickedPos();
             ItemStack toolStack = useOnContext.getItemInHand();
             Direction face = useOnContext.getClickedFace();
@@ -72,9 +72,9 @@ public abstract class HoeItemMixin extends Item {
                         UseOnContext context = new UseOnContext(player, useOnContext.getHand(), useOnContext.getHitResult().withPosition(blockPos1));
                         if (predicate.test(context)) {
                             level.playSound(player, blockPos1, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            if (!level.isClientSide) {
+                            if (!level.isClientSide()) {
                                 consumer.accept(context);
-                                context.getItemInHand().hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
+                                context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                                 flag.set(true);
                             }
                         }

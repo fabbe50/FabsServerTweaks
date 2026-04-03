@@ -4,7 +4,7 @@ import com.fabbe50.fabsservertweaks.data.CauldronConversionData;
 import com.fabbe50.fabsservertweaks.data.loader.CauldronConversionLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -28,16 +28,16 @@ public abstract class LayeredCauldronBlockMixin {
     public abstract boolean isFull(BlockState arg);
 
     @Inject(method = "entityInside", at = @At("HEAD"))
-    private void injectEntityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, CallbackInfo ci) {
+    private void injectEntityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
         if (level instanceof ServerLevel) {
             if (this.isFull(blockState)) {
                 if (entity instanceof ItemEntity itemEntity) {
                     ItemStack inputStack = itemEntity.getItem();
                     for (CauldronConversionData conversionData : CauldronConversionLoader.INSTANCE.getDataMap().values()) {
-                        ResourceLocation inputLocation = conversionData.input();
-                        ResourceLocation outputLocation = conversionData.output();
+                        Identifier inputLocation = conversionData.input();
+                        Identifier outputLocation = conversionData.output();
                         if (inputLocation != null && outputLocation != null) {
-                            ResourceLocation itemInside = inputStack.getItem().arch$registryName();
+                            Identifier itemInside = inputStack.getItem().arch$registryName();
                             if (itemInside != null) {
                                 if (itemInside.toString().equals(inputLocation.toString())) {
                                     Item outputItem = level.registryAccess().lookup(Registries.ITEM).orElseThrow().getValue(outputLocation);

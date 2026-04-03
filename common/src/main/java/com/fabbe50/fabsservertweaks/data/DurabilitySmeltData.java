@@ -1,6 +1,5 @@
 package com.fabbe50.fabsservertweaks.data;
 
-import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -8,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,7 @@ public record DurabilitySmeltData(Ingredient ingredient, Set<String> furnaceType
     public static DurabilitySmeltData fromJson(JsonObject json) {
         String resourceString = json.get("ingredient").toString();
         resourceString = resourceString.replaceAll("\"", "");
-        Ingredient ingredient1 = Ingredient.of(HolderSet.direct(ModRegistry.ITEMS.getHolder(ResourceLocation.parse(resourceString))));
+        Ingredient ingredient1 = Ingredient.of(HolderSet.direct(ModRegistry.ITEMS.getHolder(Identifier.parse(resourceString))));
         Set<String> furnaceTypes = STRING_SET_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonArray("furnaceType")).getOrThrow();
         Integer defaultCookTime = json.get("defaultCookTime").getAsInt();
         Float defaultXp = json.getAsJsonPrimitive("defaultXp").getAsFloat();

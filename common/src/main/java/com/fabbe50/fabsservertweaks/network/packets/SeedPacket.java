@@ -6,11 +6,11 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class SeedPacket {
-    public static final ResourceLocation PACKET_ID = Fabsservertweaks.location("seed");
+    public static final Identifier PACKET_ID = Fabsservertweaks.location("seed");
 
     public static class Client {
         private static final CustomPacketPayload.Type<PacketPayload> PACKET_TYPE = new CustomPacketPayload.Type<>(PACKET_ID);

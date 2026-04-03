@@ -3,7 +3,7 @@ package com.fabbe50.fabsservertweaks.mixin;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;

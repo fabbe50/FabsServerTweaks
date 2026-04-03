@@ -1,9 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
-import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.DurabilitySmeltData;
 import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
-import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.minecraft.core.HolderLookup;
@@ -115,7 +113,7 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Unique
     private static String kind(AbstractCookingRecipe recipe) {
         return (recipe instanceof BlastingRecipe) ? "blast_furnace" :
-                (recipe instanceof SmokingRecipe) ? "smoker" :
-                "furnace";
+                ((recipe instanceof SmokingRecipe) ? "smoker" :
+                "furnace");
     }
 }

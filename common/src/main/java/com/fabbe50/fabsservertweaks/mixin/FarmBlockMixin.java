@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue;
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil;
@@ -25,7 +26,7 @@ public class FarmBlockMixin extends Block {
     @Inject(method = "fallOn", at = @At("HEAD"), cancellable = true)
     private void injectFallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, double d, CallbackInfo ci) {
         if (level instanceof ServerLevel serverLevel && entity instanceof LivingEntity livingEntity) {
-            TrampleValue.TrampleMode trampleMode = serverLevel.getGameRules().getRule(ModGameRules.RULE_CROP_TRAMPLE_MODE).getValue();
+            TrampleValue.TrampleMode trampleMode = Fabsservertweaks.CONFIG.cropTrampleMode;
             switch (trampleMode) {
                 case NO_TRAMPLE -> {
                     ci.cancel();

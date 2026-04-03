@@ -2,7 +2,7 @@ package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -22,9 +22,9 @@ public class PhantomMixin extends Mob {
 
     @Override
     public boolean canAttack(LivingEntity livingEntity) {
-        MinecraftServer server = livingEntity.getServer();
-        if (server != null) {
-            if (!server.getGameRules().getBoolean(ModGameRules.RULE_FRIENDLY_PHANTOMS)) {
+        Level level = livingEntity.level();
+        if (level instanceof ServerLevel serverLevel) {
+            if (!serverLevel.getGameRules().get(ModGameRules.RULE_FRIENDLY_PHANTOMS)) {
                 return super.canAttack(livingEntity);
             } else {
                 if (super.canAttack(livingEntity)) {

@@ -22,7 +22,7 @@ public class ShulkerMixin {
 
     @Inject(method = "finalizeSpawn", at = @At("RETURN"))
     private void injectFinalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, EntitySpawnReason entitySpawnReason, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
-        if (serverLevelAccessor.getLevel().getGameRules().getBoolean(ModGameRules.RULE_SHULKERS_RANDOM_COLOR)) {
+        if (serverLevelAccessor.getLevel().getGameRules().get(ModGameRules.RULE_SHULKERS_RANDOM_COLOR)) {
             Shulker INSTANCE = ((Shulker) (Object) this);
             INSTANCE.getEntityData().set(DATA_COLOR_ID, (byte) DyeColor.byId(serverLevelAccessor.getRandom().nextInt(16)).getId());
         }
@@ -32,7 +32,7 @@ public class ShulkerMixin {
     private void injectTeleportSomewhere(CallbackInfoReturnable<Boolean> cir) {
         Shulker INSTANCE = ((Shulker) (Object) this);
         if (INSTANCE.level() instanceof ServerLevel level) {
-            if (!level.getGameRules().getBoolean(ModGameRules.RULE_SHULKERS_CAN_TELEPORT)) {
+            if (!level.getGameRules().get(ModGameRules.RULE_SHULKERS_CAN_TELEPORT)) {
                 cir.setReturnValue(false);
             }
         }
