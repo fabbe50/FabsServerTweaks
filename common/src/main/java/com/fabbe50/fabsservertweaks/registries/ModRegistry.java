@@ -19,6 +19,13 @@ public class ModRegistry {
     public static final Registrar<Item> ITEMS = Fabsservertweaks.MANAGER.get().get(Registries.ITEM);
 
     public static final TagKey<EntityType<?>> MOBS_WITH_POTION_EFFECTS_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("mobs_with_potion_effects_blacklist"));
+    public static final TagKey<EntityType<?>> ANIMALS = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("animals"));
+    public static final TagKey<EntityType<?>> HOSTILES = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("hostiles"));
+    public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("bosses"));
+    public static final TagKey<EntityType<?>> GOLEMS = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("golems"));
+    public static final TagKey<EntityType<?>> PETS = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("pets"));
+    public static final TagKey<EntityType<?>> VILLAGER_TYPES = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("villager_types"));
+    public static final TagKey<EntityType<?>> LEAD_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("lead_blacklist"));
     public static final TagKey<Item> STACK_16 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_16"));
     public static final TagKey<Item> STACK_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_64"));
     public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
@@ -35,6 +42,9 @@ public class ModRegistry {
     public static final TagKey<Item> HORN_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "horn_corals"));
 
     public static final ResourceKey<Enchantment> TREE_CHOPPER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("tree_chopper"));
+    public static final ResourceKey<Enchantment> CAPTURING = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("capturing"));
+    public static final ResourceKey<Enchantment> HAMMER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("hammer"));
+    public static final ResourceKey<Enchantment> ENDER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ender"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");

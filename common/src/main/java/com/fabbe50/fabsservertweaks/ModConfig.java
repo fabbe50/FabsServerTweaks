@@ -11,4 +11,11 @@ public class ModConfig implements ConfigData {
     public TrampleMode eggTrampleMode = TrampleMode.FEATHER_FALLING;
     public Difficulty difficulty = Difficulty.SAME_ON_ALL_DIFFICULTIES;
     public boolean shareSeed = false;
+    public boolean overrideNormalLead = true;
+    public boolean canLeashAnimals = true;
+    public boolean canLeashMonsters = true;
+    public boolean canLeashBosses = false;
+    public boolean canLeashVillagerTypes = true;
+    public boolean canLeashGolems = true;
+    public boolean canLeashPets = true;
 }

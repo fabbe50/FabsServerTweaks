@@ -44,7 +44,6 @@ public final class Fabsservertweaks {
 
     public static void initClient() {
         NetworkHandler.registerClientHandlers();
-        ClientData.createDebugInfo();
     }
 
     public static Identifier location(String name) {

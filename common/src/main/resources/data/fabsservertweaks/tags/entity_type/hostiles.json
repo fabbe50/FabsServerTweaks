@@ -1,0 +1,29 @@
+{
+  "values": [
+    "#minecraft:zombies",
+    "#minecraft:skeletons",
+    "#fabsservertweaks:bosses",
+    "minecraft:creeper",
+    "minecraft:spider",
+    "minecraft:cave_spider",
+    "minecraft:enderman",
+    "minecraft:endermite",
+    "minecraft:shulker",
+    "minecraft:ghast",
+    "minecraft:blaze",
+    "minecraft:breeze",
+    "minecraft:evoker",
+    "minecraft:vindicator",
+    "minecraft:witch",
+    "minecraft:ravager",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:hoglin",
+    "minecraft:zoglin",
+    "minecraft:guardian",
+    "minecraft:vex",
+    "minecraft:slime",
+    "minecraft:phantom",
+    "minecraft:creaking"
+  ]
+}

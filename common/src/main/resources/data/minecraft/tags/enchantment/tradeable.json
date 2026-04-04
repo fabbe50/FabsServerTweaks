@@ -23,6 +23,18 @@
     {
       "id": "fabsservertweaks:long_legs",
       "required": false
+    },
+    {
+      "id": "fabsservertweaks:capturing",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:hammer",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:ender",
+      "required": false
     }
   ]
 }

@@ -15,5 +15,7 @@
   "gamerule.villagerAlwaysTurnIntoZombies": "Villagers always convert to Zombie Villagers when killed by Zombies",
   "gamerule.shareSeed": "The level seed gets shared with players on join",
   "enchantment.fabsservertweaks.tree_chopper": "Tree Chopper",
-  "enchantment.fabsservertweaks.tree_chopper.desc": "Mines the entire tree stem and drops the items at the original block."
+  "enchantment.fabsservertweaks.tree_chopper.desc": "Mines the entire tree stem and drops the items at the original block.",
+  "enchantment.fabsservertweaks.capturing": "Capturing",
+  "enchantment.fabsservertweaks.capturing.desc": "Allows mobs to drop their spawn eggs."
 }

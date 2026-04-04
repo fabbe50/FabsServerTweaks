@@ -1,0 +1,24 @@
+{
+  "anvil_cost": 10,
+  "description": {
+    "translate": "enchantment.fabsservertweaks.ender",
+    "fallback": "Ender"
+  },
+  "effects": {
+
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 10
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 5
+  },
+  "slots": [
+    "hand"
+  ],
+  "supported_items": "minecraft:lead",
+  "weight": 1
+}

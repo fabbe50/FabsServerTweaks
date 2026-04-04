@@ -41,6 +41,10 @@ public class EnchantmentUtil {
         return hasEnchantment(livingEntity, stack, ModRegistry.TREE_CHOPPER);
     }
 
+    public static boolean hasHammer(LivingEntity livingEntity, ItemStack stack) {
+        return hasEnchantment(livingEntity, stack, ModRegistry.HAMMER);
+    }
+
     public static boolean hasSilkTouch(LivingEntity livingEntity, ItemStack stack) {
         return hasEnchantment(livingEntity, stack, Enchantments.SILK_TOUCH);
     }

@@ -61,6 +61,13 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;
             Fabsservertweaks.CONFIG.shareSeed = false;
+            Fabsservertweaks.CONFIG.overrideNormalLead = true;
+            Fabsservertweaks.CONFIG.canLeashAnimals = true;
+            Fabsservertweaks.CONFIG.canLeashMonsters = true;
+            Fabsservertweaks.CONFIG.canLeashBosses = false;
+            Fabsservertweaks.CONFIG.canLeashVillagerTypes = true;
+            Fabsservertweaks.CONFIG.canLeashGolems = true;
+            Fabsservertweaks.CONFIG.canLeashPets = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }
@@ -103,6 +110,13 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SAME_ON_ALL_DIFFICULTIES;
             Fabsservertweaks.CONFIG.shareSeed = false;
+            Fabsservertweaks.CONFIG.overrideNormalLead = false;
+            Fabsservertweaks.CONFIG.canLeashAnimals = true;
+            Fabsservertweaks.CONFIG.canLeashMonsters = false;
+            Fabsservertweaks.CONFIG.canLeashBosses = false;
+            Fabsservertweaks.CONFIG.canLeashVillagerTypes = false;
+            Fabsservertweaks.CONFIG.canLeashGolems = false;
+            Fabsservertweaks.CONFIG.canLeashPets = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }
@@ -145,6 +159,13 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;
             Fabsservertweaks.CONFIG.shareSeed = true;
+            Fabsservertweaks.CONFIG.overrideNormalLead = true;
+            Fabsservertweaks.CONFIG.canLeashAnimals = true;
+            Fabsservertweaks.CONFIG.canLeashMonsters = true;
+            Fabsservertweaks.CONFIG.canLeashBosses = false;
+            Fabsservertweaks.CONFIG.canLeashVillagerTypes = true;
+            Fabsservertweaks.CONFIG.canLeashGolems = true;
+            Fabsservertweaks.CONFIG.canLeashPets = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }

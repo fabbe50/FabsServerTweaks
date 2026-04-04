@@ -34,6 +34,10 @@
     "WanderingTraderSpawnerMixin",
     "ZombieMixin"
   ],
+  "server": [
+    "MixinDedicatedServer",
+    "MixinServerStatusSerializer"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
