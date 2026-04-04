@@ -343,6 +343,10 @@ public class EventRegistry {
                         }
                     }
                 }
+                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.ORE_MINER)) {
+                    if (EnchantmentUtil.hasOreMiner(player, toolStack)) {
+                        EnchantmentUtil.performOreMiner(serverLevel, pos, player, toolStack);
+                    }
                 }
                 if (EnchantmentUtil.hasSilkTouch(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
                     if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {

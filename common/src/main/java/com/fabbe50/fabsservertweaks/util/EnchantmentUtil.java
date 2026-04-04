@@ -41,6 +41,10 @@ public class EnchantmentUtil {
         return hasEnchantment(livingEntity, stack, ModRegistry.TREE_CHOPPER);
     }
 
+    public static boolean hasOreMiner(LivingEntity livingEntity, ItemStack stack) {
+        return hasEnchantment(livingEntity, stack, ModRegistry.ORE_MINER);
+    }
+
     public static boolean hasHammer(LivingEntity livingEntity, ItemStack stack) {
         return hasEnchantment(livingEntity, stack, ModRegistry.HAMMER);
     }
@@ -85,6 +89,10 @@ public class EnchantmentUtil {
             }
             return Pair.of(false, false);
         });
+    }
+
+    public static void performOreMiner(ServerLevel level, BlockPos pos, ServerPlayer player, ItemStack toolStack) {
+        performVeinMining(level, pos, 2, 512, player, toolStack, ModRegistry.ORE_MINER_WHITELIST, null, state -> Pair.of(true, false));
     }
 
     public static void performVeinMining(ServerLevel level, BlockPos pos, int range, int maxAmount, ServerPlayer player, ItemStack toolStack, TagKey<Block> validTargets, TagKey<Block> requiredAttachments, Function<BlockState, Pair<Boolean, Boolean>> attachmentFunction) {
