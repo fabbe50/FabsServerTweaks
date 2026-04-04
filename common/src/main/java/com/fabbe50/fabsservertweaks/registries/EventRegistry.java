@@ -4,6 +4,7 @@ import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.NicknameCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
+import com.fabbe50.fabsservertweaks.commands.ServerTweaksCommand;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
@@ -151,6 +152,7 @@ public class EventRegistry {
             GotoCommand.register(commandDispatcher);
             PresetCommand.register(commandDispatcher);
             NicknameCommand.register(commandDispatcher);
+            ServerTweaksCommand.register(commandDispatcher, commandBuildContext);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
             if (Fabsservertweaks.CONFIG.shareSeed) {
