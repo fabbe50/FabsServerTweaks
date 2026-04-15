@@ -21,6 +21,8 @@
     "LivingEntityMixin",
     "MobMixin",
     "PhantomMixin",
+    "PistonBaseBlockMixin",
+    "PistonMovingBlockEntityMixin",
     "PlayerMixin",
     "ServerLevelMixin",
     "ServerPlayerMixin",

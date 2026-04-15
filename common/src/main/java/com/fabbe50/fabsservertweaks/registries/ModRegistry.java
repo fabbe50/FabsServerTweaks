@@ -8,10 +8,7 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.Registrar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -38,6 +35,8 @@ public class ModRegistry {
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
     public static final TagKey<Block> MOD_BONE_MEALABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("bone_mealable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("ore_miner_whitelist"));
+    public static final TagKey<Block> PISTON_PUSH_BLACKLIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_blacklist"));
+    public static final TagKey<Block> PISTON_PUSH_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_whitelist"));
 
     public static final TagKey<Item> TUBE_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "tube_corals"));
     public static final TagKey<Item> BRAIN_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "brain_corals"));

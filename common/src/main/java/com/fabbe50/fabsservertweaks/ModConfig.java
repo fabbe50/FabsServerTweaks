@@ -18,4 +18,5 @@ public class ModConfig implements ConfigData {
     public boolean canLeashVillagerTypes = true;
     public boolean canLeashGolems = true;
     public boolean canLeashPets = true;
+    public boolean canPistonsPushBlockEntities = true;
 }

@@ -68,6 +68,7 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.canLeashVillagerTypes = true;
             Fabsservertweaks.CONFIG.canLeashGolems = true;
             Fabsservertweaks.CONFIG.canLeashPets = true;
+            Fabsservertweaks.CONFIG.canPistonsPushBlockEntities = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }
@@ -117,6 +118,7 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.canLeashVillagerTypes = false;
             Fabsservertweaks.CONFIG.canLeashGolems = false;
             Fabsservertweaks.CONFIG.canLeashPets = true;
+            Fabsservertweaks.CONFIG.canPistonsPushBlockEntities = false;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }
@@ -166,6 +168,7 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.canLeashVillagerTypes = true;
             Fabsservertweaks.CONFIG.canLeashGolems = true;
             Fabsservertweaks.CONFIG.canLeashPets = true;
+            Fabsservertweaks.CONFIG.canPistonsPushBlockEntities = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
             return true;
         }
