@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public final class PistonBlockEntityTransferStore {
@@ -15,8 +16,8 @@ public final class PistonBlockEntityTransferStore {
     private PistonBlockEntityTransferStore() {
     }
 
-    public static void put(Level level, BlockPos pos, CompoundTag tag, DataComponentMap components) {
-        SNAPSHOTS.put(new TransferKey(level.dimension(), pos.immutable()), new Snapshot(tag.copy(), components));
+    public static void put(Level level, BlockPos pos, BlockState movedState, CompoundTag tag, DataComponentMap components) {
+        SNAPSHOTS.put(new TransferKey(level.dimension(), pos.immutable()), new Snapshot(movedState, tag.copy(), components));
     }
 
     @Nullable
@@ -34,7 +35,7 @@ public final class PistonBlockEntityTransferStore {
         return SNAPSHOTS.remove(new TransferKey(level.dimension(), pos));
     }
 
-    public record Snapshot(CompoundTag tag, DataComponentMap components) {
+    public record Snapshot(BlockState movedState, CompoundTag tag, DataComponentMap components) {
     }
 
     private record TransferKey(ResourceKey<Level> dimension, BlockPos pos) {

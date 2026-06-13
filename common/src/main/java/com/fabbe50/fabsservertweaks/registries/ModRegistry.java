@@ -35,6 +35,7 @@ public class ModRegistry {
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
     public static final TagKey<Block> MOD_BONE_MEALABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("bone_mealable"));
     public static final TagKey<Block> ORE_MINER_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("ore_miner_whitelist"));
+    public static final TagKey<Block> PISTON_MOVE_OVERRIDE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_move_override"));
     public static final TagKey<Block> PISTON_PUSH_BLACKLIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_blacklist"));
     public static final TagKey<Block> PISTON_PUSH_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_whitelist"));
 

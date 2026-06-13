@@ -1,12 +1,15 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.util.PistonBlockEntityTransferStore;
+import com.fabbe50.fabsservertweaks.util.PistonChestStateStore;
 import com.fabbe50.fabsservertweaks.util.interfaces.PistonBlockEntityMover;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.piston.PistonMovingBlockEntity;
@@ -17,13 +20,17 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.util.ProblemReporter;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PistonMovingBlockEntity.class)
 public abstract class PistonMovingBlockEntityMixin extends BlockEntity implements PistonBlockEntityMover {
+    @Shadow private BlockState movedState;
+
     @Unique private static final String FABS_MOVED_BLOCK_ENTITY_TAG = "FabsMovedBlockEntity";
     @Unique private static final String FABS_MOVED_BLOCK_ENTITY_COMPONENTS = "FabsMovedBlockEntityComponents";
     @Unique @Nullable private CompoundTag fabsservertweaks$movedBlockEntityData;
@@ -87,6 +94,28 @@ public abstract class PistonMovingBlockEntityMixin extends BlockEntity implement
         ((PistonMovingBlockEntityMixin)(Object)blockEntity).fabsservertweaks$restoreMovedBlockEntityData();
     }
 
+    @Redirect(
+        method = "tick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/block/Block;updateFromNeighbourShapes(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"
+        )
+    )
+    private static BlockState keepChestStateDuringTick(BlockState movedState, net.minecraft.world.level.LevelAccessor levelAccessor, BlockPos pos) {
+        return fabsservertweaks$preserveChestState(movedState, levelAccessor, pos);
+    }
+
+    @Redirect(
+        method = "finalTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/block/Block;updateFromNeighbourShapes(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"
+        )
+    )
+    private BlockState keepChestStateDuringFinalTick(BlockState movedState, net.minecraft.world.level.LevelAccessor levelAccessor, BlockPos pos) {
+        return fabsservertweaks$preserveChestState(this.movedState, levelAccessor, pos);
+    }
+
     @Override
     public void fabsservertweaks$setMovedBlockEntityData(@Nullable CompoundTag tag, DataComponentMap components) {
         this.fabsservertweaks$movedBlockEntityData = tag == null ? null : tag.copy();
@@ -125,5 +154,24 @@ public abstract class PistonMovingBlockEntityMixin extends BlockEntity implement
         blockEntity.setChanged();
         this.fabsservertweaks$movedBlockEntityData = null;
         this.fabsservertweaks$movedBlockEntityComponents = DataComponentMap.EMPTY;
+    }
+
+    @Unique
+    private static BlockState fabsservertweaks$preserveChestState(BlockState movedState, net.minecraft.world.level.LevelAccessor levelAccessor, BlockPos pos) {
+        if (!(levelAccessor instanceof Level level) || !(movedState.getBlock() instanceof ChestBlock)) {
+            return Block.updateFromNeighbourShapes(movedState, levelAccessor, pos);
+        }
+
+        BlockState lockedState = PistonChestStateStore.get(level, pos);
+        if (lockedState != null) {
+            return lockedState;
+        }
+
+        PistonBlockEntityTransferStore.Snapshot snapshot = PistonBlockEntityTransferStore.get(level, pos);
+        if (snapshot != null && snapshot.movedState().getBlock() instanceof ChestBlock) {
+            return snapshot.movedState();
+        }
+
+        return Block.updateFromNeighbourShapes(movedState, levelAccessor, pos);
     }
 }
