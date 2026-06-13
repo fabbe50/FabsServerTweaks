@@ -2,8 +2,12 @@ package com.fabbe50.fabsservertweaks.util;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +44,21 @@ public class ItemStackUtil {
             lore = new ItemLore(components);
             stack.set(DataComponents.LORE, lore);
         }
+    }
+
+    public static ItemStack createStackWithState(BlockState state) {
+        ItemStack stack = new ItemStack(state.getBlock());
+        BlockItemStateProperties properties = BlockItemStateProperties.EMPTY;
+
+        for (Property<?> property : state.getProperties()) {
+            properties = copyProperty(properties, state, property);
+        }
+
+        stack.set(DataComponents.BLOCK_STATE, properties);
+        return stack;
+    }
+
+    private static BlockItemStateProperties copyProperty(BlockItemStateProperties properties, BlockState state, Property<?> property) {
+        return properties.with(property, state);
     }
 }

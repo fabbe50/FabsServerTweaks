@@ -48,6 +48,10 @@ public class CauldronConversions extends JsonCodecProvider<CauldronConversionDat
     }
 
     private void cauldronConversion(String location, Item input, Item output) {
-        this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(ModRegistry.ITEMS.getId(input), ModRegistry.ITEMS.getId(output)));
+        this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(new ItemStack(input), new ItemStack(output)));
+    }
+
+    private void cauldronConversion(String location, ItemStack input, ItemStack output) {
+        this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(input, output));
     }
 }

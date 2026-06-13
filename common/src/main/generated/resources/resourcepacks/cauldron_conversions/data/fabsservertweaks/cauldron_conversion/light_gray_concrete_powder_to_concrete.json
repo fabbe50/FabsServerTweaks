@@ -1,4 +1,10 @@
 {
-  "input": "minecraft:light_gray_concrete_powder",
-  "output": "minecraft:light_gray_concrete"
+  "input": {
+    "count": 1,
+    "id": "minecraft:light_gray_concrete_powder"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:light_gray_concrete"
+  }
 }

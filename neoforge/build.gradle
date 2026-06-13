@@ -59,12 +59,17 @@ dependencies {
 
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
 
+    modImplementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
     //modRuntimeOnly "dev.emi:emi-neoforge:${emi_version}"
     //modCompileOnly "vazkii.patchouli:Patchouli:${patchouli_version_neoforge}:api"
     //modRuntimeOnly "vazkii.patchouli:Patchouli:${patchouli_version_neoforge}"
     //modCompileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}:api")
     //modRuntimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}")
-    modImplementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

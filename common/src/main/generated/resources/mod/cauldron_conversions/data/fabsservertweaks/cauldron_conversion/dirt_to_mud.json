@@ -1,4 +1,10 @@
 {
-  "input": "minecraft:dirt",
-  "output": "minecraft:mud"
+  "input": {
+    "count": 1,
+    "id": "minecraft:dirt"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:mud"
+  }
 }

@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
+import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.NicknameCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
@@ -168,23 +169,25 @@ public class EventRegistry {
             BreakContextStore.recordFace(player, pos, face);
             Level level = player.level();
             ItemStack stack = player.getItemInHand(hand);
-            if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
-                AtomicBoolean flag = new AtomicBoolean(false);
-                WorldUtil.getBlocksInSphericalRadius(pos, ToolUtil.getScytheRadiusFromHoe(stack))
-                        .forEach(blockPos1 -> {
-                            BlockState state = level.getBlockState(blockPos1);
-                            if (state.is(ModRegistry.SCYTHE_ABLE)) {
-                                List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
-                                for (ItemStack dropStack : stacks) {
-                                    ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), dropStack);
-                                    level.addFreshEntity(itemEntity);
+            if (level instanceof ServerLevel serverLevel) {
+                if (serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
+                    AtomicBoolean flag = new AtomicBoolean(false);
+                    WorldUtil.getBlocksInSphericalRadius(pos, ToolUtil.getScytheRadiusFromHoe(stack))
+                            .forEach(blockPos1 -> {
+                                BlockState state = level.getBlockState(blockPos1);
+                                if (state.is(ModRegistry.SCYTHE_ABLE)) {
+                                    List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
+                                    for (ItemStack dropStack : stacks) {
+                                        ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), dropStack);
+                                        level.addFreshEntity(itemEntity);
+                                    }
+                                    level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
+                                    flag.set(true);
                                 }
-                                level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
-                                flag.set(true);
-                            }
-                        });
-                if (flag.get()) {
-                    return InteractionResult.SUCCESS;
+                            });
+                    if (flag.get()) {
+                        return InteractionResult.SUCCESS;
+                    }
                 }
             }
             return InteractionResult.PASS;

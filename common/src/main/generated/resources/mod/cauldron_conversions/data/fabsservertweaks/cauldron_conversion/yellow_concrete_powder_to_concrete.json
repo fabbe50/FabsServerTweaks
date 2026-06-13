@@ -1,4 +1,10 @@
 {
-  "input": "minecraft:yellow_concrete_powder",
-  "output": "minecraft:yellow_concrete"
+  "input": {
+    "count": 1,
+    "id": "minecraft:yellow_concrete_powder"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:yellow_concrete"
+  }
 }
