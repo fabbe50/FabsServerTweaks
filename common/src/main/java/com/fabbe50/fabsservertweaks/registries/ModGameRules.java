@@ -35,6 +35,7 @@ public class ModGameRules {
     public static final GameRule<Boolean> RULE_SAFE_CANT_SLEEP;
     public static final GameRule<Boolean> RULE_PET_FRIENDLY_FIRE;
     public static final GameRule<Boolean> RULE_FORTUNE_ANCIENT_DEBRIS;
+    public static final GameRule<Boolean> RULE_TORCHFLOWERS_GLOW;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = registerBoolean("mob_grief_enderman", GameRuleCategory.MOBS, true);
@@ -69,6 +70,7 @@ public class ModGameRules {
         RULE_SAFE_CANT_SLEEP = registerBoolean("safe_cant_sleep", GameRuleCategory.MISC, false);
         RULE_PET_FRIENDLY_FIRE = registerBoolean("pet_friendly_fire", GameRuleCategory.MISC, false);
         RULE_FORTUNE_ANCIENT_DEBRIS = registerBoolean("fortune_ancient_debris", GameRuleCategory.DROPS, false);
+        RULE_TORCHFLOWERS_GLOW = registerBoolean("torch_flowers_glow", GameRuleCategory.MISC, true);
     }
 
     public static GameRule<Boolean> registerBoolean(String name, GameRuleCategory category, boolean defaultValue) {
