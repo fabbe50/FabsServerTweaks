@@ -38,6 +38,7 @@ These settings are stored in the mod config and can be viewed or changed with `/
 - `cropTrampleMode`: controls farmland trampling. Supports vanilla behavior, no trampling, or trampling immunity with Feather Falling.
 - `eggTrampleMode`: the same idea for turtle eggs.
 - `difficulty`: controls how the custom hostile mob potion-effect system scales. Can either behave the same on all difficulties or scale with world difficulty.
+- `bundleCapacity`: sets how many vanilla item-units a bundle can hold. `64` is vanilla, `128` doubles capacity, and so on.
 - `shareSeed`: shares the world seed with players on join and allows non-moderators to use `/fabs seed`.
 - `overrideNormalLead`: overrides vanilla lead interaction and allows expanded leash targets.
 - `canLeashAnimals`: allows or blocks leashing animals through the modded lead logic.
@@ -89,6 +90,8 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `pet_friendly_fire`: when disabled, prevents players from hurting their own tameables.
 - `fortune_ancient_debris`: changes ancient debris drops to support direct scrap-style fortune scaling.
 - `torch_flowers_glow`: toggles torch flowers glowing.
+- `cactus_grow_height`: sets the max height of cactus growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
+- `sugar_cane_grow_height`: sets the max height of sugar cane growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
 
 ### Projectile and Item Recovery
 

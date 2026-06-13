@@ -36,6 +36,7 @@
     "SnowballMixin",
     "SnowGolemMixin",
     "SpiderMixin",
+    "SugarCaneBlockMixin",
     "ThrownExperienceBottleMixin",
     "ThrownTridentMixin",
     "TurtleEggBlockMixin",

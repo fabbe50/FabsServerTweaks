@@ -233,7 +233,14 @@ public class EventRegistry {
                                 return InteractionResult.SUCCESS;
                             }
                         } else if ((state.is(Blocks.SUGAR_CANE) || state.is(Blocks.CACTUS))) {
-                            if (growInColumn(serverLevel, pos, state.getBlock(), 3)) {
+                            int maxGrowHeight = 3;
+                            if (state.is(Blocks.CACTUS)) {
+                                maxGrowHeight = serverLevel.getGameRules().get(ModGameRules.RULE_CACTUS_GROW_HEIGHT);
+                            }
+                            if (state.is(Blocks.SUGAR_CANE)) {
+                                maxGrowHeight = serverLevel.getGameRules().get(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
+                            }
+                            if (growInColumn(serverLevel, pos, state.getBlock(), maxGrowHeight)) {
                                 handleBoneMealUsed(serverLevel, pos, player, stack, false);
                                 return InteractionResult.SUCCESS;
                             }

@@ -58,6 +58,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, true, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_CACTUS_GROW_HEIGHT, 3, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT, 3, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;
@@ -109,6 +111,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, false, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_CACTUS_GROW_HEIGHT, 3, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT, 3, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SAME_ON_ALL_DIFFICULTIES;
@@ -160,6 +164,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, true, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_CACTUS_GROW_HEIGHT, 5, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT, 5, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;
@@ -186,6 +192,8 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_RAIN_FILLS_CAULDRON, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SNOW_FILLS_CAULDRON, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW, false, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_CACTUS_GROW_HEIGHT, 1, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT, 1, minecraftServer);
             return true;
         }
     },
