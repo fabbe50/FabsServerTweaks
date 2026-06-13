@@ -1,0 +1,18 @@
+{
+  "input": {
+    "count": 1,
+    "id": "minecraft:campfire"
+  },
+  "output": {
+    "components": {
+      "minecraft:block_state": {
+        "facing": "north",
+        "lit": "false",
+        "signal_fire": "false",
+        "waterlogged": "false"
+      }
+    },
+    "count": 1,
+    "id": "minecraft:campfire"
+  }
+}

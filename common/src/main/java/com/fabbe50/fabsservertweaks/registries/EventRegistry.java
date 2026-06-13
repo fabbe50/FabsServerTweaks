@@ -45,6 +45,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -528,6 +529,16 @@ public class EventRegistry {
                     } else {
                         ItemStackUtil.removeLoreFuzzy(stack, "Holding Entity: ");
                         ItemStackUtil.addLore(stack, "Holding Entity: None");
+                    }
+                }
+            }
+            if (stack.is(Items.CAMPFIRE) || stack.is(Items.SOUL_CAMPFIRE)) {
+                BlockItemStateProperties properties = stack.get(DataComponents.BLOCK_STATE);
+                if (properties != null) {
+                    boolean lit = Boolean.TRUE.equals(properties.get(CampfireBlock.LIT));
+                    String name = stack.getItemName().getString();
+                    if (!lit && !name.contains("Unlit")) {
+                        stack.set(DataComponents.ITEM_NAME, Component.translatableWithFallback("item.unlit", "Unlit %s", stack.getItemName()));
                     }
                 }
             }

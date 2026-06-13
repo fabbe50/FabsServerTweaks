@@ -2,12 +2,15 @@ package com.fabbe50.fabsservertweaks.neoforge.datagen;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.data.CauldronConversionData;
-import com.fabbe50.fabsservertweaks.registries.ModRegistry;
+import com.fabbe50.fabsservertweaks.util.ItemStackUtil;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.neoforged.neoforge.common.data.JsonCodecProvider;
 import org.jspecify.annotations.NonNull;
 
@@ -45,6 +48,16 @@ public class CauldronConversions extends JsonCodecProvider<CauldronConversionDat
         cauldronConversion("magenta_concrete_powder_to_concrete", Items.MAGENTA_CONCRETE_POWDER, Items.MAGENTA_CONCRETE);
         cauldronConversion("pink_concrete_powder_to_concrete", Items.PINK_CONCRETE_POWDER, Items.PINK_CONCRETE);
         cauldronConversion("dirt_to_mud", Items.DIRT, Items.MUD);
+        cauldronConversion(
+                "lit_campfire_to_unlit_campfire",
+                new ItemStack(Blocks.CAMPFIRE),
+                ItemStackUtil.createStackWithState(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
+        );
+        cauldronConversion(
+                "lit_soul_campfire_to_unlit_soul_campfire",
+                new ItemStack(Blocks.SOUL_CAMPFIRE),
+                ItemStackUtil.createStackWithState(Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
+        );
     }
 
     private void cauldronConversion(String location, Item input, Item output) {
