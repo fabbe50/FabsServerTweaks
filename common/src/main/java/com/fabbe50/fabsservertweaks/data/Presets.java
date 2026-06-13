@@ -57,6 +57,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_EXPANDED_BONE_MEAL, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, true, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;
@@ -107,6 +108,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_EXPANDED_BONE_MEAL, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, false, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, false, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SAME_ON_ALL_DIFFICULTIES;
@@ -157,6 +159,7 @@ public enum Presets implements StringRepresentable {
             serverLevel.getGameRules().set(ModGameRules.RULE_EXPANDED_BONE_MEAL, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SLEEPING_BAGS_ENABLED, true, minecraftServer);
             serverLevel.getGameRules().set(ModGameRules.RULE_SAFE_CANT_SLEEP, false, minecraftServer);
+            serverLevel.getGameRules().set(ModGameRules.RULE_TORCHFLOWERS_GLOW, true, minecraftServer);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.FEATHER_FALLING;
             Fabsservertweaks.CONFIG.difficulty = Difficulty.SCALE_BY_DIFFICULTY;

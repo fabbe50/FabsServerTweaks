@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "FabsServerTweaks"
 authors = "fabbe50"
 description = '''
-Charting The Unknown Mod
+
 '''
 #logoFile = ""
 
@@ -23,7 +23,7 @@ side = "SERVER"
 [[dependencies.fabsservertweaks]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.8,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
 side = "BOTH"
 

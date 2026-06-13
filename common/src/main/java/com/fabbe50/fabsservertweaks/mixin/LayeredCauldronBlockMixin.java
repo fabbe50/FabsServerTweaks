@@ -33,7 +33,7 @@ public abstract class LayeredCauldronBlockMixin {
                     ItemStack inputStack = itemEntity.getItem();
                     for (CauldronConversionData conversionData : CauldronConversionLoader.INSTANCE.getDataMap().values()) {
                         if (conversionData.matches(inputStack)) {
-                            itemEntity.setItem(conversionData.output().copyWithCount(inputStack.getCount()));
+                            itemEntity.setItem(conversionData.getOutput().copyWithCount(inputStack.getCount()));
                             applyMovement(level, itemEntity);
                             break;
                         }

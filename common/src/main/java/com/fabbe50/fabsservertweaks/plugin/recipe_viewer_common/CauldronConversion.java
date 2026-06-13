@@ -19,10 +19,10 @@ public abstract class CauldronConversion<T> {
         Map<Identifier, CauldronConversionData> cauldronConversions = CauldronConversionLoader.INSTANCE.getDataMap();
         List<CauldronRecipe> recipes = new ArrayList<>();
         for (CauldronConversionData entry : cauldronConversions.values()) {
-            if (entry.input().isEmpty() || entry.output().isEmpty()) {
+            if (entry.getInput().isEmpty() || entry.getOutput().isEmpty()) {
                 continue;
             }
-            recipes.add(new CauldronRecipe(entry.input().copy(), entry.output().copy()));
+            recipes.add(new CauldronRecipe(entry.getInput().copy(), entry.getOutput().copy()));
         }
         registerRecipes(registry, recipes);
     }

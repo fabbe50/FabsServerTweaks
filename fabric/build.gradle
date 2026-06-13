@@ -1,19 +1,13 @@
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id "com.gradleup.shadow" version "9.2.2"
 }
 
 def generatedResources = project(":common").file("src/main/generated/resources")
 def commonBuiltinResourcePacks = project(":common").file("src/main/resources/resourcepacks")
 def accessWidener = project(":common").file("src/main/resources/${mod_id}.accesswidener")
 
-sourceSets {
-    main {
-        resources.srcDir generatedResources
-    }
-}
-
 loom {
-    accessWidenerPath.set(accessWidener)
+    accessWidenerPath = file(accessWidener)
 
     runs {
         client {
@@ -32,39 +26,43 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
+    shadowCommon {
+        canBeResolved = true
+        canBeConsumed = false
+    }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
+}
 
-    // Files in this configuration will be bundled into your mod using the Shadow plugin.
-    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
-    shadowBundle {
-        canBeResolved = true
-        canBeConsumed = false
+sourceSets {
+    main {
+        resources.srcDir generatedResources
     }
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    api "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    api "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    api "dev.architectury:architectury-fabric:${architectury_api_version}"
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    implementation "dev.architectury:architectury-fabric:${architectury_api_version}"
 
-    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    implementation "com.terraformersmc:modmenu:${mod_menu_version}" transitive false
+    implementation "me.shedaniel.cloth:cloth-config:${cloth_config_version}"
+    implementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}" transitive false
 
-    modImplementation "com.terraformersmc:modmenu:${mod_menu_version}" transitive false
-    modImplementation "me.shedaniel.cloth:cloth-config:${cloth_config_version}"
-    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}" transitive false
+    //localRuntime "dev.emi:emi-fabric:${emi_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+//    compileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+//    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+    //implementation "vazkii.patchouli:Patchouli:${patchouli_version_fabric}"
+    //implementation "dev.emi:trinkets:${trinkets_version}"
 
-    //modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
-    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
-    //modImplementation "vazkii.patchouli:Patchouli:${patchouli_version_fabric}"
-    //modImplementation "dev.emi:trinkets:${trinkets_version}"
-
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+    common(project(path: ':common')) { transitive false }
+    shadowCommon project(path: ':common', configuration: 'transformProductionFabric')
 }
 
 processResources {
@@ -83,11 +81,29 @@ processResources {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'dev-shadow'
+jar {
+    archiveClassifier = "raw"
 }
 
-remapJar {
-    input.set shadowJar.archiveFile
+java {
+    withSourcesJar()
+}
+
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()
+    from(zipTree(jar.archiveFile))
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
 }

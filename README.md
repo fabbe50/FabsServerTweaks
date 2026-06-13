@@ -236,7 +236,9 @@ Current conversions include:
 
 Enabled by default. Does not require restart.
 
-Adds data-driven smelting behavior for used tools and armor. The result can vary by durability tier and can also adjust cook time and XP.
+Adds data-driven smelting behavior for used tools and armor. The result can vary by durability tier and can also adjust cook time and XP. 
+
+**NOTE**: Because of how furnaces work, it's not enough to just add the durability-smelting recipe. The recipe must be added as a vanilla smelting recipe as well.
 
 Current data includes entries for:
 

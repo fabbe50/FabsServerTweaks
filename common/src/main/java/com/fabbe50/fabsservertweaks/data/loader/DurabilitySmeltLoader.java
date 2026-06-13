@@ -3,14 +3,20 @@ package com.fabbe50.fabsservertweaks.data.loader;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.DurabilitySmeltData;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistryAccess.Frozen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -24,15 +30,16 @@ public class DurabilitySmeltLoader extends SimpleJsonResourceReloadListener<Json
     }
 
     @Override
-    protected void apply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(Map<Identifier, JsonElement> map, @NonNull ResourceManager resourceManager, @NonNull ProfilerFiller profilerFiller) {
         dataMap.clear();
+        Frozen frozen = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, frozen);
         for (Map.Entry<Identifier, JsonElement> entry : map.entrySet()) {
             try {
-                DurabilitySmeltData data = DurabilitySmeltData.fromJson(entry.getValue().getAsJsonObject());
-                dataMap.put(entry.getKey(), data);
+                DurabilitySmeltData.CODEC.codec().parse(ops, entry.getValue()).resultOrPartial(error -> LogUtil.error(String.format("Failed to load %s: %s", entry.getKey().toString(), error))).ifPresent(data -> dataMap.put(entry.getKey(), data));
             } catch (Exception e) {
                 LogUtil.error("Failed to load durability recipe: " + entry.getKey());
-                LogUtil.error(e.toString());
+                LogUtil.error(e.getMessage(), e.fillInStackTrace());
             }
         }
         LogUtil.log("Loaded " + dataMap.size() + " durability recipe entries");

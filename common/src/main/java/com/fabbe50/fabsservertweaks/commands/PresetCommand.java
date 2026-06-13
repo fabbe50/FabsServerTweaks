@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.commands;
 
+import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.Presets;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -38,5 +39,7 @@ public class PresetCommand {
                 }));
 
         commandDispatcher.register(command);
+
+        LogUtil.log("Preset command registered");
     }
 }

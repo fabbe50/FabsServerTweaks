@@ -22,4 +22,8 @@ public class LogUtil {
     public static void error(String msg) {
         LOGGER.error(msg);
     }
+
+    public static void error(String msg, Throwable throwable) {
+        LOGGER.error(msg, throwable);
+    }
 }

@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.commands;
 
+import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -38,5 +39,7 @@ public class NicknameCommand {
                             return 0;
                         }))
         );
+
+        LogUtil.log("Nickname command registered");
     }
 }

@@ -4,7 +4,6 @@ import com.fabbe50.fabsservertweaks.data.DurabilitySmeltData;
 import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -27,9 +26,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     private static void createExperience(ServerLevel arg, Vec3 arg2, int j, float g) {
     }
 
-    @Redirect(method = "burn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/AbstractCookingRecipe;assemble(Lnet/minecraft/world/item/crafting/SingleRecipeInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;"))
-    private static ItemStack redirectAssemble(AbstractCookingRecipe recipe, SingleRecipeInput singleRecipeInput, HolderLookup.Provider provider) {
-        ItemStack vanilla = recipe.assemble(singleRecipeInput, provider);
+    @Redirect(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/AbstractCookingRecipe;assemble(Lnet/minecraft/world/item/crafting/SingleRecipeInput;)Lnet/minecraft/world/item/ItemStack;"))
+    private static ItemStack redirectServerTickAssemble(AbstractCookingRecipe recipe, SingleRecipeInput singleRecipeInput) {
+        ItemStack vanilla = recipe.assemble(singleRecipeInput);
 
         ItemStack input = singleRecipeInput.item();
         if (input.isEmpty()) {
@@ -46,7 +45,7 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             return vanilla;
         }
 
-        return tier.result().copy();
+        return tier.getResult();
     }
 
     @Inject(method = "getTotalCookTime", at = @At("HEAD"), cancellable = true)

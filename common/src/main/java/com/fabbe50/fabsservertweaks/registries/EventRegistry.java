@@ -20,6 +20,7 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -63,6 +64,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -80,7 +82,7 @@ public class EventRegistry {
                 }
                 if (serverLevel.getGameRules().get(ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
                     if (entity instanceof Monster monster) {
-                        if (entity.getType().is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
+                        if (entity.is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
                             return EventResult.pass();
                         }
                         RandomSource random = entity.getRandom();
@@ -114,12 +116,13 @@ public class EventRegistry {
                 if (damageSource.getEntity() instanceof Player player) {
                     ItemStack toolStack = player.getItemInHand(player.getUsedItemHand());
                     if (EnchantmentUtil.hasEnchantment(player, toolStack, ModRegistry.CAPTURING)) {
-                        SpawnEggItem item = SpawnEggItem.byId(livingEntity.getType());
-                        if (item != null) {
+                        Optional<Holder<Item>> optionalItemHolder = SpawnEggItem.byId(livingEntity.getType());
+                        if (optionalItemHolder.isPresent()) {
+                            Holder<Item> itemHolder = optionalItemHolder.get();
                             int capturingLevel = EnchantmentUtil.getEnchantmentLevel(player, toolStack, ModRegistry.CAPTURING);
                             double chance = Math.min(50d / (1000 / Math.pow(10, Math.clamp(capturingLevel, 1, 3))), 50);
-                            if (level.random.nextInt(0, 100) < chance) {
-                                dropItem(level, livingEntity.blockPosition(), new ItemStack(item));
+                            if (level.getRandom().nextInt(0, 100) < chance) {
+                                dropItem(level, livingEntity.blockPosition(), new ItemStack(itemHolder.value()));
                             }
                         }
                     }
@@ -334,10 +337,7 @@ public class EventRegistry {
                                             return false;
                                         }
                                         float speed = state1.getDestroySpeed(serverLevel, blockPos);
-                                        if (speed <= baseSpeed) {
-                                            return true;
-                                        }
-                                        return false;
+                                        return speed <= baseSpeed;
                                     })
                                     .map(BlockPos::immutable)
                                     .collect(Collectors.toSet());
@@ -384,7 +384,7 @@ public class EventRegistry {
                 if (EnchantmentUtil.hasFortune(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
                     int fortuneLevel = EnchantmentUtil.getEnchantmentLevel(player, toolStack, Enchantments.FORTUNE);
                     if (state.is(Blocks.ANCIENT_DEBRIS) && serverLevel.getGameRules().get(ModGameRules.RULE_FORTUNE_ANCIENT_DEBRIS)) {
-                        if (dropItem(level, pos, new ItemStack(Items.NETHERITE_SCRAP, level.random.nextInt(fortuneLevel) + 1))) {
+                        if (dropItem(level, pos, new ItemStack(Items.NETHERITE_SCRAP, level.getRandom().nextInt(fortuneLevel) + 1))) {
                             serverLevel.destroyBlock(pos, false);
                             return EventResult.interruptFalse();
                         }
@@ -446,7 +446,7 @@ public class EventRegistry {
             if (stack.is(Items.EXPERIENCE_BOTTLE)) {
                 CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
                 if (tag.contains("xp")) {
-                    int xpPoints = tag.getInt("xp").get();
+                    int xpPoints = tag.getInt("xp").orElse(0);
                     XPUtil.addExperiencePoints(player, xpPoints);
                     stack.shrink(1);
                     return InteractionResult.SUCCESS;
@@ -482,11 +482,15 @@ public class EventRegistry {
                     if (tamableAnimal.isOwnedBy(player)) {
                         switch (tamableAnimal) {
                             case Wolf wolf -> {
-                                ServerUtil.sendSound(serverLevel, player, wolf, wolf.getSoundVariant().value().pantSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                if (wolf.isBaby()) {
+                                    ServerUtil.sendSound(serverLevel, player, wolf, wolf.getSoundVariant().value().babySounds().pantSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                } else {
+                                    ServerUtil.sendSound(serverLevel, player, wolf, wolf.getSoundVariant().value().adultSounds().pantSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                }
                                 ServerUtil.sendParticle(serverLevel, ParticleTypes.HEART, wolf, 15, 0.5, 0.3);
                             }
                             case Cat cat -> {
-                                ServerUtil.sendSound(serverLevel, player, cat, SoundEvents.CAT_PURR, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                                ServerUtil.sendSound(serverLevel, player, cat, cat.getSoundSet().purrSound(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                                 ServerUtil.sendParticle(serverLevel, ParticleTypes.HEART, cat, new Vec3(0, -0.2, 0), 15, 0.5, 0.3);
                             }
                             case Parrot parrot -> {
@@ -721,25 +725,25 @@ public class EventRegistry {
     }
 
     private static boolean canLeash(LivingEntity entity) {
-        if (entity.getType().is(ModRegistry.LEAD_BLACKLIST)) {
+        if (entity.is(ModRegistry.LEAD_BLACKLIST)) {
             return false;
         }
-        if (entity.getType().is(ModRegistry.PETS)) {
+        if (entity.is(ModRegistry.PETS)) {
             return Fabsservertweaks.CONFIG.canLeashPets;
         }
-        if (entity.getType().is(ModRegistry.ANIMALS)) {
+        if (entity.is(ModRegistry.ANIMALS)) {
             return Fabsservertweaks.CONFIG.canLeashAnimals;
         }
-        if (entity.getType().is(ModRegistry.HOSTILES)) {
+        if (entity.is(ModRegistry.HOSTILES)) {
             return Fabsservertweaks.CONFIG.canLeashMonsters;
         }
-        if (entity.getType().is(ModRegistry.BOSSES)) {
+        if (entity.is(ModRegistry.BOSSES)) {
             return Fabsservertweaks.CONFIG.canLeashBosses;
         }
-        if (entity.getType().is(ModRegistry.VILLAGER_TYPES)) {
+        if (entity.is(ModRegistry.VILLAGER_TYPES)) {
             return Fabsservertweaks.CONFIG.canLeashVillagerTypes;
         }
-        if (entity.getType().is(ModRegistry.GOLEMS)) {
+        if (entity.is(ModRegistry.GOLEMS)) {
             return Fabsservertweaks.CONFIG.canLeashGolems;
         }
         return true;

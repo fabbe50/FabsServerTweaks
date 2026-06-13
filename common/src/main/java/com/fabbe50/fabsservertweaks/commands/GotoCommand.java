@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.commands;
 
+import com.fabbe50.fabsservertweaks.LogUtil;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -44,5 +45,6 @@ public class GotoCommand {
                             return 0;
                         }))
         );
+        LogUtil.log("Goto command registered");
     }
 }

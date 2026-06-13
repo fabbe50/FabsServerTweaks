@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.commands;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
+import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.ModConfig;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficulty;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.DifficultyArgumentType;
@@ -50,12 +51,15 @@ public class ServerTweaksCommand {
                 "canLeashGolems",
                 "canLeashPets"
         );
+        List<String> INTEGER_SETTINGS = List.of(
+        );
         List<String> ALL_SETTINGS = new ArrayList<>(List.of(
                 "cropTrampleMode",
                 "eggTrampleMode",
                 "difficultyType"
         ));
         ALL_SETTINGS.addAll(BOOLEAN_SETTINGS);
+        ALL_SETTINGS.addAll(INTEGER_SETTINGS);
         SuggestionProvider<CommandSourceStack> optionProvider = (context, builder) -> {
             ALL_SETTINGS.forEach(builder::suggest);
             return CompletableFuture.supplyAsync(() -> Suggestions.create("option", builder.build().getList()));
@@ -121,6 +125,17 @@ public class ServerTweaksCommand {
                         }
                         AutoConfig.getConfigHolder(ModConfig.class).save();
                         context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + (booleanValue ? "enabled" : "disabled")), true);
+                        return 1;
+                    } else if (INTEGER_SETTINGS.contains(option)) {
+                        int integerValue = Integer.parseInt(value);
+                        switch (option) {
+                            default -> {
+                                context.getSource().sendFailure(Component.literal("Invalid value: " + integerValue));
+                                return 0;
+                            }
+                        }
+                        AutoConfig.getConfigHolder(ModConfig.class).save();
+                        context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + integerValue), true);
                         return 1;
                     }
                     context.getSource().sendFailure(Component.literal("Invalid option: " + option));
@@ -248,6 +263,8 @@ public class ServerTweaksCommand {
                         .then(enchantArgument)
                         .then(featureArgument)
         );
+
+        LogUtil.log("Server tweaks command registered");
     }
 
     private static int enchant(CommandContext<CommandSourceStack> context, ServerPlayer player, Reference<Enchantment> enchantment, int level) {

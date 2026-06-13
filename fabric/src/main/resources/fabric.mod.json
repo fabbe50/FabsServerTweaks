@@ -3,7 +3,7 @@
   "id": "fabsservertweaks",
   "version": "${version}",
   "name": "FabsServerTweaks",
-  "description": "Charting The Unknown Mod",
+  "description": "",
   "authors": [
     "fabbe50"
   ],
@@ -42,7 +42,7 @@
   "accessWidener": "fabsservertweaks.accesswidener",
   "depends": {
     "fabricloader": ">=0.17.2",
-    "minecraft": "~1.21.8",
+    "minecraft": "~26.1",
     "java": ">=21",
     "architectury": ">=17.0.8",
     "fabric-api": "*"

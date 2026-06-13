@@ -8,7 +8,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -39,8 +39,8 @@ public class CauldronConversionJEI extends CauldronConversion<IRecipeRegistratio
                 }
 
                 @Override
-                public void draw(@NonNull GuiGraphics guiGraphics, int x, int y) {
-                    guiGraphics.renderFakeItem(new ItemStack(Blocks.WATER_CAULDRON), x, y);
+                public void draw(@NonNull GuiGraphicsExtractor guiGraphics, int x, int y) {
+                    guiGraphics.fakeItem(new ItemStack(Blocks.WATER_CAULDRON), x, y);
                 }
             }, 108, 18);
         }

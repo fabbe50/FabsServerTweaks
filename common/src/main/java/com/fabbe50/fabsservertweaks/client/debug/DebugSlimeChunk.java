@@ -39,7 +39,7 @@ public class DebugSlimeChunk implements DebugScreenEntry {
         if (Minecraft.getInstance().level != null) {
             assert cameraEntity != null;
             final BlockPos blockPos = cameraEntity.blockPosition();
-            final ChunkPos chunkPos = new ChunkPos(blockPos);
+            final ChunkPos chunkPos = ChunkPos.containing(blockPos);
 
             boolean isIntegrated = integratedServer != null;
 
@@ -49,7 +49,7 @@ public class DebugSlimeChunk implements DebugScreenEntry {
             }
 
             if (ClientData.getCurrentSeed() != 0L) {
-                final RandomSource slimeChunk = WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, ClientData.getCurrentSeed(), 0x3ad8025fL);
+                final RandomSource slimeChunk = WorldgenRandom.seedSlimeChunk(chunkPos.x(), chunkPos.z(), ClientData.getCurrentSeed(), 0x3ad8025fL);
                 slimeChunkDisplay = "Slime Chunk: " + ((slimeChunk.nextInt(10) == 0) ? "True" : "False");
             }
         }
