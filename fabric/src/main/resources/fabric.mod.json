@@ -44,11 +44,21 @@
     "fabricloader": ">=0.17.2",
     "minecraft": "~26.1",
     "java": ">=21",
-    "architectury": ">=17.0.8",
-    "fabric-api": "*"
+    "architectury": ">=17.0.8"
+  },
+  "recommends": {
+    "roughlyenoughitems": "*",
+    "jei": "*"
   },
   "suggests": {
     "another-mod": "*"
+    "polymer-core": "*",
+    "polymer-blocks": "*",
+    "polymer-resource-pack": "*",
+    "polymer-autohost": "*",
+    "polymer-virtual-entity": "*",
+  },
+  "conflicts": {
   },
   "custom": {
     "fabric-networking-v0:serverOnly": true

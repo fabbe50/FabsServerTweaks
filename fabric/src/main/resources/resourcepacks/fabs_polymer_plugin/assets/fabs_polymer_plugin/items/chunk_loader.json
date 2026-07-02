@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "fabs_polymer_plugin:block/chunk_loader"
+  }
+}

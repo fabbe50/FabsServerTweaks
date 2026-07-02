@@ -23,4 +23,8 @@ public class ModConfig implements ConfigData {
 
     @Comment("The percentage chance for a plant to grow an extra step. Default=20")
     public int plantRainGrowthChance = 20;
+
+    public boolean enableLootrPolymerPlugin = true;
+    public boolean enableUniversalOresPlugin = true;
+    public boolean enableResourceNetherOresPlugin = true;
 }

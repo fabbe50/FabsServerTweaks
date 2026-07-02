@@ -13,6 +13,7 @@ The mod is designed to work server-side, with optional client installation for m
 - Fabric or NeoForge (required) – Needed for the mod to run on Minecraft.
   - Fabric additionally requires:
     - Fabric API
+- Polymer (optional) [Fabric-only] – Allows the mod to add some server side content (read more below).
 - Mod Menu (optional) [Fabric-only] – Allows the mod to add a configuration screen in game on clients.
 
 ## How Features Are Controlled
@@ -377,6 +378,13 @@ The mod includes a REI plugin that adds support for the mod's custom recipes.
 ### Mod Menu (Fabric Only)
 Mod Menu is a client-side mod that lists mods installed on the client and allows for opening configuration screens in game.
 
+### Polymer (Fabric Only)
+
+Allows the mod to add server-side content like custom blocks and items. It also allows the mod to display textures for things that would normally be client-sided.
+
+Current features:
+- Chunk Loader (force loads a single chunk).
+- Textures and item models for the unlit campfire items.
 ## Preset Philosophy
 
 The included presets make it easier to swing between:

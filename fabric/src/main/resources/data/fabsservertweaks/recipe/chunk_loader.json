@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabs_chunk_loader",
+  "ingredients": [
+    "minecraft:amethyst_cluster",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "fabsservertweaks:chunk_loader"
+  }
+}

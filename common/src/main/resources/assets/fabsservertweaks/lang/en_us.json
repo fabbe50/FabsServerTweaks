@@ -19,5 +19,6 @@
   "enchantment.fabsservertweaks.capturing": "Capturing",
   "enchantment.fabsservertweaks.capturing.desc": "Allows mobs to drop their spawn eggs.",
   "recipe_viewer.category.fabsservertweaks.cauldron_conversion": "Cauldron Conversion",
-  "item.unlit": "Unlit %s"
+  "item.unlit": "Unlit %s",
+  "item.fabsservertweaks.chunk_loader": "Chunk Loader"
 }

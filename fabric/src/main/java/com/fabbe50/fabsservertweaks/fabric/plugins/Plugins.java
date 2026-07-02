@@ -1,0 +1,26 @@
+package com.fabbe50.fabsservertweaks.fabric.plugins;
+
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
+import com.fabbe50.fabsservertweaks.LogUtil;
+import com.fabbe50.fabsservertweaks.fabric.FabricPluginHelper;
+import com.fabbe50.fabsservertweaks.fabric.plugins.base.Plugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.fabs.FabsPolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.lootr.LootrPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.resource_nether_ores.ResourceNetherOresPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.universal_ores.UniversalOresPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.vanilla.VanillaPlugin;
+
+import java.util.LinkedList;
+
+public class Plugins {
+    private static final LinkedList<Plugin> plugins = new LinkedList<>();
+
+    public static void init() {
+        if (FabricPluginHelper.arePolymerComponentsLoaded()) {
+            plugins.add(new FabsPolymerPlugin());
+            plugins.add(new VanillaPlugin());
+        }
+
+        plugins.forEach(Plugin::initialize);
+    }
+}
