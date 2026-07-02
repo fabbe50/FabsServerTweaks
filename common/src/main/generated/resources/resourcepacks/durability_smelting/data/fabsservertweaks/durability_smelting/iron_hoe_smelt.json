@@ -2,8 +2,8 @@
   "defaultCookTime": 200,
   "defaultXp": 0.7,
   "furnaceType": [
-    "blast_furnace",
-    "furnace"
+    "furnace",
+    "blast_furnace"
   ],
   "ingredient": "minecraft:iron_hoe",
   "tiers": [
@@ -83,7 +83,6 @@
       "cookTime": 108,
       "minPercent": 47,
       "result": {
-        "count": 1,
         "id": "minecraft:iron_ingot"
       }
     },
@@ -147,7 +146,6 @@
       "cookTime": 20,
       "minPercent": 0,
       "result": {
-        "count": 1,
         "id": "minecraft:iron_nugget"
       }
     }

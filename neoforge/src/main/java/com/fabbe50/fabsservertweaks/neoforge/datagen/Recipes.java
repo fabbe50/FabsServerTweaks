@@ -14,6 +14,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
@@ -105,6 +106,7 @@ public abstract class Recipes extends RecipeProvider {
                     new ModIngredient(Items.SAND),
                     new ModIngredient(Items.RED_DYE)
             );
+            shapeless(RecipeCategory.MISC, Items.LEATHER, 1, "leather_from_rotten_flesh", "has_rotten_flesh", new ModIngredient(Items.ROTTEN_FLESH, 9));
             shapeless9x9(RecipeCategory.MISC, Items.TUBE_CORAL_BLOCK, "has_tube_coral_block", ModRegistry.TUBE_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.BRAIN_CORAL_BLOCK, "has_brain_coral_block", ModRegistry.BRAIN_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.BUBBLE_CORAL_BLOCK, "has_bubble_coral_block", ModRegistry.BUBBLE_CORALS);
@@ -138,12 +140,12 @@ public abstract class Recipes extends RecipeProvider {
 
         @Override
         protected void buildRecipes() {
-            oreBlasting(List.of(Items.RAW_COPPER_BLOCK), RecipeCategory.MISC, Items.GOLD_BLOCK, 9, 900, "");
-            oreBlasting(List.of(Items.RAW_IRON_BLOCK), RecipeCategory.MISC, Items.IRON_BLOCK, 9, 900, "");
-            oreBlasting(List.of(Items.RAW_GOLD_BLOCK), RecipeCategory.MISC, Items.GOLD_BLOCK, 9, 900, "");
-            oreSmelting(List.of(Items.RAW_COPPER_BLOCK), RecipeCategory.MISC, Items.COPPER_INGOT, 9, 1800, "");
-            oreSmelting(List.of(Items.RAW_IRON_BLOCK), RecipeCategory.MISC, Items.IRON_INGOT, 9, 1800, "");
-            oreSmelting(List.of(Items.RAW_GOLD_BLOCK), RecipeCategory.MISC, Items.GOLD_INGOT, 9, 1800, "");
+            oreBlasting(List.of(Items.RAW_COPPER_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.COPPER_BLOCK, 9, 900, "");
+            oreBlasting(List.of(Items.RAW_IRON_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.IRON_BLOCK, 9, 900, "");
+            oreBlasting(List.of(Items.RAW_GOLD_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.GOLD_BLOCK, 9, 900, "");
+            oreSmelting(List.of(Items.RAW_COPPER_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.COPPER_BLOCK, 9, 1800, "");
+            oreSmelting(List.of(Items.RAW_IRON_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.IRON_BLOCK, 9, 1800, "");
+            oreSmelting(List.of(Items.RAW_GOLD_BLOCK), RecipeCategory.MISC, CookingBookCategory.BLOCKS, Items.GOLD_BLOCK, 9, 1800, "");
         }
     }
 

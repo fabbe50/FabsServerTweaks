@@ -9,6 +9,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.data.JsonCodecProvider;
@@ -124,7 +125,7 @@ public class DurabilitySmeltRecipes extends JsonCodecProvider<DurabilitySmeltDat
     }
 
     private Tier tier(int minPercent, Item item, int amount, Integer cookTime, Float xp) {
-        return new Tier(minPercent, new ItemStack(item, amount), cookTime, xp);
+        return new Tier(minPercent, new ItemStackTemplate(item, amount), cookTime, xp);
     }
 
     private record ToolValueData(Item tool, String tool_type, int ingredientCount, int partCount) {

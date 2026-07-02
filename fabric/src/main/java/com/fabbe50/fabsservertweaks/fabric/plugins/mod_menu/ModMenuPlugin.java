@@ -1,4 +1,4 @@
-package com.fabbe50.fabsservertweaks.fabric.plugins;
+package com.fabbe50.fabsservertweaks.fabric.plugins.mod_menu;
 
 import com.fabbe50.fabsservertweaks.ModConfig;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;

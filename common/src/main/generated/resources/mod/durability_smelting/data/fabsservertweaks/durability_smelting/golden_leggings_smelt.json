@@ -2,8 +2,8 @@
   "defaultCookTime": 200,
   "defaultXp": 0.7,
   "furnaceType": [
-    "blast_furnace",
-    "furnace"
+    "furnace",
+    "blast_furnace"
   ],
   "ingredient": "minecraft:golden_leggings",
   "tiers": [
@@ -443,7 +443,6 @@
       "cookTime": 44,
       "minPercent": 12,
       "result": {
-        "count": 1,
         "id": "minecraft:gold_ingot"
       }
     },
@@ -507,7 +506,6 @@
       "cookTime": 20,
       "minPercent": 0,
       "result": {
-        "count": 1,
         "id": "minecraft:gold_nugget"
       }
     }

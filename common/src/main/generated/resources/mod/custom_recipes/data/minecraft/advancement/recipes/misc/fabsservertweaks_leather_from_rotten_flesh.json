@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_gold_block": {
+    "has_rotten_flesh": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:raw_gold_block"
+            "items": "minecraft:rotten_flesh"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:gold_ingot_from_smelting_raw_gold_block"
+        "recipe": "minecraft:fabsservertweaks_leather_from_rotten_flesh"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_gold_block"
+      "has_rotten_flesh"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:gold_ingot_from_smelting_raw_gold_block"
+      "minecraft:fabsservertweaks_leather_from_rotten_flesh"
     ]
   }
 }

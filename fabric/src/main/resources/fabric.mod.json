@@ -33,7 +33,7 @@
       "com.fabbe50.fabsservertweaks.plugin.rei.ModREIServerPlugin"
     ],
     "modmenu": [
-      "com.fabbe50.fabsservertweaks.fabric.plugins.ModMenuPlugin"
+      "com.fabbe50.fabsservertweaks.fabric.plugins.mod_menu.ModMenuPlugin"
     ]
   },
   "mixins": [

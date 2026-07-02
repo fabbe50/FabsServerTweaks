@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_leather_from_rotten_flesh",
+  "ingredients": [
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh",
+    "minecraft:rotten_flesh"
+  ],
+  "result": {
+    "id": "minecraft:leather"
+  }
+}

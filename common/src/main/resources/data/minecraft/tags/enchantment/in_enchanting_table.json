@@ -35,10 +35,6 @@
     {
       "id": "fabsservertweaks:ender",
       "required": false
-    },
-    {
-      "id": "fabsservertweaks:ore_miner",
-      "required": false
     }
   ]
 }

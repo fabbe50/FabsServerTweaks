@@ -119,3 +119,9 @@ runs/
 !gradle-wrapper.jar
 
 common/src/main/generated/resources/.cache/
+/.tmp_lootr
+/.tmp_mc_assets
+/.tmp_polymer
+/.tmp_polymer_rp
+/.tmp_loader
+/- resources -

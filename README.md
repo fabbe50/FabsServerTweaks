@@ -13,6 +13,7 @@ The mod is designed to work server-side, with optional client installation for m
 - Fabric or NeoForge (required) – Needed for the mod to run on Minecraft.
   - Fabric additionally requires:
     - Fabric API
+- Mod Menu (optional) [Fabric-only] – Allows the mod to add a configuration screen in game on clients.
 
 ## How Features Are Controlled
 
@@ -223,6 +224,7 @@ Adds a small collection of utility recipes, including:
 - red sand recoloring
 - clay and calcite recipes
 - a larger `mass calcite` recipe
+- rotten flesh to leather
 
 ### `CAULDRON_CONVERSIONS`
 
@@ -369,6 +371,9 @@ The mod includes a JEI plugin that adds support for the mod's custom recipes.
 
 ### Roughly Enough Items (REI)
 The mod includes a REI plugin that adds support for the mod's custom recipes.
+
+### Mod Menu (Fabric Only)
+Mod Menu is a client-side mod that lists mods installed on the client and allows for opening configuration screens in game.
 
 ## Preset Philosophy
 

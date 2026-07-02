@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -50,21 +50,21 @@ public class CauldronConversions extends JsonCodecProvider<CauldronConversionDat
         cauldronConversion("dirt_to_mud", Items.DIRT, Items.MUD);
         cauldronConversion(
                 "lit_campfire_to_unlit_campfire",
-                new ItemStack(Blocks.CAMPFIRE),
-                ItemStackUtil.createStackWithState(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
+                new ItemStackTemplate(Blocks.CAMPFIRE.asItem()),
+                ItemStackUtil.createStackTemplateWithState(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
         );
         cauldronConversion(
                 "lit_soul_campfire_to_unlit_soul_campfire",
-                new ItemStack(Blocks.SOUL_CAMPFIRE),
-                ItemStackUtil.createStackWithState(Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
+                new ItemStackTemplate(Blocks.SOUL_CAMPFIRE.asItem()),
+                ItemStackUtil.createStackTemplateWithState(Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false))
         );
     }
 
     private void cauldronConversion(String location, Item input, Item output) {
-        this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(new ItemStack(input), new ItemStack(output)));
+        this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(new ItemStackTemplate(input), new ItemStackTemplate(output)));
     }
 
-    private void cauldronConversion(String location, ItemStack input, ItemStack output) {
+    private void cauldronConversion(String location, ItemStackTemplate input, ItemStackTemplate output) {
         this.unconditional(Fabsservertweaks.location(location), new CauldronConversionData(input, output));
     }
 }

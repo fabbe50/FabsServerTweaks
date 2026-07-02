@@ -549,7 +549,7 @@ public class EventRegistry {
                     boolean lit = Boolean.TRUE.equals(properties.get(CampfireBlock.LIT));
                     String name = stack.getItemName().getString();
                     if (!lit && !name.contains("Unlit")) {
-                        stack.set(DataComponents.ITEM_NAME, Component.translatableWithFallback("item.unlit", "Unlit %s", stack.getItemName()));
+                        stack.set(DataComponents.ITEM_NAME, Component.translatableWithFallback("item.unlit", "Unlit %s", name));
                     }
                 }
             }
