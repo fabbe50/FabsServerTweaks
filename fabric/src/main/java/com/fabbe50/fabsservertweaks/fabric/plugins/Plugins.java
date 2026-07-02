@@ -30,6 +30,11 @@ public class Plugins {
         } else {
             LogUtil.warn("Universal Ores plugin disabled or components are not loaded, disabling Universal Ores support.");
         }
+        if (FabricPluginHelper.areResourceNetherOresComponentsLoaded() && Fabsservertweaks.CONFIG.enableResourceNetherOresPlugin) {
+            plugins.add(new ResourceNetherOresPlugin());
+        } else {
+            LogUtil.warn("Resource Nether Ores plugin disabled or components are not loaded, disabling Resource Nether Ores support.");
+        }
 
         plugins.forEach(Plugin::initialize);
     }

@@ -11,6 +11,8 @@ public class FabricPluginHelper {
     public static final String POLYMER_AUTOHOST_ID = "polymer-autohost";
     public static final String POLYMER_VIRTUAL_ENTITY_ID = "polymer-virtual-entity";
     public static final String LOOTR_POLYMER_ID = "lootr_polymer";
+    public static final String RESOURCE_LIBRARY_ID = "resourcelibrary";
+    public static final String RESOURCE_NETHER_ORES_ID = "resource_nether_ores";
 
     public static boolean areLootrPluginComponentsLoaded() {
         return isModLoaded(LOOTR_ID) && arePolymerComponentsLoaded() && !isModLoaded(LOOTR_POLYMER_ID);
@@ -18,6 +20,10 @@ public class FabricPluginHelper {
 
     public static boolean areUniversalOresComponentsLoaded() {
         return isModLoaded(UNIVERSAL_ORES_ID) && arePolymerComponentsLoaded();
+    }
+
+    public static boolean areResourceNetherOresComponentsLoaded() {
+        return isModLoaded(RESOURCE_NETHER_ORES_ID) && isModLoaded(RESOURCE_LIBRARY_ID) && arePolymerComponentsLoaded();
     }
 
     public static boolean arePolymerComponentsLoaded() {

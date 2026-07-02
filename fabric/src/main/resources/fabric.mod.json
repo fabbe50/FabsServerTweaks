@@ -58,6 +58,8 @@
     "polymer-virtual-entity": "*",
     "lootr": "*",
     "universal_ores": "*",
+    "resourcelibrary": "*",
+    "resource_nether_ores": "*"
   },
   "conflicts": {
     "lootr_polymer": "*"

@@ -16,6 +16,7 @@ The mod is designed to work server-side, with optional client installation for m
 - Polymer (optional) [Fabric-only] – Allows the mod to add some server side content (read more below).
 - Lootr (optional, requires Polymer) [Fabric-only] - Compatibility layer to make Lootr completely server side (read more below).
 - Universal Ores (optional, requires Polymer) [Fabric-only] - Compatibility layer to make Universal Ores completely server side (read more below).
+- Resource Nether Ores (optional, requires Polymer) [Fabric-only] - Compatibility layer to make Resource Nether Ores completely server side (read more below).
 - Mod Menu (optional) [Fabric-only] – Allows the mod to add a configuration screen in game on clients.
 
 ## How Features Are Controlled
@@ -394,10 +395,17 @@ Current features:
 - Universal Ores Compatibility
   - Allows the Universal Ores mod to work server-side only by registering the content through Polymer and sending the resources to the client.
   - Note: Requires Universal Ores to be installed on the server.
+- Resource Nether Ores Compatibility
+  - Allows the Resource Nether Ores mod to work server-side only by registering the content through Polymer and sending the resources to the client.
+  - Note: Requires Resource Nether Ores to be installed on the server.
 
 ### Universal Ores (Fabric Only)
 
 Allows Universal Ores to function server-side by registering the content through Polymer and sending the resources to the client.
+
+### Resource Nether Ores (Fabric Only)
+
+Allows Resource Nether Ores to function server-side by registering the content through Polymer and sending the resources to the client.
 
 ### Lootr (Fabric Only)
 

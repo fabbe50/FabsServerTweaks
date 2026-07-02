@@ -60,6 +60,8 @@ dependencies {
     implementation "eu.pb4:polymer-virtual-entity:${polymer_core_version}"
     implementation "maven.modrinth:lootr:${lootr_modrinth_version_id}"
     implementation "maven.modrinth:68kWHuUF:${universal_ores_modrinth_version_id}"
+    implementation "maven.modrinth:XLhounCW:${resource_library_modrinth_version_id}"
+    implementation "maven.modrinth:GXPQteCw:${resource_nether_ores_modrinth_version_id}"
 
     //localRuntime "dev.emi:emi-fabric:${emi_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
