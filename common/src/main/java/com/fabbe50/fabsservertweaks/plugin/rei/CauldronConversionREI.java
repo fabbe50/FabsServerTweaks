@@ -4,7 +4,7 @@ import com.fabbe50.fabsservertweaks.plugin.recipe_viewer_common.CauldronConversi
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-/*import me.shedaniel.math.Point;
+import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -17,7 +17,7 @@ import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import me.shedaniel.rei.api.common.util.EntryStacks;*/
+import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -28,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CauldronConversionREI /*extends CauldronConversion<DisplayRegistry>*/ {
-    /*public static final CategoryIdentifier<CauldronConversionDisplay> CAULDRON_CONVERSION_DISPLAY = CategoryIdentifier.of(CAULDRON_CONVERSION);
+public class CauldronConversionREI extends CauldronConversion<DisplayRegistry> {
+    public static final CategoryIdentifier<CauldronConversionDisplay> CAULDRON_CONVERSION_DISPLAY = CategoryIdentifier.of(CAULDRON_CONVERSION);
 
     @Override
     protected void registerRecipes(DisplayRegistry registry, List<CauldronRecipe> cauldronRecipes) {
@@ -102,5 +102,5 @@ public class CauldronConversionREI /*extends CauldronConversion<DisplayRegistry>
         public @Nullable DisplaySerializer<? extends Display> getSerializer() {
             return DisplaySerializer.of(CODEC, STREAM_CODEC);
         }
-    }*/
+    }
 }

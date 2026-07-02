@@ -61,9 +61,9 @@ dependencies {
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-//    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-//    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
 
     common(project(path: ':common')) { transitive false }
     shadowCommon project(path: ':common', configuration: 'transformProductionNeoForge')

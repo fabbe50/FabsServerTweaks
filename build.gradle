@@ -46,6 +46,10 @@ subprojects {
             name = "ModMaven"
             url = "https://modmaven.dev"
         }
+        maven {
+            name = "Nucleoid Polymer"
+            url = "https://maven.nucleoid.xyz/"
+        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -63,7 +67,7 @@ subprojects {
 allprojects {
     apply plugin: 'java'
 
-    version = minecraft_version-mod_version
+    version = "${minecraft_version}-${mod_version}"
 
     base {
         archivesName = archives_name

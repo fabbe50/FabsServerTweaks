@@ -8,9 +8,9 @@ The mod is designed to work server-side, with optional client installation for m
 
 ### Dependencies
 
-- Architectury API
-- Cloth Config
-- Fabric or NeoForge
+- Architectury API (required) – Allows the mod to run on Fabric or NeoForge.
+- Cloth Config (required) - Makes configuring the mod possible.
+- Fabric or NeoForge (required) – Needed for the mod to run on Minecraft.
   - Fabric additionally requires:
     - Fabric API
 
@@ -29,7 +29,9 @@ This makes it possible to run the mod in a very vanilla-like mode or enable a mu
 
 The mod works server-side only. Vanilla clients can connect and play normally.
 
-For the best visual experience, installing it on the client is recommended, since some custom piston and presentation logic may otherwise be shown using vanilla client visuals.
+For the best visual experience, installing it on the client is recommended since some custom piston and presentation logic may otherwise be shown using vanilla client visuals.
+
+To easily find the recipes, it's recommended to install a recipe viewer like JEI or REI on both the server and client.
 
 ## Config Features
 
@@ -38,7 +40,6 @@ These settings are stored in the mod config and can be viewed or changed with `/
 - `cropTrampleMode`: controls farmland trampling. Supports vanilla behavior, no trampling, or trampling immunity with Feather Falling.
 - `eggTrampleMode`: the same idea for turtle eggs.
 - `difficulty`: controls how the custom hostile mob potion-effect system scales. Can either behave the same on all difficulties or scale with world difficulty.
-- `bundleCapacity`: sets how many vanilla item-units a bundle can hold. `64` is vanilla, `128` doubles capacity, and so on.
 - `shareSeed`: shares the world seed with players on join and allows non-moderators to use `/fabs seed`.
 - `overrideNormalLead`: overrides vanilla lead interaction and allows expanded leash targets.
 - `canLeashAnimals`: allows or blocks leashing animals through the modded lead logic.
@@ -360,6 +361,14 @@ Examples include:
 - `fabsservertweaks:piston_move_override`
 
 Entity tags are also used for leash permissions and mob-effect blacklists.
+
+## Plugins
+
+### Just Enough Items (JEI)
+The mod includes a JEI plugin that adds support for the mod's custom recipes.
+
+### Roughly Enough Items (REI)
+The mod includes a REI plugin that adds support for the mod's custom recipes.
 
 ## Preset Philosophy
 

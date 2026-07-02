@@ -55,9 +55,9 @@ dependencies {
 
     //localRuntime "dev.emi:emi-fabric:${emi_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
-//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-//    compileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-//    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
     //implementation "vazkii.patchouli:Patchouli:${patchouli_version_fabric}"
     //implementation "dev.emi:trinkets:${trinkets_version}"
 
