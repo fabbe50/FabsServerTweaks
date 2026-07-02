@@ -1,9 +1,12 @@
 package com.fabbe50.fabsservertweaks.util;
 
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
+import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +147,23 @@ public class WorldUtil {
             return false;
         }
         return player.getAbilities().instabuild;
+    }
+
+    public static boolean shouldPlantGrowExtra(ServerLevel level, BlockPos pos, RandomSource random, int age, int maxAge) {
+        int randomChance = random.nextInt(100);
+        int percentageChance = Fabsservertweaks.CONFIG.plantRainGrowthChance;
+        if (age < maxAge - 1 && randomChance < percentageChance) {
+            return level.getGameRules().get(ModGameRules.RULE_PLANTS_GROW_FASTER_IN_RAIN) && isRainingAtLocation(level, pos);
+        }
+        return false;
+    }
+
+    public static boolean isRainingAtLocation(Level level, BlockPos pos) {
+        return level.isRainingAt(pos);
+    }
+
+    public static boolean isChunkLoaded(@NonNull Level level, @NonNull BlockPos pos) {
+        return level.getChunkSource().getForceLoadedChunks().contains(level.getChunkAt(pos).getPos().pack());
     }
 
     public enum RelativePosition {

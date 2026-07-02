@@ -38,6 +38,7 @@ public class ModGameRules {
     public static final GameRule<Boolean> RULE_TORCHFLOWERS_GLOW;
     public static final GameRule<Integer> RULE_CACTUS_GROW_HEIGHT;
     public static final GameRule<Integer> RULE_SUGAR_CANE_GROW_HEIGHT;
+    public static final GameRule<Boolean> RULE_PLANTS_GROW_FASTER_IN_RAIN;
 
     static {
         RULE_MOB_GRIEF_ENDERMAN = registerBoolean("mob_grief_enderman", GameRuleCategory.MOBS, true);
@@ -75,6 +76,7 @@ public class ModGameRules {
         RULE_TORCHFLOWERS_GLOW = registerBoolean("torch_flowers_glow", GameRuleCategory.MISC, true);
         RULE_CACTUS_GROW_HEIGHT = registerInteger("cactus_grow_height", GameRuleCategory.MISC, 3, 1, 100);
         RULE_SUGAR_CANE_GROW_HEIGHT = registerInteger("sugar_cane_grow_height", GameRuleCategory.MISC, 3, 1, 100);
+        RULE_PLANTS_GROW_FASTER_IN_RAIN = registerBoolean("plants_grow_faster_in_rain", GameRuleCategory.MISC, true);
     }
 
     public static GameRule<Boolean> registerBoolean(String name, GameRuleCategory category, boolean defaultValue) {

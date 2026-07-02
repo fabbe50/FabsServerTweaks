@@ -2,6 +2,7 @@ package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.util.PillarGrowUtil;
+import com.fabbe50.fabsservertweaks.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -29,19 +30,25 @@ public class SugarCaneBlockMixin extends Block {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void injectRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
         int maxHeight = level.getGameRules().get(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
-        if (maxHeight != 3) {
+        int height = PillarGrowUtil.getPillarHeight(state, level, pos);
+        if (maxHeight > height) {
             ci.cancel();
+            BlockPos activePos = pos;
             BlockPos above = pos.above();
             if (level.isEmptyBlock(above)) {
-                int height = PillarGrowUtil.getPillarHeight(state, level, pos);
                 int age = state.getValue(AGE);
-
+                if (WorldUtil.shouldPlantGrowExtra(level, pos, random, age, 15)) {
+                    level.setBlockAndUpdate(above, this.defaultBlockState());
+                    level.setBlock(activePos, state.setValue(AGE, 0), 260);
+                    activePos = above;
+                    above = activePos.above();
+                }
                 if (PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
                     if (age == 15) {
-                        level.setBlockAndUpdate(pos.above(), this.defaultBlockState());
-                        level.setBlock(pos, state.setValue(AGE, 0), 260);
+                        level.setBlockAndUpdate(above, this.defaultBlockState());
+                        level.setBlock(activePos, state.setValue(AGE, 0), 260);
                     } else {
-                        level.setBlock(pos, state.setValue(AGE, age + 1), 260);
+                        level.setBlock(activePos, state.setValue(AGE, age + 1), 260);
                     }
                 }
             }

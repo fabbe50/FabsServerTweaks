@@ -50,6 +50,7 @@ These settings are stored in the mod config and can be viewed or changed with `/
 - `canLeashGolems`: allows or blocks leashing golems.
 - `canLeashPets`: allows or blocks leashing tameable pets.
 - `canPistonsPushBlockEntities`: enables the custom piston logic for moving block entities with their full data.
+- `plantRainGrowthChance`: the percent chance that a plant will grow an extra step during a growth tick when it's raining.
 
 ## Gamerule Features
 
@@ -94,6 +95,7 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `torch_flowers_glow`: toggles torch flowers glowing.
 - `cactus_grow_height`: sets the max height of cactus growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
 - `sugar_cane_grow_height`: sets the max height of sugar cane growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
+- `plants_grow_faster_in_rain`: gives plants a chance to grow an extra step for every growth tick when it's raining (see config for chance config).
 
 ### Projectile and Item Recovery
 

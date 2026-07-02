@@ -4,6 +4,7 @@ import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficu
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleMode;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = Fabsservertweaks.MOD_NAME)
 public class ModConfig implements ConfigData {
@@ -19,4 +20,7 @@ public class ModConfig implements ConfigData {
     public boolean canLeashGolems = true;
     public boolean canLeashPets = true;
     public boolean canPistonsPushBlockEntities = true;
+
+    @Comment("The percentage chance for a plant to grow an extra step. Default=20")
+    public int plantRainGrowthChance = 20;
 }
