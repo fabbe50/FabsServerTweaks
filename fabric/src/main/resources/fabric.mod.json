@@ -57,6 +57,7 @@
     "polymer-autohost": "*",
     "polymer-virtual-entity": "*",
     "lootr": "*",
+    "universal_ores": "*",
   },
   "conflicts": {
     "lootr_polymer": "*"

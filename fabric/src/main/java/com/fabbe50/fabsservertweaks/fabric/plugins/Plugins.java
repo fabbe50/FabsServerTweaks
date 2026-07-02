@@ -25,6 +25,11 @@ public class Plugins {
         } else {
             LogUtil.warn("Lootr plugin disabled or components are not loaded, disabling Lootr support.");
         }
+        if (FabricPluginHelper.areUniversalOresComponentsLoaded() && Fabsservertweaks.CONFIG.enableUniversalOresPlugin) {
+            plugins.add(new UniversalOresPlugin());
+        } else {
+            LogUtil.warn("Universal Ores plugin disabled or components are not loaded, disabling Universal Ores support.");
+        }
 
         plugins.forEach(Plugin::initialize);
     }

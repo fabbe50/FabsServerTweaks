@@ -14,6 +14,8 @@ The mod is designed to work server-side, with optional client installation for m
   - Fabric additionally requires:
     - Fabric API
 - Polymer (optional) [Fabric-only] – Allows the mod to add some server side content (read more below).
+- Lootr (optional, requires Polymer) [Fabric-only] - Compatibility layer to make Lootr completely server side (read more below).
+- Universal Ores (optional, requires Polymer) [Fabric-only] - Compatibility layer to make Universal Ores completely server side (read more below).
 - Mod Menu (optional) [Fabric-only] – Allows the mod to add a configuration screen in game on clients.
 
 ## How Features Are Controlled
@@ -389,6 +391,14 @@ Current features:
   - Allows the Lootr mod to work server-side only by registering the content through Polymer and sending the resources to the client.
   - Note: Requires Lootr to be installed on the server.
   - Note 2: Display of Lootr's custom decorated pots doesn't work at the moment.
+- Universal Ores Compatibility
+  - Allows the Universal Ores mod to work server-side only by registering the content through Polymer and sending the resources to the client.
+  - Note: Requires Universal Ores to be installed on the server.
+
+### Universal Ores (Fabric Only)
+
+Allows Universal Ores to function server-side by registering the content through Polymer and sending the resources to the client.
+
 ### Lootr (Fabric Only)
 
 Allows Lootr to function server-side by registering the content through Polymer and sending the resources to the client.

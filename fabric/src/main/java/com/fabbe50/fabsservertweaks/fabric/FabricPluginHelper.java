@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPluginHelper {
     public static final String LOOTR_ID = "lootr";
+    public static final String UNIVERSAL_ORES_ID = "universal_ores";
     public static final String POLYMER_CORE_ID = "polymer-core";
     public static final String POLYMER_BLOCKS_ID = "polymer-blocks";
     public static final String POLYMER_RESOURCE_PACK_ID = "polymer-resource-pack";
@@ -13,6 +14,10 @@ public class FabricPluginHelper {
 
     public static boolean areLootrPluginComponentsLoaded() {
         return isModLoaded(LOOTR_ID) && arePolymerComponentsLoaded() && !isModLoaded(LOOTR_POLYMER_ID);
+    }
+
+    public static boolean areUniversalOresComponentsLoaded() {
+        return isModLoaded(UNIVERSAL_ORES_ID) && arePolymerComponentsLoaded();
     }
 
     public static boolean arePolymerComponentsLoaded() {
