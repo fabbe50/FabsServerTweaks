@@ -2,8 +2,10 @@ package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
+import com.fabbe50.fabsservertweaks.ModPlatform;
 import com.fabbe50.fabsservertweaks.data.loader.CauldronConversionLoader;
 import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.Registrar;
 import net.minecraft.core.registries.Registries;
@@ -12,6 +14,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 
@@ -55,5 +58,17 @@ public class ModRegistry {
         LogUtil.log("Setting up registry...");
         ReloadListenerRegistry.register(PackType.SERVER_DATA, CauldronConversionLoader.INSTANCE, Fabsservertweaks.location("cauldron_conversion"));
         ReloadListenerRegistry.register(PackType.SERVER_DATA, DurabilitySmeltLoader.INSTANCE, Fabsservertweaks.location("durability_smelting"));
+        if (Platform.isFabric() || ModPlatform.isDataGen()) {
+            registerCompostables();
+        }
+    }
+
+    public static void registerCompostables() {
+        ModPlatform.registerCompostable(0.5f, Items.ROTTEN_FLESH);
+        ModPlatform.registerCompostable(1.0f, Items.POISONOUS_POTATO);
+        ModPlatform.registerCompostable(0.3f, Items.SPIDER_EYE);
+        ModPlatform.registerCompostable(0.3f, Items.CHORUS_FRUIT);
+        ModPlatform.registerCompostable(0.3f, Items.CHORUS_FLOWER);
+        ModPlatform.registerCompostable(0.3f, Items.BAMBOO);
     }
 }

@@ -127,7 +127,7 @@ public class ServerTweaksCommand {
                         context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + (booleanValue ? "enabled" : "disabled")), true);
                         return 1;
                     } else if (INTEGER_SETTINGS.contains(option)) {
-                        int integerValue = Integer.parseInt(value);
+                        /*int integerValue = Integer.parseInt(value);
                         switch (option) {
                             default -> {
                                 context.getSource().sendFailure(Component.literal("Invalid value: " + integerValue));
@@ -136,7 +136,7 @@ public class ServerTweaksCommand {
                         }
                         AutoConfig.getConfigHolder(ModConfig.class).save();
                         context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + integerValue), true);
-                        return 1;
+                        return 1;*/
                     }
                     context.getSource().sendFailure(Component.literal("Invalid option: " + option));
                     return 0;
