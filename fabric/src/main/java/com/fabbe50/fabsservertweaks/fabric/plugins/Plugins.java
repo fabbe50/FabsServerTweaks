@@ -20,6 +20,11 @@ public class Plugins {
             plugins.add(new FabsPolymerPlugin());
             plugins.add(new VanillaPlugin());
         }
+        if (FabricPluginHelper.areLootrPluginComponentsLoaded() && Fabsservertweaks.CONFIG.enableLootrPolymerPlugin) {
+            plugins.add(new LootrPlugin());
+        } else {
+            LogUtil.warn("Lootr plugin disabled or components are not loaded, disabling Lootr support.");
+        }
 
         plugins.forEach(Plugin::initialize);
     }

@@ -1,0 +1,8 @@
+{
+  "parent": "lootr_plugin:block/lootr_shulker",
+  "texture_size": [64, 64],
+  "textures": {
+    "0": "lootr_plugin:block/lootr_shulker_opened",
+    "particle": "lootr_plugin:block/lootr_shulker_opened"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "lootr_plugin:block/lootr_chest"
+  }
+}

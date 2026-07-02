@@ -385,6 +385,36 @@ Allows the mod to add server-side content like custom blocks and items. It also 
 Current features:
 - Chunk Loader (force loads a single chunk).
 - Textures and item models for the unlit campfire items.
+- Lootr Compatibility
+  - Allows the Lootr mod to work server-side only by registering the content through Polymer and sending the resources to the client.
+  - Note: Requires Lootr to be installed on the server.
+  - Note 2: Display of Lootr's custom decorated pots doesn't work at the moment.
+### Lootr (Fabric Only)
+
+Allows Lootr to function server-side by registering the content through Polymer and sending the resources to the client.
+
+#### What works:
+
+- Lootr's native functionality of allowing separate loot for each player and preventing containers from being broken unless crouching.
+- Statistics
+- Commands*
+- Block models**
+- Block textures**
+- Item models**
+- Item textures**
+- Displaying "opened" texture for each player on containers that have been looted***.
+
+
+- *Commands do work, but some arguments may be displayed as "invalid" on vanilla clients, ignore the red text and run the command anyway.
+- **The decorated pots do not work at the moment.
+- ***Works by displaying a Display Entity on top of the block as there are no good way to change the texture of the block from the server side.
+
+#### What does not work:
+
+- Advancements
+- Decorated pot models and textures (The function of the block still works. It can still be looted by each player separately. It just doesn't display anything.)
+
+
 ## Preset Philosophy
 
 The included presets make it easier to swing between:

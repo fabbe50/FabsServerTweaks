@@ -51,14 +51,15 @@
     "jei": "*"
   },
   "suggests": {
-    "another-mod": "*"
     "polymer-core": "*",
     "polymer-blocks": "*",
     "polymer-resource-pack": "*",
     "polymer-autohost": "*",
     "polymer-virtual-entity": "*",
+    "lootr": "*",
   },
   "conflicts": {
+    "lootr_polymer": "*"
   },
   "custom": {
     "fabric-networking-v0:serverOnly": true
