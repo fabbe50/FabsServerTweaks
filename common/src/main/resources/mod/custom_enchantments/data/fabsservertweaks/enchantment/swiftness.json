@@ -13,7 +13,17 @@
           "per_level_above_first": 0.025
         },
         "attribute": "movement_speed",
-        "id": "fabsservertweaks:enchantment.swiftness",
+        "id": "fabsservertweaks:enchantment.swiftness.movement_speed",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.05,
+          "per_level_above_first": 0.025
+        },
+        "attribute": "flying_speed",
+        "id": "fabsservertweaks:enchantment.swiftness.flying_speed",
         "operation": "add_value"
       }
     ]
@@ -28,8 +38,9 @@
     "per_level_above_first": 5
   },
   "slots": [
-    "legs"
+    "legs",
+    "body"
   ],
-  "supported_items": "#minecraft:enchantable/leg_armor",
+  "supported_items": "#fabsservertweaks:enchantable/swiftness_compatible",
   "weight": 1
 }
