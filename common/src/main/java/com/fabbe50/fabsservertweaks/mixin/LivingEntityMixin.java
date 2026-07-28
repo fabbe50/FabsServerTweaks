@@ -20,8 +20,8 @@ public abstract class LivingEntityMixin {
     public abstract void setSleepingPos(BlockPos blockPos);
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"), cancellable = true)
-        if (serverLevel.getGameRules().get(ModGameRules.RULE_MOB_DROPS_REQUIRE_PLAYER_KILL)) {
     private void injectDropAllDeathLoot(ServerLevel level, DamageSource source, CallbackInfo ci) {
+        if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_MOB_DROPS_REQUIRE_PLAYER_KILL)) {
             if (!source.is(DamageTypes.PLAYER_ATTACK) && !source.is(DamageTypes.PLAYER_EXPLOSION)) {
                 ci.cancel();
             }

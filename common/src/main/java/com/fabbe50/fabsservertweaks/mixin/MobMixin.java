@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Mob.class)
 public class MobMixin {
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/item/ItemEntity;"))
-        if (serverLevel.getGameRules().get(ModGameRules.RULE_MOB_DROP_FULL_DURABILITY)) {
     public void injectDropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer, CallbackInfo ci, @Local(name = "itemStack") ItemStack itemStack) {
+        if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_MOB_DROP_FULL_DURABILITY)) {
             if (itemStack != null && !itemStack.isEmpty() && itemStack.isDamageableItem()) {
                 itemStack.setDamageValue(0);
             }

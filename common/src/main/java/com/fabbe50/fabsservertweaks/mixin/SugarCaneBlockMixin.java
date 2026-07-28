@@ -29,7 +29,7 @@ public class SugarCaneBlockMixin extends Block {
 
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void injectRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
-        int maxHeight = level.getGameRules().get(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
+        int maxHeight = ModGameRules.getGameRuleInteger(level, ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
         if (maxHeight > 0) {
             int height = PillarGrowUtil.getPillarHeight(state, level, pos);
             if (maxHeight > height) {

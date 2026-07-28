@@ -3,6 +3,7 @@ package com.fabbe50.fabsservertweaks.commands;
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.ModConfig;
+import com.fabbe50.fabsservertweaks.ModPlatform;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficulty;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.DifficultyArgumentType;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleArgumentType;
@@ -26,6 +27,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.core.Holder.Reference;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent.CopyToClipboard;
 import net.minecraft.network.chat.Component;
@@ -34,6 +36,7 @@ import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,9 @@ import java.util.concurrent.CompletableFuture;
 public class ServerTweaksCommand {
     public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher, CommandBuildContext commandBuildContext) {
         List<String> BOOLEAN_SETTINGS = List.of(
+                "debugMode",
+                "debugEventRun",
+                "debugItemStackCreation",
                 "shareSeed",
                 "overrideNormalLead",
                 "canLeashAnimals",
@@ -49,9 +55,17 @@ public class ServerTweaksCommand {
                 "canLeashBosses",
                 "canLeashVillagerTypes",
                 "canLeashGolems",
-                "canLeashPets"
+                "canLeashPets",
+                "canPistonsPushBlockEntities",
+                "toolsInBundle",
+                "shouldEnderDragonAlwaysLootLikeFirst",
+                "enableLootrPolymerPlugin",
+                "enableUniversalOresPlugin",
+                "enableResourceNetherOresPlugin"
         );
         List<String> INTEGER_SETTINGS = List.of(
+                "plantRainGrowthChance",
+                "maxAnvilCost"
         );
         List<String> ALL_SETTINGS = new ArrayList<>(List.of(
                 "cropTrampleMode",
@@ -110,6 +124,9 @@ public class ServerTweaksCommand {
                     } else if (BOOLEAN_SETTINGS.contains(option)) {
                         boolean booleanValue = Boolean.parseBoolean(value);
                         switch (option) {
+                            case "debugMode" -> Fabsservertweaks.CONFIG.debugMode = booleanValue;
+                            case "debugEventRun" -> Fabsservertweaks.CONFIG.debugEventRun = booleanValue;
+                            case "debugItemStackCreation" -> Fabsservertweaks.CONFIG.debugItemStackCreation = booleanValue;
                             case "shareSeed" -> Fabsservertweaks.CONFIG.shareSeed = booleanValue;
                             case "overrideNormalLead" -> Fabsservertweaks.CONFIG.overrideNormalLead = booleanValue;
                             case "canLeashAnimals" -> Fabsservertweaks.CONFIG.canLeashAnimals = booleanValue;
@@ -118,6 +135,27 @@ public class ServerTweaksCommand {
                             case "canLeashVillagerTypes" -> Fabsservertweaks.CONFIG.canLeashVillagerTypes = booleanValue;
                             case "canLeashGolems" -> Fabsservertweaks.CONFIG.canLeashGolems = booleanValue;
                             case "canLeashPets" -> Fabsservertweaks.CONFIG.canLeashPets = booleanValue;
+                            case "canPistonsPushBlockEntities" -> Fabsservertweaks.CONFIG.canPistonsPushBlockEntities = booleanValue;
+                            case "enableLootrPolymerPlugin" -> {
+                                Fabsservertweaks.CONFIG.enableLootrPolymerPlugin = booleanValue;
+                                if (!ModPlatform.isModLoaded("lootr")) {
+                                    context.getSource().sendFailure(Component.literal("Lootr is not loaded, option is ineffective."));
+                                }
+                            }
+                            case "enableUniversalOresPlugin" -> {
+                                Fabsservertweaks.CONFIG.enableUniversalOresPlugin = booleanValue;
+                                if (!ModPlatform.isModLoaded("universal_ores")) {
+                                    context.getSource().sendFailure(Component.literal("Universal Ores is not loaded, option is ineffective."));
+                                }
+                            }
+                            case "enableResourceNetherOresPlugin" -> {
+                                Fabsservertweaks.CONFIG.enableResourceNetherOresPlugin = booleanValue;
+                                if (!ModPlatform.isModLoaded("resource_nether_ores")) {
+                                    context.getSource().sendFailure(Component.literal("Resource Nether Ores is not loaded, option is ineffective."));
+                                }
+                            }
+                            case "toolsInBundle" -> Fabsservertweaks.CONFIG.toolsInBundle = booleanValue;
+                            case "shouldEnderDragonAlwaysLootLikeFirst" -> Fabsservertweaks.CONFIG.shouldEnderDragonAlwaysLootLikeFirst = booleanValue;
                             default -> {
                                 context.getSource().sendFailure(Component.literal("Invalid value: " + booleanValue));
                                 return 0;
@@ -127,8 +165,10 @@ public class ServerTweaksCommand {
                         context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + (booleanValue ? "enabled" : "disabled")), true);
                         return 1;
                     } else if (INTEGER_SETTINGS.contains(option)) {
-                        /*int integerValue = Integer.parseInt(value);
+                        int integerValue = Integer.parseInt(value);
                         switch (option) {
+                            case "plantRainGrowthChance" -> Fabsservertweaks.CONFIG.plantRainGrowthChance = integerValue;
+                            case "maxAnvilCost" -> Fabsservertweaks.CONFIG.maxAnvilCost = integerValue;
                             default -> {
                                 context.getSource().sendFailure(Component.literal("Invalid value: " + integerValue));
                                 return 0;
@@ -136,7 +176,7 @@ public class ServerTweaksCommand {
                         }
                         AutoConfig.getConfigHolder(ModConfig.class).save();
                         context.getSource().sendSuccess(() -> Component.literal("Setting " + option + " is now " + integerValue), true);
-                        return 1;*/
+                        return 1;
                     }
                     context.getSource().sendFailure(Component.literal("Invalid option: " + option));
                     return 0;
@@ -148,6 +188,9 @@ public class ServerTweaksCommand {
                     String option = StringArgumentType.getString(context, "option");
                     if (ALL_SETTINGS.contains(option)) {
                         String value = switch (option) {
+                            case "debugMode" -> Boolean.toString(Fabsservertweaks.CONFIG.debugMode);
+                            case "debugEventRun" -> Boolean.toString(Fabsservertweaks.CONFIG.debugEventRun);
+                            case "debugItemStackCreation" -> Boolean.toString(Fabsservertweaks.CONFIG.debugItemStackCreation);
                             case "difficultyType" -> Fabsservertweaks.CONFIG.difficulty.getSerializedName();
                             case "cropTrampleMode" -> Fabsservertweaks.CONFIG.cropTrampleMode.getSerializedName();
                             case "eggTrampleMode" -> Fabsservertweaks.CONFIG.eggTrampleMode.getSerializedName();
@@ -159,6 +202,14 @@ public class ServerTweaksCommand {
                             case "canLeashVillagerTypes" -> Boolean.toString(Fabsservertweaks.CONFIG.canLeashVillagerTypes);
                             case "canLeashGolems" -> Boolean.toString(Fabsservertweaks.CONFIG.canLeashGolems);
                             case "canLeashPets" -> Boolean.toString(Fabsservertweaks.CONFIG.canLeashPets);
+                            case "canPistonsPushBlockEntities" -> Boolean.toString(Fabsservertweaks.CONFIG.canPistonsPushBlockEntities);
+                            case "enableLootrPolymerPlugin" -> Boolean.toString(Fabsservertweaks.CONFIG.enableLootrPolymerPlugin);
+                            case "enableUniversalOresPlugin" -> Boolean.toString(Fabsservertweaks.CONFIG.enableUniversalOresPlugin);
+                            case "enableResourceNetherOresPlugin" -> Boolean.toString(Fabsservertweaks.CONFIG.enableResourceNetherOresPlugin);
+                            case "plantRainGrowthChance" -> Integer.toString(Fabsservertweaks.CONFIG.plantRainGrowthChance);
+                            case "toolsInBundle" -> Boolean.toString(Fabsservertweaks.CONFIG.toolsInBundle);
+                            case "shouldEnderDragonAlwaysLootLikeFirst" -> Boolean.toString(Fabsservertweaks.CONFIG.shouldEnderDragonAlwaysLootLikeFirst);
+                            case "maxAnvilCost" -> Integer.toString(Fabsservertweaks.CONFIG.maxAnvilCost);
                             default -> "";
                         };
                         if (value.isBlank()) {
@@ -255,6 +306,22 @@ public class ServerTweaksCommand {
                             return 0;
                         })
                 );
+        LiteralArgumentBuilder<CommandSourceStack> fixItem = Commands.literal("fixitem")
+                .requires(commandSourceStack -> commandSourceStack.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayer();
+                    if (player != null) {
+                        if (player.getMainHandItem().isEnchantable() && player.getMainHandItem().get(DataComponents.ENCHANTMENTS) == null) {
+                            player.getMainHandItem().set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+                            context.getSource().sendSuccess(() -> Component.literal("Fixed item in hand"), true);
+                            return 1;
+                        }
+                        context.getSource().sendFailure(Component.literal("You must be holding an enchantable item in your hand to use this command."));
+                        return 0;
+                    }
+                    context.getSource().sendFailure(Component.literal("Must be executed by a player."));
+                    return 0;
+                });
 
         commandDispatcher.register(
                 Commands.literal("fabs")
@@ -262,6 +329,7 @@ public class ServerTweaksCommand {
                         .then(seedArgument)
                         .then(enchantArgument)
                         .then(featureArgument)
+                        .then(fixItem)
         );
 
         LogUtil.log("Server tweaks command registered");
@@ -274,13 +342,17 @@ public class ServerTweaksCommand {
                 context.getSource().sendFailure(Component.literal("You must be holding an item in your hand to use this command."));
                 return 0;
             }
-            /*if (EnchantmentUtil.getEnchantmentLevel(player, itemInHand, enchantment.key()) >= level) {
-                context.getSource().sendFailure(Component.literal("You can't apply the same or lower level of existing enchantment to this item."));
-                return 0;
-            }*/
+            if (itemInHand.get(DataComponents.ENCHANTMENTS) == null) {
+                itemInHand.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+            }
             EnchantmentHelper.updateEnchantments(itemInHand, mutable -> mutable.set(enchantment, level));
-            context.getSource().sendSuccess(() -> Component.literal("Successfully enchanted " + itemInHand.getItemName().getString() + " with " + enchantment.value().description().getString() + " " + level), true);
-            return 1;
+            if (EnchantmentUtil.hasEnchantment(player, itemInHand, enchantment.key())) {
+                context.getSource().sendSuccess(() -> Component.literal("Successfully enchanted " + itemInHand.getItemName().getString() + " with " + enchantment.value().description().getString() + " " + level), true);
+                return 1;
+            } else {
+                context.getSource().sendFailure(Component.literal("Failed to enchant " + itemInHand.getItemName().getString() + " with " + enchantment.value().description().getString() + " " + level));
+                return 0;
+            }
         }
         context.getSource().sendFailure(Component.literal("Must be executed by a player."));
         return 0;

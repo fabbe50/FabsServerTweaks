@@ -5,9 +5,13 @@ import com.fabbe50.fabsservertweaks.util.BedUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayer.RespawnConfig;
+import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin {
@@ -18,7 +22,6 @@ public abstract class ServerPlayerMixin {
     )
     private boolean fabsServerTweaks$skipRespawnForSleepingBags(ServerPlayer instance, RespawnConfig arg, boolean bl) {
         ServerLevel level = instance.level();
-        return !BedUtil.isSleepingBag(level, arg.respawnData().pos(), level.getBlockState(arg.respawnData().pos()))
-                || !level.getGameRules().get(ModGameRules.RULE_SLEEPING_BAGS_ENABLED);
+        return !BedUtil.isSleepingBag(level, arg.respawnData().pos(), level.getBlockState(arg.respawnData().pos())) || !ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_SLEEPING_BAGS_ENABLED);
     }
 }

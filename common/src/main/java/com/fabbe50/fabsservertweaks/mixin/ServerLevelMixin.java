@@ -32,7 +32,7 @@ public class ServerLevelMixin {
     private void injectExplode(@Nullable Entity entity, @Nullable DamageSource damageSource, @Nullable ExplosionDamageCalculator explosionDamageCalculator, double d, double e, double f, float g, boolean bl, ExplosionInteraction explosionInteraction, ParticleOptions particleOptions, ParticleOptions particleOptions2, WeightedList<ExplosionParticleInfo> weightedList, Holder<SoundEvent> holder, CallbackInfo ci) {
         if (explosionInteraction.equals(Level.ExplosionInteraction.MOB)) {
             ServerLevel instance = ((ServerLevel) (Object) this);
-            if (!(instance.getGameRules().get(ModGameRules.RULE_MOB_GRIEF_CREEPER)) && entity instanceof Creeper) {
+            if (!(ModGameRules.getGameRuleBoolean(instance, ModGameRules.RULE_MOB_GRIEF_CREEPER)) && entity instanceof Creeper) {
                 Explosion.BlockInteraction blockInteraction = Explosion.BlockInteraction.KEEP;
                 Vec3 vec3 = new Vec3(d, e, f);
                 ServerExplosion serverExplosion = new ServerExplosion(instance, entity, damageSource, explosionDamageCalculator, vec3, g, bl, blockInteraction);

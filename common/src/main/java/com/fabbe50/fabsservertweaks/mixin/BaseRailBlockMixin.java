@@ -18,23 +18,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BaseRailBlock.class)
 public abstract class BaseRailBlockMixin {
     @Inject(method = "onPlace", at = @At("HEAD"), cancellable = true)
-        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
     private void injectOnPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston, CallbackInfo ci) {
+        if (level instanceof ServerLevel serverLevel && ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
             ci.cancel();
         }
     }
 
     @Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
-        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
     private void injectStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
         Level level = context.getLevel();
+        if (level instanceof ServerLevel serverLevel && ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
             cir.setReturnValue(RailUtil.getBetterPlacement(cir.getReturnValue(), context));
         }
     }
 
     @Inject(method = "updateDir", at = @At("HEAD"), cancellable = true)
-        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
     private void injectUpdateDir(Level level, BlockPos pos, BlockState state, boolean first, CallbackInfoReturnable<BlockState> cir) {
+        if (level instanceof ServerLevel serverLevel && ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_BETTER_RAIL_PLACEMENT)) {
             RailShape railShape = RailUtil.getShapeFromBlockState(state);
             if (railShape != null && RailUtil.sidesAreParallel(level, pos, railShape)) {
                 cir.setReturnValue(state);

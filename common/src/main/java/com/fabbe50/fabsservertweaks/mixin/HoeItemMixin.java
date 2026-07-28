@@ -56,7 +56,7 @@ public abstract class HoeItemMixin extends Item {
         if (player == null) {
             return;
         }
-        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
+        if (level instanceof ServerLevel serverLevel && ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
             BlockPos blockPos = useOnContext.getClickedPos();
             ItemStack toolStack = useOnContext.getItemInHand();
             Direction face = useOnContext.getClickedFace();

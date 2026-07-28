@@ -24,7 +24,7 @@ public abstract class SnowGolemMixin extends AbstractGolem {
 
     @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/golem/SnowGolem;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean redirectHurtServer(SnowGolem instance, ServerLevel serverLevel, DamageSource damageSource, float v) {
-        if (serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE)) {
+        if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SNOW_GOLEMS_SURVIVE_ON_ICE)) {
             BlockState standingOnBlock = instance.level().getBlockState(instance.blockPosition().relative(Direction.DOWN));
             if (standingOnBlock.is(BlockTags.ICE)) {
                 return false;
@@ -35,7 +35,7 @@ public abstract class SnowGolemMixin extends AbstractGolem {
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"), cancellable = true)
     private void injectAiStep(CallbackInfo ci) {
-        if (this.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW)) {
+        if (this.level() instanceof ServerLevel serverLevel && !ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SNOW_GOLEMS_GENERATE_SNOW)) {
             ci.cancel();
         }
     }

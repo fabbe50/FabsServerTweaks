@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ZombieMixin {
     @Inject(method = "killedEntity", at = @At("HEAD"), cancellable = true)
     private void injectKilledEntity(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
-        if (serverLevel.getGameRules().get(ModGameRules.RULE_ALWAYS_CONVERT_VILLAGERS)) {
+        if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_ALWAYS_CONVERT_VILLAGERS)) {
             Zombie instance = ((Zombie)(Object) this);
             if (livingEntity instanceof Villager villager) {
                 if (instance.convertVillagerToZombieVillager(serverLevel, villager)) {

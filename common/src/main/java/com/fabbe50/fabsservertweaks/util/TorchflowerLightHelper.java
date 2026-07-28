@@ -15,7 +15,7 @@ public final class TorchflowerLightHelper {
     }
 
     public static void refreshAdjacentLights(ServerLevel level, BlockPos torchflowerPos) {
-        if (level.getGameRules().get(ModGameRules.RULE_TORCHFLOWERS_GLOW)) {
+        if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_TORCHFLOWERS_GLOW)) {
             for (Direction direction : Direction.values()) {
                 BlockPos targetPos = torchflowerPos.relative(direction);
                 if (level.getBlockState(targetPos).isAir()) {

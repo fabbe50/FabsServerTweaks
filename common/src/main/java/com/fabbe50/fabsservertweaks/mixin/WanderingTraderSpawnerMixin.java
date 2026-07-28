@@ -24,7 +24,7 @@ public class WanderingTraderSpawnerMixin {
     @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;getBiome(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/Holder;"), cancellable = true)
     private void injectSpawn(ServerLevel serverLevel, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 2) BlockPos pos) {
         LogUtil.log("Attempting to spawn wandering trader at: " + pos);
-        if (serverLevel.getGameRules().get(ModGameRules.RULE_NO_SOLICITING_SIGN)) {
+        if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_NO_SOLICITING_SIGN)) {
             List<BlockPos> blockPositions = WorldUtil.getBlockPositions(new AABB(pos).inflate(96, 48, 96));
             blockPositions.forEach(blockPos -> {
                 BlockState state = serverLevel.getBlockState(blockPos);

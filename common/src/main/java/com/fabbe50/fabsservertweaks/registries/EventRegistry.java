@@ -2,6 +2,7 @@ package com.fabbe50.fabsservertweaks.registries;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
+import com.fabbe50.fabsservertweaks.ModPlatform;
 import com.fabbe50.fabsservertweaks.commands.GotoCommand;
 import com.fabbe50.fabsservertweaks.commands.NicknameCommand;
 import com.fabbe50.fabsservertweaks.commands.PresetCommand;
@@ -9,22 +10,28 @@ import com.fabbe50.fabsservertweaks.commands.ServerTweaksCommand;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
+import com.fabbe50.fabsservertweaks.events.CollisionEvent;
+import com.fabbe50.fabsservertweaks.events.ExtendedBlockEvent;
 import com.fabbe50.fabsservertweaks.events.ItemStackEvent;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
-import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
 import com.fabbe50.fabsservertweaks.util.*;
+import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.DisenchantingEntityResult;
+import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.EnchantmentResult;
+import com.fabbe50.fabsservertweaks.util.EventUtil.BlockEventLogic;
+import com.fabbe50.fabsservertweaks.util.SpawnerUtil.Modifier;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.networking.NetworkManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent.OpenUrl;
 import net.minecraft.network.chat.HoverEvent.ShowText;
 import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -34,40 +41,37 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TypedEntityData;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
+import net.minecraft.world.level.block.entity.vault.VaultServerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.TagValueOutput;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
+import java.net.URI;
+import java.util.*;
 
 public class EventRegistry {
     private static final ThreadLocal<Boolean> REBROADCASTING_CHAT = ThreadLocal.withInitial(() -> false);
@@ -75,12 +79,13 @@ public class EventRegistry {
 
     public static void init() {
         EntityEvent.ADD.register((entity, level) -> {
+            LogUtil.debugEventRun(String.format("Executed by entity '%s'", entity.getName().getString()));
             if (level instanceof ServerLevel serverLevel) {
                 if (PLACING_MOB_FROM_LEAD.get()) {
+                    LogUtil.debug("Entity is being placed from lead. Skipping further processing...");
                     PLACING_MOB_FROM_LEAD.set(false);
                     return EventResult.pass();
                 }
-                if (serverLevel.getGameRules().get(ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
                     if (entity instanceof Monster monster) {
                         if (entity.is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
                             return EventResult.pass();
@@ -105,6 +110,7 @@ public class EventRegistry {
                                 }
                             }
                         }
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
                     }
                 }
             }

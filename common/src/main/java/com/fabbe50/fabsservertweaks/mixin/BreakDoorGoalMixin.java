@@ -19,7 +19,7 @@ public class BreakDoorGoalMixin extends DoorInteractGoal {
     @Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
     private void injectCanUse(CallbackInfoReturnable<Boolean> cir) {
         if (this.mob instanceof Zombie zombie) {
-            if (!getServerLevel(zombie).getGameRules().get(ModGameRules.RULE_MOB_GRIEF_ZOMBIE)) {
+            if (!ModGameRules.getGameRuleBoolean(getServerLevel(zombie), ModGameRules.RULE_MOB_GRIEF_ZOMBIE)) {
                 cir.setReturnValue(false);
             }
         }

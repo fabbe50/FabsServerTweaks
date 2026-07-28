@@ -166,6 +166,7 @@ public class WorldUtil {
             if (blockEntity != null) {
                 level.removeBlockEntity(pos);
             }
+            EnchantmentUtil.handleCustomEnchantments(level, pos, stack, player);
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
         Vec3 newDropPos = dropPos.getCenter();
@@ -349,7 +350,7 @@ public class WorldUtil {
         int randomChance = random.nextInt(100);
         int percentageChance = Fabsservertweaks.CONFIG.plantRainGrowthChance;
         if (age < maxAge - 1 && randomChance < percentageChance) {
-            return level.getGameRules().get(ModGameRules.RULE_PLANTS_GROW_FASTER_IN_RAIN) && isRainingAtLocation(level, pos);
+            return ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_PLANTS_GROW_FASTER_IN_RAIN) && isRainingAtLocation(level, pos);
         }
         return false;
     }

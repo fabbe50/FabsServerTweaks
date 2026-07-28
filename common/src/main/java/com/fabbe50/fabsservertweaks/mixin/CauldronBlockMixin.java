@@ -17,28 +17,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CauldronBlock.class)
 public class CauldronBlockMixin {
     @Inject(method = "handlePrecipitation", at = @At("HEAD"), cancellable = true)
-    private void injectHandlePrecipitation(BlockState blockState, Level level, BlockPos blockPos, Biome.Precipitation precipitation, CallbackInfo ci) {
+    private void injectHandlePrecipitation(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation, CallbackInfo ci) {
         if (level.isClientSide()) {
             ci.cancel();
         } else {
             ServerLevel serverLevel = (ServerLevel) level;
-            if (precipitation.equals(Biome.Precipitation.RAIN) && !serverLevel.getGameRules().get(ModGameRules.RULE_RAIN_FILLS_CAULDRON)) {
+            if (precipitation.equals(Biome.Precipitation.RAIN) && !ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_RAIN_FILLS_CAULDRON)) {
                 ci.cancel();
-            } else if (precipitation.equals(Biome.Precipitation.SNOW) && !serverLevel.getGameRules().get(ModGameRules.RULE_SNOW_FILLS_CAULDRON)) {
+            } else if (precipitation.equals(Biome.Precipitation.SNOW) && !ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SNOW_FILLS_CAULDRON)) {
                 ci.cancel();
             }
         }
     }
 
     @Inject(method = "receiveStalactiteDrip", at = @At("HEAD"), cancellable = true)
-    private void injectReceiveStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid, CallbackInfo ci) {
+    private void injectReceiveStalactiteDrip(BlockState state, Level level, BlockPos pos, Fluid fluid, CallbackInfo ci) {
         if (level.isClientSide()) {
             ci.cancel();
         } else {
             ServerLevel serverLevel = (ServerLevel) level;
-            if (fluid.equals(Fluids.WATER) && !serverLevel.getGameRules().get(ModGameRules.RULE_WATER_DRIPSTONE_FILL_CAULDRON)) {
+            if (fluid.equals(Fluids.WATER) && !ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_WATER_DRIPSTONE_FILL_CAULDRON)) {
                 ci.cancel();
-            } else if (fluid.equals(Fluids.LAVA) && !serverLevel.getGameRules().get(ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON)) {
+            } else if (fluid.equals(Fluids.LAVA) && !ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON)) {
                 ci.cancel();
             }
         }

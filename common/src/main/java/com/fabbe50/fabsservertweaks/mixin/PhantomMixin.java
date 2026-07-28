@@ -24,7 +24,7 @@ public class PhantomMixin extends Mob {
     public boolean canAttack(LivingEntity livingEntity) {
         Level level = livingEntity.level();
         if (level instanceof ServerLevel serverLevel) {
-            if (!serverLevel.getGameRules().get(ModGameRules.RULE_FRIENDLY_PHANTOMS)) {
+            if (!ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_FRIENDLY_PHANTOMS)) {
                 return super.canAttack(livingEntity);
             } else {
                 if (super.canAttack(livingEntity)) {
