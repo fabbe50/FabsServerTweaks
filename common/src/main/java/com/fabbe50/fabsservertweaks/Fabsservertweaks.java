@@ -20,6 +20,7 @@ public final class Fabsservertweaks {
 
     public static final Supplier<RegistrarManager> MANAGER = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));
     public static ModConfig CONFIG;
+    public static boolean registryLoaded = false;
 
     public static void init() {
         initRegistries();
@@ -28,6 +29,7 @@ public final class Fabsservertweaks {
 
     public static void initRegistries() {
         ModRegistry.init();
+        registryLoaded = true;
     }
 
     public static void initRuntime() {
