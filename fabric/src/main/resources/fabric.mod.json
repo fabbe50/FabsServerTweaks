@@ -37,7 +37,8 @@
     ]
   },
   "mixins": [
-    "fabsservertweaks.mixins.json"
+    "fabsservertweaks.mixins.json",
+    "fabsservertweaks-fabric.mixins.json"
   ],
   "accessWidener": "fabsservertweaks.accesswidener",
   "depends": {

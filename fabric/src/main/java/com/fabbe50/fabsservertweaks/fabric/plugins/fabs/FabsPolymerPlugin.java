@@ -2,9 +2,10 @@ package com.fabbe50.fabsservertweaks.fabric.plugins.fabs;
 
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
-import com.fabbe50.fabsservertweaks.fabric.plugins.base.Plugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.base.PolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.lootr.PolymerStateSupplier;
 import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerBlockWithElementHolder;
-import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerRegistry;
 import com.fabbe50.fabsservertweaks.fabric.registries.ModRegistry;
 import com.fabbe50.fabsservertweaks.fabric.world.blocks.ChunkLoaderBlock;
 import com.fabbe50.fabsservertweaks.fabric.world.items.SimplePolymerBlockItem;
@@ -24,7 +25,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-public class FabsPolymerPlugin extends Plugin {
+public class FabsPolymerPlugin extends PolymerPlugin {
+
     public static Block CHUNK_LOADER_BLOCK;
     public static Item CHUNK_LOADER_ITEM;
 
@@ -42,11 +44,11 @@ public class FabsPolymerPlugin extends Plugin {
         );
 
         PolymerResourcePackUtils.RESOURCE_PACK_CREATION_EVENT.register(resourcePackBuilder -> {
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "lang/en_us.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "models/block/chunk_loader.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "textures/block/chunk_loader.png");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "textures/block/chunk_loader_e.png");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "items/chunk_loader.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "lang/en_us.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "models/block/chunk_loader.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "textures/block/chunk_loader.png");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "textures/block/chunk_loader_e.png");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/fabs_polymer_plugin/assets", "fabs_polymer_plugin", "items/chunk_loader.json");
         });
 
         PolymerResourcePackUtils.markAsRequired();
@@ -73,6 +75,6 @@ public class FabsPolymerPlugin extends Plugin {
 
     @Override
     public void registerElementHolderOverlays() {
-        PolymerPlugin.registerElementHolder(CHUNK_LOADER_BLOCK, new PolymerBlockWithElementHolder(new ChunkLoaderElementHolder(), true));
+        PolymerRegistry.registerElementHolder(CHUNK_LOADER_BLOCK, new PolymerBlockWithElementHolder(new ChunkLoaderElementHolder(), true));
     }
 }

@@ -2,8 +2,8 @@ package com.fabbe50.fabsservertweaks.fabric.plugins.universal_ores;
 
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.fabric.FabricPluginHelper;
-import com.fabbe50.fabsservertweaks.fabric.plugins.base.Plugin;
-import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.base.PolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerRegistry;
 import com.fabbe50.fabsservertweaks.fabric.world.blocks.SuppliedPolymerTexturedBlock;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class UniversalOresPlugin extends Plugin {
+public class UniversalOresPlugin extends PolymerPlugin {
     public static final Map<Block, Block> UNIVERSAL_ORES_BLOCKS_WITH_FALLBACK = new HashMap<>();
     public static final Map<Block, PolymerBlock> POLYMER_BLOCKS = new HashMap<>();
 
@@ -86,14 +86,14 @@ public class UniversalOresPlugin extends Plugin {
     @Override
     public void registerBlockOverlays() {
         for (Entry<Block, PolymerBlock> entry : POLYMER_BLOCKS.entrySet()) {
-            PolymerPlugin.registerBlock(entry.getKey(), entry.getValue());
+            PolymerRegistry.registerBlock(entry.getKey(), entry.getValue());
         }
     }
 
     @Override
     public void registerItemOverlays() {
         for (Entry<Block, Block> entry : UNIVERSAL_ORES_BLOCKS_WITH_FALLBACK.entrySet()) {
-            PolymerPlugin.registerItemOverlay(entry.getKey().asItem(), entry.getValue().asItem());
+            PolymerRegistry.registerItemOverlay(entry.getKey().asItem(), entry.getValue().asItem());
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.fabbe50.fabsservertweaks.fabric.plugins.base;
 
-public interface IPlugin {
+public interface IPolymerPlugin {
     default void registerBlocks() {}
     default void registerBlockOverlays() {}
     default void registerItems() {}

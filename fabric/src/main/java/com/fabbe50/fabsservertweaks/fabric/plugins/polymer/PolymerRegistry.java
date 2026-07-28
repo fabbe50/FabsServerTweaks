@@ -2,7 +2,6 @@ package com.fabbe50.fabsservertweaks.fabric.plugins.polymer;
 
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
-import eu.pb4.polymer.core.api.entity.PolymerEntity;
 import eu.pb4.polymer.core.api.entity.PolymerEntityUtils;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.core.api.item.PolymerItemUtils;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class PolymerPlugin {
+public class PolymerRegistry {
     public static void registerBlock(Block block, PolymerBlock polymerBlock) {
         PolymerBlockUtils.registerOverlay(block, polymerBlock);
     }
@@ -65,7 +64,7 @@ public class PolymerPlugin {
 
     public static void addAsset(ResourcePackBuilder builder, String prefix, String pluginPath, String localPath) {
         String resourcePath = "/" + prefix + "/" + pluginPath + "/" + localPath;
-        try (InputStream in = PolymerPlugin.class.getResourceAsStream(resourcePath)) {
+        try (InputStream in = PolymerRegistry.class.getResourceAsStream(resourcePath)) {
             if (in == null) {
                 throw new IllegalStateException("Missing polymer asset: " + resourcePath);
             }

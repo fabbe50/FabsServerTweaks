@@ -1,7 +1,10 @@
 {
   "pack": {
-    "min_format": 84.0,
-    "max_format": 84.0,
-    "description": "Fab's Polymer Plugin"
+    "description": "Fab's Polymer Plugin",
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
   }
 }

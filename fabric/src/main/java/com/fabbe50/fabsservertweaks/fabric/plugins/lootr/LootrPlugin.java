@@ -3,9 +3,9 @@ package com.fabbe50.fabsservertweaks.fabric.plugins.lootr;
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.fabric.FabricPluginHelper;
-import com.fabbe50.fabsservertweaks.fabric.plugins.base.Plugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.base.PolymerPlugin;
 import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerBlockWithElementHolder;
-import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerPlugin;
+import com.fabbe50.fabsservertweaks.fabric.plugins.polymer.PolymerRegistry;
 import com.fabbe50.fabsservertweaks.fabric.plugins.util.PathUtil;
 import com.fabbe50.fabsservertweaks.fabric.plugins.util.PathUtil.FolderType;
 import com.fabbe50.fabsservertweaks.fabric.registries.ModRegistry;
@@ -22,7 +22,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,7 +31,7 @@ import noobanidus.mods.lootr.fabric.init.*;
 
 import java.util.LinkedHashMap;
 
-public class LootrPlugin extends Plugin {
+public class LootrPlugin extends PolymerPlugin {
     private static final PolymerStateSupplier DEFAULT_STATE_SUPPLIER = (state, context) -> LootrPolymerStates.getBlockState(state, false);
     private static final PolymerStateSupplier DEFAULT_STATE_SUPPLIER_OPEN = (state, context) -> LootrPolymerStates.getBlockState(state, true);
     private static final PolymerStateSupplier HORIZONTAL_ROTATABLE = (state, context) -> {
@@ -105,33 +104,33 @@ public class LootrPlugin extends Plugin {
         LogUtil.log("Setting up lootr resource events.");
         PolymerResourcePackUtils.RESOURCE_PACK_CREATION_EVENT.register(resourcePackBuilder -> {
             LogUtil.log("Adding custom lootr models to resource pack.");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_chest.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_chest_opened.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_trapped_chest.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_trapped_chest_opened.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_shulker.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_shulker_opened.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_chest.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_chest_opened.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_trapped_chest.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_trapped_chest_opened.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_shulker.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "models/block/lootr_shulker_opened.json");
             LogUtil.log("Adding custom lootr item registration to resource pack.");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_barrel.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_chest.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_barrel.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_chest.json");
 //            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_decorated_pot.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_shulker.json");
-            PolymerPlugin.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_trapped_chest.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_shulker.json");
+            PolymerRegistry.addAsset(resourcePackBuilder, "resourcepacks/lootr_plugin/assets", "lootr_plugin", "items/lootr_trapped_chest.json");
         });
         PolymerResourcePackUtils.RESOURCE_PACK_AFTER_INITIAL_CREATION_EVENT.register(resourcePackBuilder -> {
             LogUtil.log("Moving lootr entity textures to plugin location in resource pack.");
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "normal", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_chest", "png"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "normal_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_chest_opened", "png"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "trapped", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_trapped_chest", "png"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "trapped_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_trapped_chest_opened", "png"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "shulker_box", "normal", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_shulker", "png"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "shulker_box", "normal_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_shulker_opened", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "normal", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_chest", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "normal_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_chest_opened", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "trapped", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_trapped_chest", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "chest", "trapped_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_trapped_chest_opened", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "shulker_box", "normal", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_shulker", "png"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr", FolderType.ENTITY_TEXTURES, "shulker_box", "normal_opened", "png"), PathUtil.getPath("lootr_plugin", FolderType.BLOCK_TEXTURES, "lootr_shulker_opened", "png"));
             LogUtil.log("Moving lootr item registration to lootr location in resource pack.");
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_barrel", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "barrel", "json"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_chest", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "chest", "json"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_barrel", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "barrel", "json"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_chest", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "chest", "json"));
 //            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_decorated_pot", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "decorated_pot", "json"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_shulker", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "shulker_box", "json"));
-            PolymerPlugin.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_trapped_chest", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "trapped_chest", "json"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_shulker", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "shulker_box", "json"));
+            PolymerRegistry.copyAsset(resourcePackBuilder, PathUtil.getPath("lootr_plugin", FolderType.ITEMS, "lootr_trapped_chest", "json"), PathUtil.getPath("lootr", FolderType.ITEMS, "trapped_chest", "json"));
         });
         LogUtil.log("Marking lootr resource pack as required.");
         PolymerResourcePackUtils.markAsRequired();
@@ -200,57 +199,57 @@ public class LootrPlugin extends Plugin {
     @Override
     public void registerBlockOverlays() {
         LogUtil.log("Registering lootr polymer block overlays.");
-        PolymerPlugin.registerBlock(ModBlocks.CHEST, LOOTR_CHEST);
-        PolymerPlugin.registerBlock(ModBlocks.TRAPPED_CHEST, LOOTR_TRAPPED_CHEST);
-        PolymerPlugin.registerBlock(ModBlocks.BARREL, LOOTR_BARREL);
-        PolymerPlugin.registerBlock(ModBlocks.SHULKER_BOX, LOOTR_SHULKER);
-        PolymerPlugin.registerBlockOverlay(ModBlocks.SUSPICIOUS_SAND, Blocks.SUSPICIOUS_SAND);
-        PolymerPlugin.registerBlockOverlay(ModBlocks.SUSPICIOUS_GRAVEL, Blocks.SUSPICIOUS_GRAVEL);
-        PolymerPlugin.registerBlockOverlay(ModBlocks.DECORATED_POT, Blocks.DECORATED_POT);
-        PolymerPlugin.registerBlock(ModBlocks.TROPHY, LOOTR_TROPHY);
+        PolymerRegistry.registerBlock(ModBlocks.CHEST, LOOTR_CHEST);
+        PolymerRegistry.registerBlock(ModBlocks.TRAPPED_CHEST, LOOTR_TRAPPED_CHEST);
+        PolymerRegistry.registerBlock(ModBlocks.BARREL, LOOTR_BARREL);
+        PolymerRegistry.registerBlock(ModBlocks.SHULKER_BOX, LOOTR_SHULKER);
+        PolymerRegistry.registerBlockOverlay(ModBlocks.SUSPICIOUS_SAND, Blocks.SUSPICIOUS_SAND);
+        PolymerRegistry.registerBlockOverlay(ModBlocks.SUSPICIOUS_GRAVEL, Blocks.SUSPICIOUS_GRAVEL);
+        PolymerRegistry.registerBlockOverlay(ModBlocks.DECORATED_POT, Blocks.DECORATED_POT);
+        PolymerRegistry.registerBlock(ModBlocks.TROPHY, LOOTR_TROPHY);
     }
 
     @Override
     public void registerElementHolderOverlays() {
         LogUtil.log("Registering lootr polymer element holders.");
-        PolymerPlugin.registerElementHolder(ModBlocks.CHEST, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
-        PolymerPlugin.registerElementHolder(ModBlocks.TRAPPED_CHEST, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
-        PolymerPlugin.registerElementHolder(ModBlocks.BARREL, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
-        PolymerPlugin.registerElementHolder(ModBlocks.SHULKER_BOX, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
-        PolymerPlugin.registerElementHolder(ModBlocks.SUSPICIOUS_SAND, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
-        PolymerPlugin.registerElementHolder(ModBlocks.SUSPICIOUS_GRAVEL, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.CHEST, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.TRAPPED_CHEST, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.BARREL, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.SHULKER_BOX, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.SUSPICIOUS_SAND, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
+        PolymerRegistry.registerElementHolder(ModBlocks.SUSPICIOUS_GRAVEL, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
 //        PolymerPlugin.registerElementHolder(ModBlocks.DECORATED_POT, new PolymerBlockWithElementHolder(new LootrElementHolder(), true));
     }
 
     @Override
     public void registerItemOverlays() {
         LogUtil.log("Registering lootr polymer item overlays.");
-        PolymerPlugin.registerItemOverlay(ModItems.CHEST, Items.CHEST);
-        PolymerPlugin.registerItemOverlay(ModItems.BARREL, Items.BARREL);
-        PolymerPlugin.registerItemOverlay(ModItems.TRAPPED_CHEST, Items.TRAPPED_CHEST);
-        PolymerPlugin.registerItemOverlay(ModItems.SHULKER_BOX, Items.SHULKER_BOX);
-        PolymerPlugin.registerItemOverlay(ModItems.SUSPICIOUS_SAND, Items.SUSPICIOUS_SAND);
-        PolymerPlugin.registerItemOverlay(ModItems.SUSPICIOUS_GRAVEL, Items.SUSPICIOUS_GRAVEL);
-        PolymerPlugin.registerItemOverlay(ModItems.DECORATED_POT, Items.DECORATED_POT);
-        PolymerPlugin.registerItemOverlay(ModItems.TROPHY, Items.BARRIER);
+        PolymerRegistry.registerItemOverlay(ModItems.CHEST, Items.CHEST);
+        PolymerRegistry.registerItemOverlay(ModItems.BARREL, Items.BARREL);
+        PolymerRegistry.registerItemOverlay(ModItems.TRAPPED_CHEST, Items.TRAPPED_CHEST);
+        PolymerRegistry.registerItemOverlay(ModItems.SHULKER_BOX, Items.SHULKER_BOX);
+        PolymerRegistry.registerItemOverlay(ModItems.SUSPICIOUS_SAND, Items.SUSPICIOUS_SAND);
+        PolymerRegistry.registerItemOverlay(ModItems.SUSPICIOUS_GRAVEL, Items.SUSPICIOUS_GRAVEL);
+        PolymerRegistry.registerItemOverlay(ModItems.DECORATED_POT, Items.DECORATED_POT);
+        PolymerRegistry.registerItemOverlay(ModItems.TROPHY, Items.BARRIER);
     }
 
     @Override
     public void registerBlockEntities() {
         LogUtil.log("Registering lootr polymer block entities.");
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.CHEST, BlockEntityType.BARREL);
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.BARREL, BlockEntityType.BARREL);
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.TRAPPED_CHEST, BlockEntityType.BARREL);
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.SHULKER_BOX, BlockEntityType.BARREL);
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.BRUSHABLE_BLOCK, BlockEntityType.BRUSHABLE_BLOCK);
-        PolymerPlugin.registerBlockEntity(ModBlockEntities.DECORATED_POT, BlockEntityType.DECORATED_POT);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.CHEST, BlockEntityType.BARREL);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.BARREL, BlockEntityType.BARREL);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.TRAPPED_CHEST, BlockEntityType.BARREL);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.SHULKER_BOX, BlockEntityType.BARREL);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.BRUSHABLE_BLOCK, BlockEntityType.BRUSHABLE_BLOCK);
+        PolymerRegistry.registerBlockEntity(ModBlockEntities.DECORATED_POT, BlockEntityType.DECORATED_POT);
     }
 
     @Override
     public void registerEntities() {
-        LogUtil.log("Registering lootr polymer entities.");
+        /*LogUtil.log("Registering lootr polymer entities.");
         PolymerPlugin.registerEntity(ModEntities.MINECART_WITH_CHEST, EntityType.CHEST_MINECART);
-        PolymerPlugin.registerEntity(ModEntities.ITEM_FRAME, EntityType.ITEM_FRAME);
+        PolymerPlugin.registerEntity(ModEntities.ITEM_FRAME, EntityType.ITEM_FRAME);*/
     }
 
     public static Block getOpenedBlock(LootrBlocks block) {

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.fabbe50.fabsservertweaks.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "plugin": "com.fabbe50.fabsservertweaks.fabric.mixin.MixinPlugin",
+  "mixins": [
+  ],
+  "server": [
+    "AnvilBlockMixin",
+    "LootrModEntitiesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

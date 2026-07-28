@@ -13,6 +13,7 @@ public class FabricPluginHelper {
     public static final String LOOTR_POLYMER_ID = "lootr_polymer";
     public static final String RESOURCE_LIBRARY_ID = "resourcelibrary";
     public static final String RESOURCE_NETHER_ORES_ID = "resource_nether_ores";
+    public static final String GEYSER_ID = "geyser";
 
     public static boolean areLootrPluginComponentsLoaded() {
         return isModLoaded(LOOTR_ID) && arePolymerComponentsLoaded() && !isModLoaded(LOOTR_POLYMER_ID);
@@ -28,6 +29,10 @@ public class FabricPluginHelper {
 
     public static boolean arePolymerComponentsLoaded() {
         return isModLoaded(POLYMER_CORE_ID) && isModLoaded(POLYMER_BLOCKS_ID) && isModLoaded(POLYMER_RESOURCE_PACK_ID) && isModLoaded(POLYMER_AUTOHOST_ID) && isModLoaded(POLYMER_VIRTUAL_ENTITY_ID);
+    }
+
+    public static boolean isGeyserLoaded() {
+        return isModLoaded(GEYSER_ID);
     }
 
     public static boolean isModLoaded(String modId) {

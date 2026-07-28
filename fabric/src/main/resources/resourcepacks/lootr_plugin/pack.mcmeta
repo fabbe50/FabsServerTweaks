@@ -1,8 +1,11 @@
 {
   "pack": {
-    "min_format": 84.0,
-    "max_format": 84.0,
-    "description": "Lootr Plugin"
+    "description": "Lootr Plugin",
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
   },
   "filter": {
     "block": [

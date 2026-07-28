@@ -1,6 +1,6 @@
 package com.fabbe50.fabsservertweaks.fabric.plugins.base;
 
-public abstract class Plugin implements IPlugin {
+public abstract class Plugin {
     protected boolean initialized;
     protected boolean bootstrapped;
 
@@ -10,23 +10,7 @@ public abstract class Plugin implements IPlugin {
         }
         initialized = true;
         init();
-        bootstrap();
     }
 
     abstract public void init();
-
-    public void bootstrap() {
-        if (bootstrapped) {
-            return;
-        }
-        bootstrapped = true;
-
-        registerBlocks();
-        registerBlockOverlays();
-        registerItems();
-        registerItemOverlays();
-        registerElementHolderOverlays();
-        registerBlockEntities();
-        registerEntities();
-    }
 }
