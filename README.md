@@ -55,6 +55,9 @@ These settings are stored in the mod config and can be viewed or changed with `/
 - `canLeashPets`: allows or blocks leashing tameable pets.
 - `canPistonsPushBlockEntities`: enables the custom piston logic for moving block entities with their full data.
 - `plantRainGrowthChance`: the percent chance that a plant will grow an extra step during a growth tick when it's raining.
+- `maxAnvilCost`: the maximum anvil extra cost.
+- `shouldEnderDragonAlwaysLootLikeFirst`: when enabled, the ender dragon will always generate a dragon egg and drop xp like it's the first defeat.
+- `warnPlayersAboutModNotOnClient`: allows the server owner to notify players when the mod is not installed on the client.
 
 ## Gamerule Features
 
@@ -68,12 +71,17 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `mob_drop_equipable`: toggles equipment, tools, and weapon drops from mobs.
 - `mob_drop_full_durability`: restores dropped mob gear to full durability.
 - `mob_drops_require_player_kill`: prevents mob drops unless the mob was killed by a player attack or player-caused explosion.
+- `shulker_shell_drop_amount`: fixed shell drop amount for shulkers.
 - `shulker_random_color`: randomizes natural shulker colors.
 - `shulkers_can_teleport`: toggles shulker teleporting.
-- `shulker_shell_drop_amount`: fixed shell drop amount for shulkers.
 - `villager_always_turn_into_zombies`: zombies always convert villagers instead of only sometimes.
 - `mobs_spawn_with_effects`: hostile mobs can spawn with dimension- and difficulty-based potion effects.
 - `friendly_phantoms`: phantoms orbit but do not attack players.
+- `no_soliciting_sign`: prevents wandering trader spawns near signs reading `No Soliciting`.
+- `pet_friendly_fire`: when disabled, prevents players from hurting their own tameables.
+- `snow_golems_generate_snow`: toggles snow trail generation.
+- `snow_golems_survive_on_ice`: prevents snow golems from melting while standing on ice.
+- `enderman_teleport_inhibitor`: enables the enderman teleportation inhibitor.
 
 ### World and Block Behavior
 
@@ -84,9 +92,6 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `rain_fills_cauldron`: toggles rain filling cauldrons.
 - `snow_fills_cauldron`: toggles snow filling cauldrons.
 - `better_rail_placement`: improves rail placement and shape retention.
-- `snow_golems_survive_on_ice`: prevents snow golems from melting while standing on ice.
-- `snow_golems_generate_snow`: toggles snow trail generation.
-- `no_soliciting_sign`: prevents wandering trader spawns near signs reading `No Soliciting`.
 - `silk_touchable_amethyst_nodes`: allows budding amethyst to be harvested.
 - `silk_touchable_spawners`: allows spawners to drop with their block entity data.
 - `silk_touchable_trial_spawners`: allows trial spawners to drop with their data.
@@ -94,12 +99,20 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `expanded_bone_meal`: adds new bonemeal interactions.
 - `sleeping_bags_enabled`: enables sleeping-bag behavior for specially named beds.
 - `safe_cant_sleep`: prevents sleeping if the world currently cannot skip the night.
-- `pet_friendly_fire`: when disabled, prevents players from hurting their own tameables.
 - `fortune_ancient_debris`: changes ancient debris drops to support direct scrap-style fortune scaling.
 - `torch_flowers_glow`: toggles torch flowers glowing.
 - `cactus_grow_height`: sets the max height of cactus growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
 - `sugar_cane_grow_height`: sets the max height of sugar cane growth. (Setting to `3` disables the modded growth, and `1` disables growth completely)
 - `plants_grow_faster_in_rain`: gives plants a chance to grow an extra step for every growth tick when it's raining (see config for chance config).
+- `amethyst_does_damage`: makes amethyst clusters deal damage to mobs.
+- `stone_type_generators`: enables more stone type generation from lava.
+- `dispensers_can_place_blocks`: dispensers can place blocks.
+- `prevent_hot_floor_damage_items`: enables the rule that some items protect against hot floor damage.
+- `repairable_anvils`: anvils are repairable with iron blocks.
+- `unlockable_vaults`: allows certain items to unlock vaults.
+- `modify_spawners`: allows spawners to be modified by using certain items on them.
+- `enchantment_transfer_to_books`: allows the player to transfer enchantments from a tool to a book.
+- `xp_to_bottles`: allows the transfer of XP to bottles.
 
 ### Projectile and Item Recovery
 
@@ -139,6 +152,10 @@ Spiders in Minecraft can usually climb on anything. This mod adds a tag to black
   - All `ice` blocks, this is applied through the `#minecraft:ice` tag, so it includes modded ice blocks if the tag is used by the mod author.
   - All `glazed terracotta` blocks
 
+### Enderman Teleportation Inhibitor
+
+If the gamerule is active, placing an ender dragon head on top of a respawn anchor will prevent enderman from teleporting within a 10 block radius.
+
 ### Beds and Sleeping Bags
 
 - Beds named `Sleeping Bag` act as sleeping bags instead of spawn-setting beds.
@@ -153,14 +170,15 @@ Spiders in Minecraft can usually climb on anything. This mod adds a tag to black
 ### Item and Utility Tweaks
 
 - Lodestone compasses can teleport the player to the lodestone by consuming an ender pearl.
-- Using a glass bottle on an enchanting table stores one level as a reusable XP bottle.
-- Right-clicking that XP bottle gives the stored experience back.
+- If the gamerule is active: using a glass bottle on an enchanting table stores one level as a reusable XP bottle.
+  - Right-clicking that XP bottle gives the stored experience back.
 - Snowballs deal proper damage to water-sensitive mobs.
 - Aqua Affinity underwater mining is improved.
 - Tagged items can become cactus-immune.
 - Tagged items can also have stack sizes overridden to `16` or `64`.
 - Creative players can instantly kill mobs with non-weapon attacks.
 - Nicknames can override the displayed chat sender name.
+- If the config option is enabled, a bundle can hold up to 16 tools (if only tools).
 
 ## Enchantments
 
@@ -189,7 +207,13 @@ This pack is enabled by default and requires restart.
 - `Springy I-III`:
   Increases jump strength.
 - `Swiftness I-III`:
-  Increases movement speed.
+  - Increases movement speed when on leg armor.
+  - Increases flight speed when on body (for the Happy Ghast harnesses).
+- `Soul Bound I`: Lets the player keep the items after death.
+- `Ice Touch I-III`:
+  - Converts Lava around the mined block depending on level into [1: Cobblestone, 2: Basalt, 3: Obsidian]
+  - Converts Water around the mined block depending on level into [1: Ice, 2 & 3: Packed Ice]
+- `Luck I-III`: Increases the player luck. (Gives better loot)
 
 ### Ore Miner Pack
 
@@ -215,6 +239,14 @@ It overrides several vanilla enchantments:
 
 These are not just higher caps. Their data definitions also adjust scaling behavior.
 
+### Disenchanting
+
+If the gamerule is enabled, enchanted items can be disenchanted by dropping them on top of a stonecutter and right-clicking the stonecutter with a book.
+
+- It removed one enchantment at a time.
+- The book needs to be unenchanted.
+- It will remove the anvil penalty for each enchantment removed.
+
 ## Recipe and Datapack Features
 
 The mod ships a number of built-in datapacks that can be toggled with `/fabs feature <pack>`.
@@ -231,6 +263,10 @@ Adds a small collection of utility recipes, including:
 - clay and calcite recipes
 - a larger `mass calcite` recipe
 - rotten flesh to leather
+- magma cream to magma block and back
+- mushrooms to mushroom blocks and back
+- ice uncrafting
+- nether wart block uncrafting
 
 ### `CAULDRON_CONVERSIONS`
 
@@ -367,6 +403,23 @@ Examples include:
 - `fabsservertweaks:piston_push_blacklist`
 - `fabsservertweaks:piston_push_whitelist`
 - `fabsservertweaks:piston_move_override`
+- `fabsservertweaks:fits_in_bundle_16`
+- `fabsservertweaks:fits_in_bundle_64`
+- `fabsservertweaks:prevents_hot_floor_damage`
+- `fabsservertweaks:vault_key`
+- `fabsservertweaks:block_dispense_blacklist`
+- `fabsservertweaks:bone_mealable`
+- `fabsservertweaks:field_growable`
+- `fabsservertweaks:harvestable`
+- `fabsservertweaks:piston_breaker_rods`
+- `fabsservertweaks:animals`
+- `fabsservertweaks:bosses`
+- `fabsservertweaks:golems`
+- `fabsservertweaks:hostiles`
+- `fabsservertweaks:pets`
+- `fabsservertweaks:villager_types`
+- `fabsservertweaks:lead_blacklist`
+- `fabsservertweaks:mobs_with_potion_effects_blacklist`
 
 Entity tags are also used for leash permissions and mob-effect blacklists.
 
@@ -474,6 +527,8 @@ Existing flowers must be updated, typically by breaking and replacing them, for 
 - If a built-in datapack is marked as restart-required, treat that as authoritative even if the command can toggle it immediately.
   - Meaning that enabling the datapack will succeed and the command will prompt the player to restart the server.
   - This is a limitation in vanilla not rebuilding the registries related on reload.
+- The tools in bundle feature will work for everyone, but the bundle will display itself as full even if it will still accept items.
+  - This can be solved by installing the mod on the clients.
 
 ## Recommended Documentation Note
 
