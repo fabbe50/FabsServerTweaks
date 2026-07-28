@@ -5,6 +5,8 @@ import com.fabbe50.fabsservertweaks.ModConfig;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficulty;
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleMode;
+import com.fabbe50.fabsservertweaks.util.BuiltinDatapack;
+import com.fabbe50.fabsservertweaks.util.BuiltinDatapackUtil;
 import io.netty.buffer.ByteBuf;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -23,18 +25,32 @@ import java.util.function.IntFunction;
 public enum Presets implements StringRepresentable {
     DEFAULT(0, "default") {
         @Override
-        public boolean adjustRules(ServerLevel serverLevel) {
+        public ChangedSettingResult adjustRules(ServerLevel level) {
             setToPresetDefaults(level);
             setConfigCommonFabDefaults();
             Fabsservertweaks.CONFIG.shareSeed = false;
             Fabsservertweaks.CONFIG.toolsInBundle = false;
             AutoConfig.getConfigHolder(ModConfig.class).save();
-            return true;
+            ChangedSettingResult result = ChangedSettingResult.NO_RESTART;
+            for (BuiltinDatapack datapack : BuiltinDatapack.values()) {
+                if (datapack.enabledByDefault() && !BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.enable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                } else if (!datapack.enabledByDefault() && BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.disable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                }
+            }
+            return result;
         }
     },
     VANILLA(1, "vanilla") {
         @Override
-        public boolean adjustRules(ServerLevel serverLevel) {
+        public ChangedSettingResult adjustRules(ServerLevel level) {
             setToPresetDefaults(level);
             Fabsservertweaks.CONFIG.cropTrampleMode = TrampleMode.NORMAL;
             Fabsservertweaks.CONFIG.eggTrampleMode = TrampleMode.NORMAL;
@@ -53,24 +69,41 @@ public enum Presets implements StringRepresentable {
             Fabsservertweaks.CONFIG.plantRainGrowthChance = 0;
             Fabsservertweaks.CONFIG.maxAnvilCost = Integer.MAX_VALUE;
             AutoConfig.getConfigHolder(ModConfig.class).save();
-            return true;
+            ChangedSettingResult result = ChangedSettingResult.NO_RESTART;
+            for (BuiltinDatapack datapack : BuiltinDatapack.values()) {
+                if (BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.disable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                }
+            }
+            return result;
         }
     },
     FABS(2, "fabs_choice") {
         @Override
-        public boolean adjustRules(ServerLevel serverLevel) {
+        public ChangedSettingResult adjustRules(ServerLevel level) {
             setToPresetDefaults(level);
             setConfigCommonFabDefaults();
             Fabsservertweaks.CONFIG.shareSeed = true;
             Fabsservertweaks.CONFIG.toolsInBundle = true;
             AutoConfig.getConfigHolder(ModConfig.class).save();
-            return true;
+            ChangedSettingResult result = ChangedSettingResult.NO_RESTART;
+            for (BuiltinDatapack datapack : BuiltinDatapack.values()) {
+                if (!BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.enable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                }
+            }
+            return result;
         }
     },
     NO_RENEWABLE(3, "no_renewable") {
         @Override
-        public boolean adjustRules(ServerLevel serverLevel) {
-            return true;
+        public ChangedSettingResult adjustRules(ServerLevel level) {
             setGameRule(level, ModGameRules.RULE_NO_COBBLE_GEN, true);
             setGameRule(level, ModGameRules.RULE_WATER_DRIPSTONE_FILL_CAULDRON, false);
             setGameRule(level, ModGameRules.RULE_LAVA_DRIPSTONE_FILL_CAULDRON, false);
@@ -83,18 +116,33 @@ public enum Presets implements StringRepresentable {
             setGameRule(level, ModGameRules.RULE_UNLOCKABLE_VAULTS, false);
             setGameRule(level, ModGameRules.RULE_STONE_TYPE_GENERATORS, false);
             setGameRule(level, ModGameRules.RULE_BETTER_MOB_LOOT, false);
+            ChangedSettingResult result = ChangedSettingResult.NO_RESTART;
+            for (BuiltinDatapack datapack : BuiltinDatapack.values()) {
+                if (datapack.equals(BuiltinDatapack.POTTERY_SHERD_DUPLICATION) && BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.disable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                } else if (!BuiltinDatapackUtil.isEnabled(level.getServer(), datapack)) {
+                    BuiltinDatapackUtil.enable(level.getServer(), datapack);
+                    if (datapack.requiresRestart()) {
+                        result = ChangedSettingResult.RESTART_REQUIRED;
+                    }
+                }
+            }
+            return result;
         }
     },
     CREATIVE_DEFAULTS(4, "creative_defaults") {
         @Override
-        public boolean adjustRules(ServerLevel serverLevel) {
-            return true;
+        public ChangedSettingResult adjustRules(ServerLevel level) {
             setGameRule(level, GameRules.ADVANCE_TIME, false);
             setGameRule(level, GameRules.ADVANCE_WEATHER, false);
             setGameRule(level, GameRules.SPAWN_MOBS, false);
             setGameRule(level, GameRules.SPAWN_WANDERING_TRADERS, false);
             setGameRule(level, GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0);
             setGameRule(level, GameRules.KEEP_INVENTORY, true);
+            return ChangedSettingResult.NO_RESTART;
         }
     };
 
@@ -110,7 +158,7 @@ public enum Presets implements StringRepresentable {
         this.name = name;
     }
 
-    public boolean adjustRules(ServerLevel serverLevel) {
+    public ChangedSettingResult adjustRules(ServerLevel level) {
         throw new RuntimeException("Preset without adjustments. This shouldn't happen.");
     }
 
