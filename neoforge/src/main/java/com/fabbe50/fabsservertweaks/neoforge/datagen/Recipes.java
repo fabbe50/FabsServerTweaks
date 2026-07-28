@@ -6,10 +6,14 @@ import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -20,13 +24,17 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Recipes extends RecipeProvider {
+    public final HolderGetter<Item> items;
+
     protected Recipes(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
         super(provider, recipeOutput);
+        this.items = provider.lookupOrThrow(Registries.ITEM);
     }
 
     public static class Runner extends RecipeProvider.Runner {
