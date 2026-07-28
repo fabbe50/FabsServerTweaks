@@ -9,20 +9,25 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(CompassItem.class)
@@ -35,7 +40,7 @@ public abstract class CompassItemMixin extends Item {
     }
 
     @Override
-    public @NotNull InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
+    public @NotNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NonNull InteractionHand interactionHand) {
         if (level instanceof ServerLevel serverLevel) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             ItemStack compassItem = player.getItemInHand(interactionHand);
@@ -72,18 +77,41 @@ public abstract class CompassItemMixin extends Item {
                 if (teleportPosition != null) {
                     if (!player.isCreative()) {
                         for (ItemStack stack : player.getInventory()) {
+                            if (stack.is(ItemTags.BUNDLES)) {
+                                if (stack.getItem() instanceof BundleItem bundleItem) {
+                                    BundleContents contents = stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+                                    List<ItemStack> stacks = new ArrayList<>(contents.itemCopyStream().toList());
+                                    for (ItemStack itemStack : new ArrayList<>(stacks)) {
+                                        if (itemStack.is(Items.ENDER_PEARL)) {
+                                            int index = stacks.indexOf(itemStack);
+                                            stacks.remove(itemStack);
+                                            itemStack.shrink(1);
+                                            stacks.add(index, itemStack);
+                                            break;
+                                        }
+                                    }
+                                    contents = new BundleContents(stacks.stream()
+                                            .map(stack1 -> {
+                                                if (!stack1.isEmpty()) {
+                                                    return ItemStackTemplate.fromNonEmptyStack(stack1);
+                                                }
+                                                return null;
+                                            })
+                                            .filter(Objects::nonNull).toList()
+                                    );
+                                    stack.set(DataComponents.BUNDLE_CONTENTS, contents);
+                                    teleport(serverLevel, serverPlayer, teleportPosition, compassItem);
+                                    return InteractionResult.SUCCESS;
+                                }
+                            }
                             if (stack.is(Items.ENDER_PEARL)) {
                                 stack.shrink(1);
-                                player.teleport(new TeleportTransition(targetDimension, teleportPosition.getBottomCenter(), Vec3.ZERO, player.getYRot(), player.getXRot(), Relative.union(Relative.DELTA, Relative.ROTATION), entity -> {}));
-                                player.getCooldowns().addCooldown(compassItem, 600);
-                                serverPlayer.sendSystemMessage(Component.literal("Teleported!"), true);
+                                teleport(targetDimension, serverPlayer, teleportPosition, compassItem);
                                 return InteractionResult.SUCCESS;
                             }
                         }
                     } else {
-                        player.teleport(new TeleportTransition(targetDimension, teleportPosition.getBottomCenter(), Vec3.ZERO, player.getYRot(), player.getXRot(), Relative.union(Relative.DELTA, Relative.ROTATION), entity -> {}));
-                        player.getCooldowns().addCooldown(compassItem, 600);
-                        serverPlayer.sendSystemMessage(Component.literal("Teleported!"), true);
+                        teleport(targetDimension, serverPlayer, teleportPosition, compassItem);
                         return InteractionResult.SUCCESS;
                     }
                     serverPlayer.sendSystemMessage(Component.literal("Missing ender pearl.").withStyle(ChatFormatting.RED), true);
@@ -95,5 +123,12 @@ public abstract class CompassItemMixin extends Item {
             }
         }
         return super.use(level, player, interactionHand);
+    }
+
+    @Unique
+    private void teleport(ServerLevel targetDimension, ServerPlayer serverPlayer, BlockPos teleportPosition, ItemStack compassItem) {
+        serverPlayer.teleport(new TeleportTransition(targetDimension, teleportPosition.getBottomCenter(), Vec3.ZERO, serverPlayer.getYRot(), serverPlayer.getXRot(), Relative.union(Relative.DELTA, Relative.ROTATION), entity -> {}));
+        serverPlayer.getCooldowns().addCooldown(compassItem, 600);
+        serverPlayer.sendSystemMessage(Component.literal("Teleported!"), true);
     }
 }
