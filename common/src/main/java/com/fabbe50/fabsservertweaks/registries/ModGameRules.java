@@ -75,6 +75,7 @@ public class ModGameRules {
     public static final ExtGameRule<Boolean> RULE_SNOW_GOLEMS_GENERATE_SNOW;
     public static final ExtGameRule<Boolean> RULE_PET_FRIENDLY_FIRE;
     public static final ExtGameRule<Boolean> RULE_SHULKERS_CAN_TELEPORT;
+    public static final ExtGameRule<Boolean> RULE_ENDERMAN_TELEPORT_INHIBITOR;
 
     // Block Behavior
     public static final ExtGameRule<Boolean> RULE_TORCHFLOWERS_GLOW;
@@ -166,6 +167,7 @@ public class ModGameRules {
         RULE_DISPENSERS_CAN_PLACE_BLOCKS = registerBoolean("dispensers_can_place_blocks", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         RULE_PREVENT_HOT_FLOOR_DAMAGE_ITEMS = registerBoolean("prevent_hot_floor_damage_items", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         RULE_REPAIRABLE_ANVILS = registerBoolean("repairable_anvils", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
+        RULE_ENDERMAN_TELEPORT_INHIBITOR = registerBoolean("enderman_teleport_inhibitor", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
         if (Fabsservertweaks.CONFIG.enableExperimentalFeatures) {
             RULE_PISTONS_CAN_BREAK_BLOCKS = registerBoolean("pistons_can_break_blocks", GameRuleCategory.MISC, BOOLEAN_ALL_FALSE);
             RULE_BETTER_MOB_LOOT = registerBoolean("better_mob_loot", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);

@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
+import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -24,14 +25,16 @@ public class EnderManMixin extends Monster {
     private void injectTeleport(CallbackInfoReturnable<Boolean> cir) {
         Level level = level();
         if (level instanceof ServerLevel serverLevel) {
-            BlockPos pos = getOnPos();
-            AABB aabb = new AABB(pos);
-            aabb = aabb.inflate(10, 5, 10);
-            for (BlockPos blockPos : BlockPos.betweenClosed(aabb)) {
-                BlockState state = serverLevel.getBlockState(blockPos);
-                if (state.is(Blocks.RESPAWN_ANCHOR) && serverLevel.getBlockState(blockPos.above()).is(Blocks.DRAGON_HEAD)) {
-                    cir.setReturnValue(true);
-                    return;
+            if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_ENDERMAN_TELEPORT_INHIBITOR)) {
+                BlockPos pos = getOnPos();
+                AABB aabb = new AABB(pos);
+                aabb = aabb.inflate(10, 5, 10);
+                for (BlockPos blockPos : BlockPos.betweenClosed(aabb)) {
+                    BlockState state = serverLevel.getBlockState(blockPos);
+                    if (state.is(Blocks.RESPAWN_ANCHOR) && serverLevel.getBlockState(blockPos.above()).is(Blocks.DRAGON_HEAD)) {
+                        cir.setReturnValue(true);
+                        return;
+                    }
                 }
             }
         }
