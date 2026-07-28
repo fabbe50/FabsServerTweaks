@@ -1,6 +1,11 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
+import com.fabbe50.fabsservertweaks.LogUtil;
+import com.fabbe50.fabsservertweaks.data.PlantGrowth;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
+import com.fabbe50.fabsservertweaks.registries.ModRegistry;
+import com.fabbe50.fabsservertweaks.util.PillarGrowUtil;
+import com.fabbe50.fabsservertweaks.util.PlantUtil;
 import com.fabbe50.fabsservertweaks.util.ToolUtil;
 import com.fabbe50.fabsservertweaks.util.WorldUtil;
 import com.mojang.datafixers.util.Pair;
@@ -9,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -21,14 +25,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CocoaBlock;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -80,30 +84,53 @@ public abstract class HoeItemMixin extends Item {
                         }
                     }
                 });
-            } else if (originState.is(BlockTags.CROPS)) {
-                WorldUtil.getBlocksInRadius(blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(blockPos1 -> {
-                    BlockState state = level.getBlockState(blockPos1);
-                    if (state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state)) {
-                        List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, toolStack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
-                        for (ItemStack dropStack : stacks) {
-                            ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
-                            level.addFreshEntity(itemEntity);
-                        }
-                        level.setBlockAndUpdate(blockPos1, cropBlock.getStateForAge(0));
-                    }
-                });
-            } else if (originState.is(Blocks.COCOA)) {
-                WorldUtil.getBlocksInRadius(face, blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(pos -> {
-                    BlockState state = level.getBlockState(pos);
-                    if (state.getBlock() instanceof CocoaBlock) {
-                        int age = state.getValue(CocoaBlock.AGE);
-                        if (age == CocoaBlock.MAX_AGE) {
-                            List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, toolStack).withParameter(LootContextParams.ORIGIN, pos.getCenter()));
-                            for (ItemStack dropStack : stacks) {
-                                ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
-                                level.addFreshEntity(itemEntity);
+            } else if (originState.is(ModRegistry.HARVESTABLE)) {
+                Direction harvestDirection = face;
+                if (originState.is(ModRegistry.FIELD_GROWABLE)) {
+                    harvestDirection = Direction.UP;
+                }
+                PlantGrowth ogGrowth = PlantGrowth.getPlantAge(originState);
+                WorldUtil.getBlocksInRadius(harvestDirection, blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(pos -> {
+                    BlockState state = serverLevel.getBlockState(pos);
+                    if (ogGrowth != null) {
+                        BlockPos abovePos = pos.above();
+                        BlockState aboveState = serverLevel.getBlockState(abovePos);
+                        for (Block block : ogGrowth.getAttachments()) {
+                            if (aboveState.is(block)) {
+                                dropItems(serverLevel, blockPos, abovePos, aboveState, toolStack);
+                                serverLevel.setBlockAndUpdate(abovePos, Blocks.AIR.defaultBlockState());
+                                break;
                             }
-                            level.setBlockAndUpdate(pos, state.setValue(CocoaBlock.AGE, 0));
+                        }
+                    }
+                    if (!(state.is(Blocks.MELON_STEM) || state.is(Blocks.PUMPKIN_STEM) || !state.is(ModRegistry.HARVESTABLE))) {
+                        IntegerProperty ageProperty = PlantUtil.getAgeProperty(state);
+                        PlantGrowth plantAge = PlantGrowth.getPlantAge(state);
+                        if ((ageProperty != null && plantAge != null) || (plantAge != null && plantAge.hasDifferentBlock())) {
+                            if (PlantUtil.isMaxAge(state, ageProperty) || plantAge.shouldIgnoreMaxAge() || !plantAge.isAgingPlant()) {
+                                int resettingAge = plantAge.getResettingAge();
+                                boolean tallPlant = plantAge.isTallPlant();
+                                if (tallPlant) {
+                                    int height = PillarGrowUtil.getPillarHeight(state, serverLevel, pos);
+                                    if (height != 1) {
+                                        BlockPos above = pos.above();
+                                        for (int i = 0; i < height; i++) {
+                                            BlockState tallPlantState = serverLevel.getBlockState(above);
+                                            if (tallPlantState.is(state.getBlock())) {
+                                                if (plantAge.tallPlantDropsForEverySegment()) {
+                                                    dropItems(serverLevel, blockPos.relative(face), pos, state, toolStack);
+                                                }
+                                                serverLevel.setBlockAndUpdate(above, Blocks.AIR.defaultBlockState());
+                                                above = above.above();
+                                            }
+                                        }
+                                        PlantUtil.setPlantWithAge(serverLevel, pos, state, plantAge, ageProperty, resettingAge);
+                                    }
+                                } else if (resettingAge != -1) {
+                                    dropItems(serverLevel, blockPos, pos, state, toolStack);
+                                    PlantUtil.setPlantWithAge(serverLevel, pos, state, plantAge, ageProperty, resettingAge);
+                                }
+                            }
                         }
                     }
                 });
@@ -111,6 +138,15 @@ public abstract class HoeItemMixin extends Item {
             if (flag.get()) {
                 cir.setReturnValue(InteractionResult.SUCCESS);
             }
+        }
+    }
+
+    @Unique
+    private void dropItems(ServerLevel serverLevel, BlockPos blockPos, BlockPos blockPos1, BlockState state, ItemStack toolStack) {
+        List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, toolStack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
+        for (ItemStack dropStack : stacks) {
+            ItemEntity itemEntity = new ItemEntity(serverLevel, blockPos.getX(), blockPos.getY(), blockPos.getZ(), dropStack);
+            serverLevel.addFreshEntity(itemEntity);
         }
     }
 }
