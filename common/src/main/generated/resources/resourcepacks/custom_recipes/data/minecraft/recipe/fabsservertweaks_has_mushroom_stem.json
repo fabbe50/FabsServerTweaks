@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#fabsservertweaks:mushroom_head_blocks",
+    "#fabsservertweaks:mushroom_head_blocks"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:mushroom_stem"
+  }
+}

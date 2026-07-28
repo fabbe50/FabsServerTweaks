@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_amethyst_un_crafting",
+  "ingredients": [
+    "minecraft:amethyst_block"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minecraft:amethyst_shard"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_red_mushroom_block_crafting",
+  "ingredients": [
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:red_mushroom"
+  ],
+  "result": {
+    "id": "minecraft:red_mushroom_block"
+  }
+}

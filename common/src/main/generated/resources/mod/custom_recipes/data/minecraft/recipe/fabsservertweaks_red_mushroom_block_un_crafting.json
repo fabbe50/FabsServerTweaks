@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_red_mushroom_block_un_crafting",
+  "ingredients": [
+    "minecraft:red_mushroom_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:red_mushroom"
+  }
+}

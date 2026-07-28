@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_packed_ice_un_crafting",
+  "ingredients": [
+    "minecraft:packed_ice"
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:ice"
+  }
+}

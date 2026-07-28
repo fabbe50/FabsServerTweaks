@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_brown_mushroom_block_un_crafting",
+  "ingredients": [
+    "minecraft:brown_mushroom_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:brown_mushroom"
+  }
+}

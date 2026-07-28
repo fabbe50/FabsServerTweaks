@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mushroom_stem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#fabsservertweaks:mushroom_head_blocks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fabsservertweaks_has_mushroom_stem"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mushroom_stem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fabsservertweaks_has_mushroom_stem"
+    ]
+  }
+}

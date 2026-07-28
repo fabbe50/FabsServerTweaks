@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_magma_cream_un_crafting",
+  "ingredients": [
+    "minecraft:magma_block"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minecraft:magma_cream"
+  }
+}

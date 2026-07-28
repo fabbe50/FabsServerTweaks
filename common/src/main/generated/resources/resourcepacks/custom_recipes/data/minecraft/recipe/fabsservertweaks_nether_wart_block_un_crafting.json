@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "fabsservertweaks_nether_wart_block_un_crafting",
+  "ingredients": [
+    "minecraft:nether_wart_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:nether_wart"
+  }
+}
