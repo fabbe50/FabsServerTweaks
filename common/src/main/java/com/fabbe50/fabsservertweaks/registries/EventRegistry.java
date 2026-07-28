@@ -86,73 +86,40 @@ public class EventRegistry {
                     PLACING_MOB_FROM_LEAD.set(false);
                     return EventResult.pass();
                 }
-                    if (entity instanceof Monster monster) {
-                        if (entity.is(ModRegistry.MOBS_WITH_POTION_EFFECTS_BLACKLIST)) {
-                            return EventResult.pass();
-                        }
-                        RandomSource random = entity.getRandom();
-                        DifficultyValue.Difficulty difficulty = Fabsservertweaks.CONFIG.difficulty;
-                        if (shouldApplyEffect(serverLevel, random, difficulty)) {
-                            if (serverLevel.dimension().equals(Level.NETHER)) {
-                                if (random.nextDouble() < 0.75d) {
-                                    monster.addEffect(EffectUtil.getRandomNetherEffect(random));
-                                    return EventResult.interruptTrue();
-                                }
-                            } else if (serverLevel.dimension().equals(Level.END)) {
-                                if (random.nextDouble() < 0.25d) {
-                                    monster.addEffect(EffectUtil.getRandomEndEffect(random));
-                                    return EventResult.interruptTrue();
-                                }
-                            } else {
-                                if (ChanceUtil.rollAtY(level, monster.getBlockY(), 0.01, 0.75, 5.25, random)) {
-                                    monster.addEffect(EffectUtil.getRandomOverworldEffect(random));
-                                    return EventResult.interruptTrue();
-                                }
-                            }
-                        }
                 if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
+                    if (EntityUtil.applyMobEffect(serverLevel, entity)) {
+                        LogUtil.debug("Entity got effects applied.");
                     }
                 }
             }
             return EventResult.pass();
         });
-        EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
-            Level level = livingEntity.level();
-            if (BuiltinDatapackUtil.isEnabled(level.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
-                if (damageSource.getEntity() instanceof Player player) {
-                    ItemStack toolStack = player.getItemInHand(player.getUsedItemHand());
-                    if (EnchantmentUtil.hasEnchantment(player, toolStack, ModRegistry.CAPTURING)) {
-                        Optional<Holder<Item>> optionalItemHolder = SpawnEggItem.byId(livingEntity.getType());
-                        if (optionalItemHolder.isPresent()) {
-                            Holder<Item> itemHolder = optionalItemHolder.get();
-                            int capturingLevel = EnchantmentUtil.getEnchantmentLevel(player, toolStack, ModRegistry.CAPTURING);
-                            double chance = Math.min(50d / (1000 / Math.pow(10, Math.clamp(capturingLevel, 1, 3))), 50);
-                            if (level.getRandom().nextInt(0, 100) < chance) {
-                                dropItem(level, livingEntity.blockPosition(), new ItemStack(itemHolder.value()));
-                            }
-                        }
-                    }
+        EntityEvent.LIVING_HURT.register((entity, source, amount) -> {
+            if (entity.level() instanceof ServerLevel serverLevel) {
+                ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
+                if (ConditionHelper.preventsHotFloorDamage(serverLevel, entity, boots) && source.is(DamageTypes.HOT_FLOOR)) {
+                    return EventResult.interruptTrue();
                 }
             }
-            if (livingEntity instanceof Mob mob) {
-                if (level instanceof ServerLevel serverLevel) {
-                    GameRules gameRules = serverLevel.getGameRules();
-                    if (!gameRules.get(ModGameRules.RULE_MOB_DROP_EQUIPABLE)) {
-                        for (EquipmentSlot slot : EquipmentSlot.values()) {
-                            if (!mob.getDropChances().isPreserved(slot)) {
-                                ItemStack stack = mob.getItemBySlot(slot);
-                                if (stack.has(DataComponents.EQUIPPABLE) || stack.has(DataComponents.TOOL) || stack.has(DataComponents.WEAPON) || stack.getItem() instanceof ProjectileWeaponItem) {
-                                    stack.setCount(0);
-                                }
+            return EventResult.pass();
+        });
+        EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
+            LogUtil.debugEventRun(String.format("Executed by entity '%s' by %s", livingEntity.getName().getString(), damageSource));
+            Level level = livingEntity.level();
+            Entity sourceEntity = damageSource.getEntity();
+
+            if (level instanceof ServerLevel serverLevel) {
+                if (BuiltinDatapackUtil.isEnabled(level.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
+                    if (livingEntity instanceof Mob mob) {
+                        if (sourceEntity instanceof LivingEntity sourceLivingEntity) {
+                            if (EnchantmentUtil.performCapturing(serverLevel, mob, sourceLivingEntity)) {
+                                LogUtil.debug("Entity spawn egg dropped.");
                             }
                         }
                     }
-                    if (mob instanceof Shulker shulker) {
-                        int shulker_shells = gameRules.get(ModGameRules.RULE_SHULKER_SHELL_DROP_AMOUNT);
-                        if (shulker_shells > 0) {
-                            shulker.spawnAtLocation(serverLevel, new ItemStack(Items.SHULKER_SHELL, shulker_shells));
-                            shulker.remove(Entity.RemovalReason.DISCARDED);
-                            return EventResult.interruptTrue();
+                    if (livingEntity instanceof Player player) {
+                        if (EnchantmentUtil.handleSoulBoundAfterDeath(player)) {
+                            LogUtil.debug("Soul bound items are saved for player: " + player);
                         }
                     }
                 }
@@ -166,6 +133,15 @@ public class EventRegistry {
             ServerTweaksCommand.register(commandDispatcher, commandBuildContext);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s'", serverPlayer.getName().getString()));
+            if (Fabsservertweaks.CONFIG.warnPlayersAboutModNotOnClient) {
+                try {
+                    if (!NetworkManager.canPlayerReceive(serverPlayer, SeedPacket.PACKET_ID)) {
+                        serverPlayer.sendSystemMessage(Component.literal("Fab's Server Tweaks is not installed on your client."));
+                        serverPlayer.sendSystemMessage(Component.translatable("See %s for more information.", Component.literal("https://github.com/fabbe50/FabsServerTweaks").withStyle(Style.EMPTY.withUnderlined(true).withClickEvent(new OpenUrl(URI.create("https://github.com/fabbe50/FabsServerTweaks"))))));
+                    }
+                } catch (UnsupportedOperationException ignored) {}
+            }
             if (Fabsservertweaks.CONFIG.shareSeed) {
                 long seed = serverPlayer.level().getSeed();
                 try {
@@ -175,279 +151,324 @@ public class EventRegistry {
                 }
             }
         });
-        InteractionEvent.LEFT_CLICK_BLOCK.register((player, hand, pos, face) -> {
-            BreakContextStore.recordFace(player, pos, face);
-            Level level = player.level();
-            ItemStack stack = player.getItemInHand(hand);
-            if (level instanceof ServerLevel serverLevel) {
-                if (serverLevel.getGameRules().get(ModGameRules.RULE_BETTER_HOES) && !player.isShiftKeyDown()) {
-                    AtomicBoolean flag = new AtomicBoolean(false);
-                    WorldUtil.getBlocksInSphericalRadius(pos, ToolUtil.getScytheRadiusFromHoe(stack))
-                            .forEach(blockPos1 -> {
-                                BlockState state = level.getBlockState(blockPos1);
-                                if (state.is(ModRegistry.SCYTHE_ABLE)) {
-                                    List<ItemStack> stacks = state.getDrops(new LootParams.Builder(serverLevel).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.ORIGIN, blockPos1.getCenter()));
-                                    for (ItemStack dropStack : stacks) {
-                                        ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), dropStack);
-                                        level.addFreshEntity(itemEntity);
-                                    }
-                                    level.setBlockAndUpdate(blockPos1, Blocks.AIR.defaultBlockState());
-                                    flag.set(true);
-                                }
-                            });
-                    if (flag.get()) {
-                        return InteractionResult.SUCCESS;
+        PlayerEvent.PLAYER_RESPAWN.register((player, conqueredEnd, removalReason) -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s'", player.getName().getString()));
+            if (player.level() instanceof ServerLevel level) {
+                LogUtil.debug("Player spawned!");
+                if (BuiltinDatapackUtil.isEnabled(level.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
+                    if (EnchantmentUtil.handleSoulBoundAfterRespawn(player)) {
+                        LogUtil.debug("Soul bound items were returned to player: " + player);
                     }
                 }
+            }
+        });
+        InteractionEvent.LEFT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s' at %s using hand %s", player.getName().getString(), pos, hand));
+            BreakContextStore.recordFace(player, pos, face);
+            Level level = player.level();
+            if (level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
+                BlockState state = serverLevel.getBlockState(pos);
+                BlockEventLogic.leftClickBlock(serverLevel, serverPlayer, pos, state, face);
             }
             return InteractionResult.PASS;
         });
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
-            if (player.level() instanceof ServerLevel serverLevel) {
-                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+            LogUtil.debugEventRun(String.format("Executed by player '%s' at %s using hand %s", player.getName().getString(), pos, hand));
+            if (player.level() instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
+                ItemStack mainHandStack = player.getMainHandItem();
+                ItemStack offHandStack = player.getOffhandItem();
                 BlockState state = serverLevel.getBlockState(pos);
-                if (stack.is(Items.GLASS_BOTTLE) && state.is(Blocks.ENCHANTING_TABLE) && !player.isShiftKeyDown()) {
-                    ItemStack xpBottle = new ItemStack(Items.EXPERIENCE_BOTTLE);
-                    CompoundTag tag = new CompoundTag();
-                    int exp = XPUtil.removeLevels(player, 1);
-                    tag.putInt("xp", exp);
-                    xpBottle.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-                    stack.shrink(1);
-                    player.addItem(xpBottle);
-                    return InteractionResult.SUCCESS;
-                }
-                if (stack.is(Items.BONE_MEAL) && !player.getCooldowns().isOnCooldown(stack)) {
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_BETTER_BONE_MEAL) && mainHandStack.is(Items.BONE_MEAL) && !player.getCooldowns().isOnCooldown(mainHandStack)) {
                     if (state.is(ModRegistry.MOD_BONE_MEALABLE)) {
-                        RandomSource random = serverLevel.getRandom();
-                        if (state.is(Blocks.LILY_PAD)) {
-                            List<BlockPos> blockPositions = WorldUtil.getBlockPositions(new AABB(pos).inflate(1));
-                            for (BlockPos blockPos : blockPositions) {
-                                if (serverLevel.getRandom().nextInt(3) == 0) {
-                                    BlockState checkState = serverLevel.getBlockState(blockPos);
-                                    if (checkState.isAir() && (serverLevel.getBlockState(blockPos.below()).is(Blocks.WATER) && serverLevel.getFluidState(blockPos.below()).is(Fluids.WATER))) {
-                                        serverLevel.setBlockAndUpdate(blockPos, state);
-                                        handleBoneMealUsed(serverLevel, pos, player, stack, true);
-                                        return InteractionResult.SUCCESS;
-                                    }
+                        LogUtil.debug("Bone meal used on bone-mealable block. Attempting growth task.");
+                        if (PlantUtil.boneMealPlant(serverLevel, pos, state, serverPlayer, mainHandStack)) {
+                            LogUtil.debug("Operation seems successful. Passing success result.");
+                            return InteractionResult.SUCCESS;
+                        }
+                    }
+                }
+                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
+                    if (mainHandStack.is(Items.LEAD) && EnchantmentUtil.hasEnchantment(player, mainHandStack, ModRegistry.ENDER)) {
+                        LogUtil.debug("Lead with Ender used on block. Checking entity data on stack.");
+                        if (mainHandStack.has(DataComponents.ENTITY_DATA)) {
+                            TypedEntityData<EntityType<?>> entityData = mainHandStack.get(DataComponents.ENTITY_DATA);
+                            if (entityData != null) {
+                                LogUtil.debug("Lead has entity data. Attempting mob placement.");
+                                EntityType<?> type = entityData.type();
+                                Entity entity = type.create(serverLevel, EntitySpawnReason.EVENT);
+                                if (entity != null) {
+                                    LogUtil.debug("Entity on lead is present and valid. Placing entity on block...");
+                                    PLACING_MOB_FROM_LEAD.set(true);
+                                    entityData.loadInto(entity);
+                                    entity.setPos(pos.relative(face).getBottomCenter());
+                                    serverLevel.addFreshEntity(entity);
+                                    mainHandStack.remove(DataComponents.ENTITY_DATA);
+                                    LogUtil.debug("Operation seems successful. Passing success result.");
+                                    return InteractionResult.SUCCESS;
                                 }
                             }
-                        } else if (state.is(Blocks.SEA_PICKLE)) {
-                            int pickles = state.getValue(SeaPickleBlock.PICKLES);
-                            if (state.getValue(SeaPickleBlock.WATERLOGGED) && pickles < 4) {
-                                serverLevel.setBlockAndUpdate(pos, state.setValue(SeaPickleBlock.PICKLES, pickles + 1));
-                                handleBoneMealUsed(serverLevel, pos.above(), player, stack, true);
-                                return InteractionResult.SUCCESS;
-                            }
-                        } else if ((state.is(Blocks.SUGAR_CANE) || state.is(Blocks.CACTUS))) {
-                            int maxGrowHeight = 3;
-                            if (state.is(Blocks.CACTUS)) {
-                                maxGrowHeight = serverLevel.getGameRules().get(ModGameRules.RULE_CACTUS_GROW_HEIGHT);
-                            }
-                            if (state.is(Blocks.SUGAR_CANE)) {
-                                maxGrowHeight = serverLevel.getGameRules().get(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
-                            }
-                            if (growInColumn(serverLevel, pos, state.getBlock(), maxGrowHeight)) {
-                                handleBoneMealUsed(serverLevel, pos, player, stack, false);
-                                return InteractionResult.SUCCESS;
-                            }
-                        } else if (state.is(Blocks.PUMPKIN_STEM) || state.is(Blocks.MELON_STEM)) {
-                            Block fruit = state.is(Blocks.PUMPKIN_STEM) ? Blocks.PUMPKIN : Blocks.MELON;
-                            Block stem = state.is(Blocks.PUMPKIN_STEM) ? Blocks.ATTACHED_PUMPKIN_STEM : Blocks.ATTACHED_MELON_STEM;
-                            if (growFromStem(serverLevel, pos, state, random, fruit, stem)) {
-                                handleBoneMealUsed(serverLevel, pos, player, stack, true);
-                                return InteractionResult.SUCCESS;
-                            }
                         } else {
-                            if (dropItem(serverLevel, pos, new ItemStack(state.getBlock()))) {
-                                handleBoneMealUsed(serverLevel, pos, player, stack, true);
-                                return InteractionResult.SUCCESS;
-                            }
+                            LogUtil.debug("Lead does not have entity data. Operation failed.");
                         }
                     }
                 }
-                if (stack.is(Items.LEAD) && EnchantmentUtil.hasEnchantment(player, stack, ModRegistry.ENDER)) {
-                    if (stack.has(DataComponents.ENTITY_DATA)) {
-                        TypedEntityData<EntityType<?>> entityData = stack.get(DataComponents.ENTITY_DATA);
-                        if (entityData != null) {
-                            EntityType<?> type = entityData.type();
-                            Entity entity = type.create(serverLevel, EntitySpawnReason.EVENT);
-                            if (entity != null) {
-                                PLACING_MOB_FROM_LEAD.set(true);
-                                entityData.loadInto(entity);
-                                entity.setPos(pos.relative(face).getBottomCenter());
-                                serverLevel.addFreshEntity(entity);
-                                stack.remove(DataComponents.ENTITY_DATA);
-                                return InteractionResult.SUCCESS;
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_ENCHANTMENT_TRANSFER_TO_BOOKS) && mainHandStack.is(Items.BOOK) && state.is(Blocks.STONECUTTER)) {
+                    LogUtil.debug("Book used on stonecutter. Checking items on top...");
+                    AABB aabb = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1);
+                    List<ItemEntity> entities = serverLevel.getEntitiesOfClass(ItemEntity.class, aabb);
+                    LogUtil.debug("Item entities found: " + entities + ". Checking if any of them are enchanted...");
+                    for (ItemEntity entity : entities) {
+                        if (!mainHandStack.isEnchanted()) {
+                            DisenchantingEntityResult result = EnchantmentUtil.disenchantEntity(entity, 1);
+                            if (result.itemEntity() != null) {
+                                boolean success = false;
+                                for (int i = 0; i < result.enchantments().size(); i++) {
+                                    EnchantmentResult enchantmentResult = result.enchantments().get(i);
+                                    ItemStack book = EnchantmentHelper.createBook(new EnchantmentInstance(enchantmentResult.enchantmentHolder(), enchantmentResult.level()));
+                                    mainHandStack.shrink(1);
+                                    player.addItem(book);
+                                    success = true;
+                                }
+                                if (success) {
+                                    ParticleUtil.spawnParticleExplodeUpperSphere(serverLevel, entity.position().add(new Vec3(0, 0.5, 0)), ParticleTypes.REVERSE_PORTAL, 100, 0.1, 0.7d);
+                                    serverLevel.addFreshEntity(result.itemEntity());
+                                    serverLevel.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1, 1);
+                                    serverLevel.playSound(null, pos, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.BLOCKS, 0.5f, 0.5f);
+                                    player.getCooldowns().addCooldown(mainHandStack, 10);
+                                    LogUtil.debug("Operation seems successful. Passing success result.");
+                                    return InteractionResult.SUCCESS;
+                                } else {
+                                    serverLevel.playSound(null, pos, SoundEvents.VAULT_INSERT_ITEM_FAIL, SoundSource.BLOCKS, 1, 1);
+                                    LogUtil.debug("Operation failed. No enchanted items found.");
+                                    return InteractionResult.FAIL;
+                                }
                             }
                         }
                     }
+                    LogUtil.debug("No enchanted items found. Operation failed.");
+                    return InteractionResult.FAIL;
                 }
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_UNLOCKABLE_VAULTS) && mainHandStack.is(ModRegistry.VAULT_KEY) && state.is(Blocks.VAULT)) {
+                    LogUtil.debug("Vault key used on vault. Checking if vault is locked for player...");
+                    BlockEntity blockEntity = serverLevel.getBlockEntity(pos);
+                    if (blockEntity instanceof VaultBlockEntity vaultBlockEntity) {
+                        if (WorldUtil.unlockVault(serverLevel, pos, player, mainHandStack, vaultBlockEntity)) {
+                            LogUtil.debug("Vault is unlocked for player. Passing success result.");
+                            return InteractionResult.SUCCESS;
+                        }
+                    }
+                }
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_MODIFY_SPAWNERS) && state.is(Blocks.SPAWNER)) {
+                    LogUtil.debug("Block is spawner. Attempting modification operation on spawner...");
+                    BlockEntity blockEntity = serverLevel.getBlockEntity(pos);
+                    if (blockEntity instanceof SpawnerBlockEntity spawnerBE) {
+                        BaseSpawner spawner = spawnerBE.getSpawner();
+                        if (mainHandStack.isEmpty()) {
+                            LogUtil.debug("Stack is empty. Attempting to show spawner information...");
+                            int minSpawnDelay = spawner.minSpawnDelay;
+                            int maxSpawnDelay = spawner.maxSpawnDelay;
+                            int spawnCount = spawner.spawnCount;
+                            int maxNearbyEntities = spawner.maxNearbyEntities;
+                            int requiredPlayerRange = spawner.requiredPlayerRange;
+                            int spawnRange = spawner.spawnRange;
+                            String requiredPlayerRangeString = requiredPlayerRange == -1 ? "Not required" : String.valueOf(requiredPlayerRange);
+                            player.sendOverlayMessage(Component.literal("Spawner: minSpawnDelay=" + minSpawnDelay + ", maxSpawnDelay=" + maxSpawnDelay + ", spawnCount=" + spawnCount + ", maxNearbyEntities=" + maxNearbyEntities + ", requiredPlayerRange=" + requiredPlayerRangeString + ", spawnRange=" + spawnRange));
+                            LogUtil.debug("Operation seems successful. Passing success result.");
+                            return InteractionResult.SUCCESS;
+                        } else if (Modifier.isItemValid(mainHandStack.getItem())) {
+                            LogUtil.debug("Stack is valid modification item. Attempting modification operation on spawner...");
+                            boolean offHandStackIsQuartz = offHandStack.is(Items.QUARTZ);
+                            if (SpawnerUtil.tryChangeSpawner(player, spawner, mainHandStack.getItem(), offHandStackIsQuartz)) {
+                                ParticleUtil.spawnParticlesOnBlockFaces(serverLevel, pos, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(2, 5));
+                                ItemStackUtil.shrink(mainHandStack, player);
+                                if (offHandStackIsQuartz) {
+                                    ItemStackUtil.shrink(offHandStack, player);
+                                }
+                                LogUtil.debug("Operation seems successful. Passing success result.");
+                                return InteractionResult.SUCCESS;
+                            }
+                            LogUtil.debug("Operation failed. This is possibly due to the modifier being at it's min/max value or that the change didn't complete. Passing fail result.");
+                            return InteractionResult.FAIL;
+                        }
+                    } else {
+                        LogUtil.debug("Block entity is not a spawner. Operation failed.");
+                    }
+                }
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_REPAIRABLE_ANVILS) && mainHandStack.is(Items.IRON_BLOCK) && state.is(BlockTags.ANVIL)) {
+                    if (state.is(Blocks.DAMAGED_ANVIL)) {
+                        serverLevel.setBlockAndUpdate(pos, Blocks.CHIPPED_ANVIL.defaultBlockState().setValue(AnvilBlock.FACING, state.getValue(AnvilBlock.FACING)));
+                        return InteractionResult.SUCCESS;
+                    }
+                    if (state.is(Blocks.CHIPPED_ANVIL)) {
+                        serverLevel.setBlockAndUpdate(pos, Blocks.ANVIL.defaultBlockState().setValue(AnvilBlock.FACING, state.getValue(AnvilBlock.FACING)));
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+            }
+            if (ModPlatform.rightClickBlockEvent(player, hand, pos, face)) {
+                return InteractionResult.SUCCESS_SERVER;
             }
             return InteractionResult.PASS;
         });
         InteractionEvent.INTERACT_ENTITY.register((player, entity, hand) -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s' on entity %s using hand %s", player.getName().getString(), entity, hand));
             if (player.level() instanceof ServerLevel serverLevel) {
-                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+                ItemStack mainHandStack = player.getMainHandItem();
                 if (entity instanceof Mob mob) {
-                    if (stack.is(Items.LEAD) && EnchantmentUtil.hasEnchantment(player, stack, ModRegistry.ENDER)) {
-                        if (!stack.has(DataComponents.ENTITY_DATA) && canLeash(mob)) {
+                    if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS) && mainHandStack.is(Items.LEAD) && EnchantmentUtil.hasEnchantment(player, mainHandStack, ModRegistry.ENDER)) {
+                        if (!mainHandStack.has(DataComponents.ENTITY_DATA) && EntityUtil.canLeash(mob)) {
                             TagValueOutput valueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, serverLevel.registryAccess());
                             mob.save(valueOutput);
-                            stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(mob.getType(), valueOutput.buildResult()));
+                            mainHandStack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(mob.getType(), valueOutput.buildResult()));
                             mob.remove(RemovalReason.UNLOADED_WITH_PLAYER);
+                            return EventResult.interruptFalse();
                         }
-                        return EventResult.interruptFalse();
-                    } else if (stack.is(Items.LEAD) && Fabsservertweaks.CONFIG.overrideNormalLead) {
-                        if (canLeash(mob) && !mob.isLeashed()) {
+                    } else if (mainHandStack.is(Items.LEAD) && Fabsservertweaks.CONFIG.overrideNormalLead) {
+                        if (EntityUtil.canLeash(mob) && !mob.isLeashed()) {
                             mob.setLeashedTo(player, true);
                         } else {
                             mob.dropLeash();
                         }
-                        return EventResult.interruptFalse();
+                        return EventResult.pass();
                     }
                 }
             }
             return EventResult.pass();
         });
         BlockEvent.BREAK.register((level, pos, state, player, xp) -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s' at %s on block %s using hand %s", player.getName().getString(), pos, state, player.getUsedItemHand()));
             Direction breakFace = BreakContextStore.consumeFace(player, pos);
             if (level instanceof ServerLevel serverLevel) {
-                ItemStack toolStack = player.getItemInHand(player.getUsedItemHand());
-                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
-                    if (EnchantmentUtil.hasTreeChopper(player, toolStack)) {
-                        EnchantmentUtil.performTreeChop(serverLevel, pos, player, toolStack);
-                    }
-                    if (EnchantmentUtil.hasHammer(player, toolStack) && !player.isShiftKeyDown()) {
-                        BlockState blockState = serverLevel.getBlockState(pos);
-                        int hammerLevel = EnchantmentUtil.getEnchantmentLevel(player, toolStack, ModRegistry.HAMMER);
-                        float baseSpeed = blockState.getDestroySpeed(serverLevel, pos);
-                        if (!blockState.hasBlockEntity()) {
-                            BlockPos usedPos = pos;
-                            if (hammerLevel == 1) {
-                                if (player.getBlockY() + 1 == pos.getY()) {
-                                    usedPos = pos.below();
-                                }
-                            }
-                            if (hammerLevel == 3) {
-                                if (player.getBlockY() + 1 == pos.getY()) {
-                                    usedPos = pos.above();
-                                }
-                            }
-                            AABB aabb = new AABB(usedPos.getX(), usedPos.getY(), usedPos.getZ(), usedPos.getX(), usedPos.getY(), usedPos.getZ());
-                            if (hammerLevel == 1) {
-                                aabb = aabb.expandTowards(0, 1, 0);
-                            }
-                            if (breakFace != null) {
-                                aabb = inflateFromBreakAxis(aabb, breakFace.getAxis(), (hammerLevel - 1));
-                            } else {
-                                Direction direction = player.getDirection();
-                                aabb = inflateFromBreakAxis(aabb, direction.getAxis(), (hammerLevel - 1));
-                            }
-                            Set<BlockPos> toBreak = BlockPos.betweenClosedStream(aabb)
-                                    .filter(blockPos -> {
-                                        BlockState state1 = serverLevel.getBlockState(blockPos);
-                                        if (state1.isAir() || state1.hasBlockEntity() || (!toolStack.isCorrectToolForDrops(state1) && state1.requiresCorrectToolForDrops())) {
-                                            return false;
-                                        }
-                                        float speed = state1.getDestroySpeed(serverLevel, blockPos);
-                                        return speed <= baseSpeed;
-                                    })
-                                    .map(BlockPos::immutable)
-                                    .collect(Collectors.toSet());
-                            if (toBreak.isEmpty()) {
-                                return EventResult.pass();
-                            }
-                            WorldUtil.breakBlocks(serverLevel, pos, toBreak, player, toolStack);
+                ItemStack toolStack = player.getMainHandItem();
+                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.ORE_MINER)) {
+                    if (EnchantmentUtil.hasOreMiner(player, toolStack)) {
+                        LogUtil.debug("Ore Miner used on block. Attempting to perform ore miner operation.");
+                        if (EnchantmentUtil.performOreMiner(serverLevel, pos, player, toolStack)) {
+                            LogUtil.debug("Ore Miner operation performed successfully.");
                             return EventResult.interruptFalse();
                         }
                     }
                 }
-                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.ORE_MINER)) {
-                    if (EnchantmentUtil.hasOreMiner(player, toolStack)) {
-                        EnchantmentUtil.performOreMiner(serverLevel, pos, player, toolStack);
+                if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
+                    if (EnchantmentUtil.hasTreeChopper(player, toolStack)) {
+                        LogUtil.debug("Tree Chopper used on block. Attempting to perform tree chopper operation...");
+                        if (EnchantmentUtil.performTreeChop(serverLevel, pos, player, toolStack)) {
+                            LogUtil.debug("Tree Chopper operation performed successfully.");
+                            return EventResult.interruptFalse();
+                        }
+                    }
+                    if (EnchantmentUtil.hasHammer(player, toolStack) && !player.isShiftKeyDown()) {
+                        LogUtil.debug("Hammer used on block. Attempting to perform hammer operation...");
+                        if (EnchantmentUtil.performHammer(serverLevel, pos, breakFace, player, toolStack)) {
+                            return EventResult.interruptFalse();
+                        }
+                    }
+                    if (EnchantmentUtil.hasIceTouch(player, toolStack)) {
+                        LogUtil.debug("Ice Touch used on block. Attempting to perform ice touch operation...");
+                        if (EnchantmentUtil.performIceTouch(serverLevel, pos, player, toolStack)) {
+                            LogUtil.debug("Ice Touch operation performed successfully.");
+                            return EventResult.pass();
+                        }
                     }
                 }
                 if (EnchantmentUtil.hasSilkTouch(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
-                    if (state.is(Blocks.SPAWNER) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS)) {
-                        if (dropItemWithData(level, pos, new ItemStack(Blocks.SPAWNER))) {
+                    if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SILK_TOUCHABLE_SPAWNERS) && state.is(Blocks.SPAWNER)) {
+                        LogUtil.debug("Detected silk touch used on spawner.");
+                        if (WorldUtil.dropItemWithData(level, pos, new ItemStack(Blocks.SPAWNER))) {
+                            LogUtil.debug("Dropped spawner with data.");
                             return EventResult.interruptTrue();
                         }
                     }
-                    if (state.is(Blocks.BUDDING_AMETHYST) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES)) {
-                        Block.popResource(level, pos, new ItemStack(Items.BUDDING_AMETHYST));
-                        return EventResult.interruptTrue();
-                    }
-                    if (state.is(Blocks.TRIAL_SPAWNER) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS)) {
-                        if (dropItemWithData(level, pos, new ItemStack(Blocks.TRIAL_SPAWNER))) {
+                    if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SILK_TOUCHABLE_AMETHYST_NODES) && state.is(Blocks.BUDDING_AMETHYST)) {
+                        LogUtil.debug("Detected silk touch used on amethyst node. Dropping item.");
+                        if (WorldUtil.dropItem(level, pos, new ItemStack(Items.BUDDING_AMETHYST))) {
+                            LogUtil.debug("Dropped budding amethyst.");
                             return EventResult.interruptTrue();
                         }
                     }
-                    if (state.is(Blocks.VAULT) && serverLevel.getGameRules().get(ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS)) {
-                        if (dropItemWithData(level, pos, new ItemStack(Blocks.VAULT))) {
+                    if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_SPAWNERS) && state.is(Blocks.TRIAL_SPAWNER)) {
+                        LogUtil.debug("Detected silk touch used on trial spawner.");
+                        if (WorldUtil.dropItemWithData(level, pos, new ItemStack(Blocks.TRIAL_SPAWNER))) {
+                            LogUtil.debug("Dropped trial spawner with data.");
                             return EventResult.interruptTrue();
                         }
                     }
-                    if (state.is(Blocks.ANCIENT_DEBRIS) && serverLevel.getGameRules().get(ModGameRules.RULE_FORTUNE_ANCIENT_DEBRIS)) {
-                        if (dropItem(level, pos, new ItemStack(Items.ANCIENT_DEBRIS))) {
-                            serverLevel.destroyBlock(pos, false);
-                            return EventResult.interruptFalse();
+                    if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SILK_TOUCHABLE_TRIAL_VAULTS) && state.is(Blocks.VAULT)) {
+                        LogUtil.debug("Detected silk touch used on vault.");
+                        if (WorldUtil.dropItemWithData(level, pos, new ItemStack(Blocks.VAULT))) {
+                            LogUtil.debug("Dropped vault with data.");
+                            return EventResult.interruptTrue();
                         }
                     }
                 }
-                if (EnchantmentUtil.hasFortune(player, toolStack) && !WorldUtil.isPlayerInstaBuild(player)) {
-                    int fortuneLevel = EnchantmentUtil.getEnchantmentLevel(player, toolStack, Enchantments.FORTUNE);
-                    if (state.is(Blocks.ANCIENT_DEBRIS) && serverLevel.getGameRules().get(ModGameRules.RULE_FORTUNE_ANCIENT_DEBRIS)) {
-                        if (dropItem(level, pos, new ItemStack(Items.NETHERITE_SCRAP, level.getRandom().nextInt(fortuneLevel) + 1))) {
-                            serverLevel.destroyBlock(pos, false);
-                            return EventResult.interruptFalse();
-                        }
-                    }
+                if (WorldUtil.handleSpecialBreakingConditions(serverLevel, pos, state, player, toolStack)) {
+                    LogUtil.debug("Handled special breaking conditions.");
+                    return EventResult.interruptFalse();
                 }
-                if (state.is(Blocks.ANCIENT_DEBRIS) && serverLevel.getGameRules().get(ModGameRules.RULE_FORTUNE_ANCIENT_DEBRIS)) {
-                    if (dropItem(level, pos, new ItemStack(Items.NETHERITE_SCRAP))) {
-                        serverLevel.destroyBlock(pos, false);
-                        return EventResult.interruptFalse();
-                    }
-                }
-                if (state.is(BlockTags.BEDS) && !WorldUtil.isPlayerInstaBuild(player)) {
-                    if (wakeUpFromSleepingBag(level, pos, state)) {
-                        return EventResult.interruptTrue();
-                    }
-                }
+            }
+            if (ModPlatform.breakBlockEvent(level, pos, state, player)) {
+                return EventResult.interruptFalse();
             }
             return EventResult.pass();
         });
         BlockEvent.PLACE.register((level, pos, state, placer) -> {
-            if (level instanceof ServerLevel && placer instanceof Player player) {
-                ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+            if (level instanceof ServerLevel serverLevel && placer instanceof Player player) {
+                LogUtil.debugEventRun(String.format("Executed by player '%s' at %s with block %s using hand %s", player.getName().getString(), pos, state, player.getUsedItemHand()));
+                ItemStack mainHandStack = player.getMainHandItem();
                 ItemStack offhandStack = player.getOffhandItem();
-                if (offhandStack.getItem() instanceof BlockItem && stack.has(DataComponents.FOOD)) {
+                if (offhandStack.getItem() instanceof BlockItem && mainHandStack.has(DataComponents.FOOD)) {
+                    LogUtil.debug("Blocking off-hand block placement due to food item in main hand.");
                     return EventResult.interruptFalse();
                 }
-                if (state.is(BlockTags.BEDS)) {
-                    Component component = stack.getCustomName();
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SLEEPING_BAGS_ENABLED) && state.is(BlockTags.BEDS)) {
+                    LogUtil.debug("Bed placement detected. Checking for sleeping bag.");
+                    Component component = mainHandStack.getCustomName();
                     if (component != null) {
+                        LogUtil.debug("Bed is sleeping bag. Saving location.");
                         BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
                         BedNameStore.put(level, bedOrigin, component);
+                    } else {
+                        LogUtil.debug("Bed is not sleeping bag. Ignoring.");
                     }
                 }
                 if (state.is(Blocks.SPAWNER)) {
-                    TypedEntityData<BlockEntityType<?>> customData = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(BlockEntityType.MOB_SPAWNER, new CompoundTag()));
-                    BlockEntityType<?> blockEntityType = customData.type();
-                    level.setBlockAndUpdate(pos, state);
-
-                    BlockEntity blockEntity = level.getBlockEntity(pos);
-                    if (blockEntity != null) {
-                        BlockEntityType<?> blockEntityType2 = blockEntity.getType();
-                        if (blockEntityType != blockEntityType2) {
-                            return EventResult.pass();
-                        }
-
-                        if (customData.loadInto(blockEntity, level.registryAccess())) {
-                            blockEntity.applyComponentsFromItemStack(stack);
-                            blockEntity.setChanged();
-                            stack.shrink(1);
+                    if (SpawnerUtil.placeSpawnerWithData(serverLevel, pos, state, mainHandStack)) {
+                        LogUtil.debug("Spawner placed with data.");
+                        return EventResult.interruptTrue();
+                    }
+                }
+                if (state.is(Blocks.TRIAL_SPAWNER)) {
+                    if (WorldUtil.placeBlockWithData(serverLevel, pos, state, mainHandStack, BlockEntityType.TRIAL_SPAWNER)) {
+                        LogUtil.debug("Trial Spawner placed with data.");
+                        return EventResult.interruptFalse();
+                    }
+                }
+                if (state.is(Blocks.VAULT)) {
+                    if (WorldUtil.placeBlockWithData(serverLevel, pos, state, mainHandStack, BlockEntityType.VAULT)) {
+                        LogUtil.debug("Vault placed with data.");
+                        return EventResult.interruptFalse();
+                    }
+                }
+            }
+            if (ModPlatform.placeBlockEvent(level, pos, state, placer)) {
+                return EventResult.interruptFalse();
+            }
+            return EventResult.pass();
+        });
+        ExtendedBlockEvent.BLOCK_UPDATE.register((level, pos, state) -> {
+            LogUtil.debugEventRun("Executed at " + pos + " with state " + state);
+            if (level instanceof ServerLevel serverLevel && state != null) {
+                LogUtil.debug("Block update detected at " + pos + " with state " + state);
+                if (state.is(Blocks.LAVA_CAULDRON)) {
+                    BlockState below = serverLevel.getBlockState(pos.below());
+                    if (below.is(Blocks.BLUE_ICE)) {
+                        LogUtil.debug("Cauldron is on top of blue ice. Attempting to turn back into cauldron and dropping obsidian...");
+                        if (level.setBlockAndUpdate(pos, Blocks.CAULDRON.defaultBlockState())) {
+                            LogUtil.debug("Lava cooled to obsidian. Dropping item.");
+                            WorldUtil.dropItem(level, pos.above(), new ItemStack(Blocks.OBSIDIAN));
                             return EventResult.interruptTrue();
+                        } else {
+                            LogUtil.debug("Failed to turn back into cauldron. Ignoring...");
                         }
                     }
                 }
@@ -455,33 +476,39 @@ public class EventRegistry {
             return EventResult.pass();
         });
         InteractionEvent.RIGHT_CLICK_ITEM.register((player, hand) -> {
-            ItemStack stack = player.getItemInHand(hand);
-            if (stack.is(Items.EXPERIENCE_BOTTLE)) {
-                CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+            ItemStack mainHandStack = player.getMainHandItem();
+            LogUtil.debugEventRun(String.format("Executed by player '%s' with stack %s using hand %s", player.getName().getString(), mainHandStack, hand));
+            if (mainHandStack.is(Items.EXPERIENCE_BOTTLE)) {
+                CompoundTag tag = mainHandStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
                 if (tag.contains("xp")) {
                     int xpPoints = tag.getInt("xp").orElse(0);
                     XPUtil.addExperiencePoints(player, xpPoints);
-                    stack.shrink(1);
+                    mainHandStack.shrink(1);
                     return InteractionResult.SUCCESS;
                 }
             }
             return InteractionResult.PASS;
         });
         BedEvents.START_SLEEPING.register((livingEntity, pos) -> {
+            LogUtil.debugEventRun(String.format("Executed by entity '%s' at %s", livingEntity.getName().getString(), pos));
             if (livingEntity.level() instanceof ServerLevel serverLevel) {
-                if (serverLevel.getGameRules().get(ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SAFE_CANT_SLEEP) && !serverLevel.canSleepThroughNights()) {
+                    LogUtil.debug("Player is not allowed to sleep. Preventing sleep to avoid explosion.");
                     return EventResult.interruptTrue();
                 }
             }
             return EventResult.pass();
         });
         BedEvents.STOP_SLEEPING.register(livingEntity -> {
+            LogUtil.debugEventRun(String.format("Executed by entity '%s'", livingEntity.getName().getString()));
             if (livingEntity instanceof ServerPlayer player && livingEntity.level() instanceof ServerLevel serverLevel) {
-                if (serverLevel.getGameRules().get(ModGameRules.RULE_SLEEPING_BAGS_ENABLED)) {
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_SLEEPING_BAGS_ENABLED)) {
                     BlockPos pos = livingEntity.getOnPos();
                     BlockState state = serverLevel.getBlockState(pos);
                     if (state.is(BlockTags.BEDS) && !WorldUtil.isPlayerInstaBuild(player)) {
-                        if (wakeUpFromSleepingBag(serverLevel, pos, state)) {
+                        LogUtil.debug("Bed is sleeping bag. Attempting wake-up from sleeping bag operation...");
+                        if (BedUtil.wakeUpFromSleepingBag(serverLevel, pos, state)) {
+                            LogUtil.debug("Wake-up from sleeping bag operation performed successfully.");
                             return EventResult.interruptTrue();
                         }
                     }
@@ -490,9 +517,11 @@ public class EventRegistry {
             return EventResult.pass();
         });
         PlayerEvent.ATTACK_ENTITY.register((player, level, target, hand, result) -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s' on entity %s using hand %s", player.getName().getString(), target, hand));
             if (level instanceof ServerLevel serverLevel) {
-                if (!serverLevel.getGameRules().get(ModGameRules.RULE_PET_FRIENDLY_FIRE) && target instanceof TamableAnimal tamableAnimal) {
+                if (!ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_PET_FRIENDLY_FIRE) && target instanceof TamableAnimal tamableAnimal) {
                     if (tamableAnimal.isOwnedBy(player)) {
+                        LogUtil.debug("Tamable animal is owned by player. Preventing damage...");
                         switch (tamableAnimal) {
                             case Wolf wolf -> {
                                 if (wolf.isBaby()) {
@@ -516,63 +545,49 @@ public class EventRegistry {
                         return EventResult.interruptTrue();
                     }
                 }
-                if (player.isCreative() && target instanceof Mob && !player.getItemInHand(hand).is(ItemTags.WEAPON_ENCHANTABLE)) {
+                if (player.isCreative() && target instanceof Mob && !player.getMainHandItem().is(ItemTags.WEAPON_ENCHANTABLE)) {
                     target.kill(serverLevel);
                 }
             }
             return EventResult.pass();
         });
         ItemStackEvent.CREATED.register(stack -> {
-            if (stack.is(ItemTags.BEDS)) {
-                ItemStackUtil.addLore(stack, "Naming a bed \"Sleeping Bag\", let's you sleep in it without setting your spawn.");
+            LogUtil.debugItemStackCreation(String.format("Executed with stack %s", stack), true);
+            int repairCost = stack.getOrDefault(DataComponents.REPAIR_COST, 0);
+            if (repairCost > Fabsservertweaks.CONFIG.maxAnvilCost) {
+                stack.set(DataComponents.REPAIR_COST, Fabsservertweaks.CONFIG.maxAnvilCost);
             }
-            if (stack.is(ModRegistry.IMMUNE_TO_CACTUS_DAMAGE)) {
-                ItemStackUtil.addLore(stack, "Immune to cactus damage.");
+
+            if (LoreRegistry.updateLore(stack)) {
+                LogUtil.debug("Updated lore for stack: " + stack);
             }
-            if (stack.is(Items.COMPASS)) {
-                if (stack.get(DataComponents.LODESTONE_TRACKER) == null) {
-                    ItemStackUtil.addLore(stack, "Bind to a lodestone to be able to teleport to it using ender pearls.");
-                } else {
-                    ItemStackUtil.removeLore(stack, "Bind to a lodestone to be able to teleport to it using ender pearls.");
-                    ItemStackUtil.addLore(stack, "Right click to teleport using ender pearls.");
-                }
-            }
-            if (stack.is(Items.LEAD)) {
-                if (stack.getEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(ModRegistry.ENDER))) {
-                    TypedEntityData<EntityType<?>> entityData = stack.get(DataComponents.ENTITY_DATA);
-                    if (entityData != null) {
-                        ItemStackUtil.removeLoreFuzzy(stack, "Holding Entity: ");
-                        ItemStackUtil.addLore(stack, "Holding Entity: " + Component.translatable(entityData.type().getDescriptionId()).getString());
-                    } else {
-                        ItemStackUtil.removeLoreFuzzy(stack, "Holding Entity: ");
-                        ItemStackUtil.addLore(stack, "Holding Entity: None");
-                    }
-                }
-            }
-            if (stack.is(Items.CAMPFIRE) || stack.is(Items.SOUL_CAMPFIRE)) {
-                BlockItemStateProperties properties = stack.get(DataComponents.BLOCK_STATE);
-                if (properties != null) {
-                    boolean lit = Boolean.TRUE.equals(properties.get(CampfireBlock.LIT));
-                    String name = stack.getItemName().getString();
-                    if (!lit && !name.contains("Unlit")) {
-                        stack.set(DataComponents.ITEM_NAME, Component.translatableWithFallback("item.unlit", "Unlit %s", name));
-                    }
-                }
+
+            if (ItemNameRegistry.setItemName(stack)) {
+                LogUtil.debug("Updated item name for stack: " + stack);
             }
         });
         ChatEvent.RECEIVED.register((player, component) -> {
+            if (player == null) {
+                return EventResult.pass();
+            }
+            LogUtil.debugEventRun(String.format("Executed by player '%s' with component: %s", player.getName().getString(), component.getString()));
+            //noinspection ConstantValue
             if (!(player instanceof ServerPlayer serverPlayer)) {
+                LogUtil.debug("Player is not a server player. Skipping...");
                 return EventResult.pass();
             }
             if (REBROADCASTING_CHAT.get()) {
+                LogUtil.debug("The message is being rebroadcasted. Skipping...");
                 return EventResult.pass();
             }
             String nickname = NicknameRegistry.getNickname(serverPlayer);
             if (nickname.equals(serverPlayer.getName().getString())) {
+                LogUtil.debug("Player isn't using a nickname. Skipping...");
                 return EventResult.pass();
             }
 
             try {
+                LogUtil.debug("Player is using a nickname. Broadcasting message...");
                 REBROADCASTING_CHAT.set(true);
                 Component nicknameComponent = Component.literal(nickname).withStyle(style -> style.withHoverEvent(new ShowText(serverPlayer.getName())).withColor(NicknameRegistry.getNicknameColor(serverPlayer)));
 //                PlayerChatMessage unsignedMessage = PlayerChatMessage.unsigned(serverPlayer.getUUID(), component.getString()).withUnsignedContent(component);
@@ -582,183 +597,50 @@ public class EventRegistry {
                 for (ServerPlayer target : serverPlayer.level().getServer().getPlayerList().getPlayers()) {
                     target.connection.send(packet);
                 }
-
+                LogUtil.debug("Message broadcasted successfully.");
                 return EventResult.interruptFalse();
             } finally {
                 REBROADCASTING_CHAT.set(false);
+                LogUtil.debug("Failed to rebroadcast message. Resetting state and skipping...");
             }
         });
-    }
-
-    private static AABB inflateFromBreakAxis(AABB aabb, Axis axis, int inflateAmount) {
-        return switch (axis) {
-            case X -> aabb.inflate(0, inflateAmount, inflateAmount);
-            case Y -> aabb.inflate(inflateAmount, 0, inflateAmount);
-            case Z -> aabb.inflate(inflateAmount, inflateAmount, 0);
-        };
-    }
-
-    private static boolean wakeUpFromSleepingBag(Level level, BlockPos pos, BlockState state) {
-        BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
-        Component customName = BedNameStore.getAndRemove(level, bedOrigin);
-        if (customName != null) {
-            ItemStack stack = new ItemStack(state.getBlock().asItem());
-            if (stack.is(ItemTags.BEDS)) {
-                BedUtil.breakBed(level, pos, state);
-                stack.set(DataComponents.CUSTOM_NAME, customName);
-                dropItem(level, pos, stack);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private static void handleBoneMealUsed(ServerLevel serverLevel, BlockPos pos, Player player, ItemStack stack, boolean doParticle) {
-        if (doParticle) {
-            boneMealParticle(serverLevel, pos);
-        }
-        stack.shrink(1);
-        player.getCooldowns().addCooldown(stack, 4);
-    }
-
-    private static void boneMealParticle(ServerLevel serverLevel, BlockPos pos) {
-        RandomSource random = serverLevel.getRandom();
-        double offset = 0.5;
-        double posX = pos.getX() + offset;
-        double posY = pos.getY() + offset;
-        double posZ = pos.getZ() + offset;
-        double distX = random.nextDouble() / 2.5;
-        double distY = random.nextDouble() / 2.5;
-        double distZ = random.nextDouble() / 2.5;
-        serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, posX, posY, posZ, 10, distX, distY, distZ, 1);
-    }
-
-    private static boolean growFromStem(ServerLevel serverLevel, BlockPos pos, BlockState state, RandomSource random, Block fruit, Block stem) {
-        if (state.getValue(StemBlock.AGE) == StemBlock.MAX_AGE) {
-            if (random.nextInt(4) == 0) {
-                for (int i = 0; i < 6; i++) {
-                    Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-                    BlockPos blockPos2 = pos.relative(direction);
-                    BlockState blockState2 = serverLevel.getBlockState(blockPos2.below());
-                    if (serverLevel.getBlockState(blockPos2).isAir() && (blockState2.is(Blocks.FARMLAND) || blockState2.is(BlockTags.DIRT))) {
-                        serverLevel.setBlockAndUpdate(blockPos2, fruit.defaultBlockState());
-                        serverLevel.setBlockAndUpdate(pos, stem.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, direction));
-                        return true;
+        CollisionEvent.COLLISION_EVENT.register((level, pos, state, entity) -> {
+            LogUtil.debugEventRun(String.format("Executed by entity '%s' at %s with state %s", entity.getName().getString(), pos, state));
+            if (level instanceof ServerLevel serverLevel) {
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_AMETHYST_DOES_DAMAGE)) {
+                    if (entity instanceof LivingEntity livingEntity) {
+                        float health = livingEntity.getHealth();
+                        if (state.is(Blocks.SMALL_AMETHYST_BUD)) {
+                            if (health > 1) {
+                                LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 1");
+                                entity.hurtServer(serverLevel, level.damageSources().cactus(), 1);
+                            }
+                        }
+                        if (state.is(Blocks.MEDIUM_AMETHYST_BUD)) {
+                            LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 2");
+                            entity.hurtServer(serverLevel, level.damageSources().cactus(), 2);
+                        }
+                        if (state.is(Blocks.LARGE_AMETHYST_BUD)) {
+                            LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 3");
+                            entity.hurtServer(serverLevel, level.damageSources().cactus(), 3);
+                        }
+                        if (state.is(Blocks.AMETHYST_CLUSTER)) {
+                            Player player = serverLevel.getNearestPlayer(entity, 16);
+                            if (player == null) {
+                                player = serverLevel.getRandomPlayer();
+                            }
+                            if (player != null) {
+                                LogUtil.debug("Amethyst cluster is performing player damage. Used player=\"" + player.getName().getString() + "\" Damage dealt: 4");
+                                entity.hurtServer(serverLevel, level.damageSources().playerAttack(player), 4);
+                            } else {
+                                LogUtil.debug("Amethyst cluster is performing normal damage. Damage dealt: 4");
+                                entity.hurtServer(serverLevel, level.damageSources().cactus(), 4);
+                            }
+                        }
                     }
                 }
             }
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean growInColumn(ServerLevel serverLevel, BlockPos pos, Block block, int maxHeight) {
-        List<BlockPos> positions = WorldUtil.getBlockPositions(new AABB(pos).inflate(0, maxHeight - 1, 0));
-        int canesInColumn = 0;
-        for (BlockPos blockPos : positions) {
-            if (serverLevel.getBlockState(blockPos).is(block)) {
-                canesInColumn++;
-            }
-        }
-        RandomSource random = serverLevel.getRandom();
-        if (canesInColumn < maxHeight) {
-            BlockPos above = pos.above();
-            for (int i = 1; i < maxHeight; i++) {
-                BlockState newState = serverLevel.getBlockState(above);
-                if (newState.is(Blocks.CACTUS_FLOWER)) {
-                    return false;
-                }
-                if (newState.isAir()) {
-                    if (block == Blocks.CACTUS && random.nextInt(10) == 0) {
-                        block = Blocks.CACTUS_FLOWER;
-                    }
-                    if (random.nextBoolean()) {
-                        serverLevel.setBlockAndUpdate(above, block.defaultBlockState());
-                    }
-                    boneMealParticle(serverLevel, above);
-                    return true;
-                }
-                above = above.above();
-            }
-        } else if (block == Blocks.CACTUS && canesInColumn == maxHeight) {
-            return tryToGrowCactusFlower(serverLevel, pos, random, maxHeight);
-        }
-        return false;
-    }
-
-    private static boolean tryToGrowCactusFlower(ServerLevel serverLevel, BlockPos pos, RandomSource random, int maxHeight) {
-        BlockPos newPos = pos.above();
-        BlockState newState = serverLevel.getBlockState(newPos);
-        int tries = maxHeight + 1;
-        while (!newState.isAir()) {
-            if (newState.is(Blocks.CACTUS_FLOWER)) {
-                return false;
-            }
-            newPos = newPos.above();
-            newState = serverLevel.getBlockState(newPos);
-            if (tries == 0) {
-                break;
-            }
-            tries--;
-        }
-        if (random.nextInt(4) == 0) {
-            serverLevel.setBlockAndUpdate(newPos, Blocks.CACTUS_FLOWER.defaultBlockState());
-        }
-        boneMealParticle(serverLevel, newPos);
-        return true;
-    }
-
-    private static boolean dropItemWithData(Level level, BlockPos pos, ItemStack stack) {
-        BlockEntity spawnerBlockEntity = level.getBlockEntity(pos);
-        if (spawnerBlockEntity != null) {
-            TagValueOutput tagValueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
-            spawnerBlockEntity.saveWithId(tagValueOutput);
-            stack.set(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(spawnerBlockEntity.getType(), tagValueOutput.buildResult()));
-            Block.popResource(level, pos, stack);
-            level.removeBlockEntity(pos);
-            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean dropItem(Level level, BlockPos pos, ItemStack stack) {
-        ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
-        return level.addFreshEntity(itemEntity);
-    }
-
-    private static boolean shouldApplyEffect(ServerLevel level, RandomSource random, DifficultyValue.Difficulty difficulty) {
-        if (difficulty.equals(DifficultyValue.Difficulty.SCALE_BY_DIFFICULTY)) {
-            return switch (level.getDifficulty()) {
-                case PEACEFUL, EASY -> false;
-                case NORMAL -> random.nextBoolean();
-                case HARD -> true;
-            };
-        } else return difficulty.equals(DifficultyValue.Difficulty.SAME_ON_ALL_DIFFICULTIES);
-    }
-
-    private static boolean canLeash(LivingEntity entity) {
-        if (entity.is(ModRegistry.LEAD_BLACKLIST)) {
-            return false;
-        }
-        if (entity.is(ModRegistry.PETS)) {
-            return Fabsservertweaks.CONFIG.canLeashPets;
-        }
-        if (entity.is(ModRegistry.ANIMALS)) {
-            return Fabsservertweaks.CONFIG.canLeashAnimals;
-        }
-        if (entity.is(ModRegistry.HOSTILES)) {
-            return Fabsservertweaks.CONFIG.canLeashMonsters;
-        }
-        if (entity.is(ModRegistry.BOSSES)) {
-            return Fabsservertweaks.CONFIG.canLeashBosses;
-        }
-        if (entity.is(ModRegistry.VILLAGER_TYPES)) {
-            return Fabsservertweaks.CONFIG.canLeashVillagerTypes;
-        }
-        if (entity.is(ModRegistry.GOLEMS)) {
-            return Fabsservertweaks.CONFIG.canLeashGolems;
-        }
-        return true;
+            return EventResult.pass();
+        });
     }
 }

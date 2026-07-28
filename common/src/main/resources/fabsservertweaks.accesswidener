@@ -12,3 +12,11 @@ accessible method net/minecraft/client/gui/components/debug/DebugScreenEntries r
 accessible method net/minecraft/world/entity/animal/feline/Cat getSoundSet ()Lnet/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet;
 accessible method net/minecraft/world/level/gamerules/GameRules registerBoolean (Ljava/lang/String;Lnet/minecraft/world/level/gamerules/GameRuleCategory;Z)Lnet/minecraft/world/level/gamerules/GameRule;
 accessible method net/minecraft/world/level/gamerules/GameRules registerInteger (Ljava/lang/String;Lnet/minecraft/world/level/gamerules/GameRuleCategory;III)Lnet/minecraft/world/level/gamerules/GameRule;
+accessible field net/minecraft/world/level/block/entity/vault/VaultServerData rewardedPlayers Ljava/util/Set;
+accessible method net/minecraft/world/level/block/entity/vault/VaultServerData markChanged ()V
+accessible field net/minecraft/world/level/BaseSpawner minSpawnDelay I
+accessible field net/minecraft/world/level/BaseSpawner maxSpawnDelay I
+accessible field net/minecraft/world/level/BaseSpawner spawnCount I
+accessible field net/minecraft/world/level/BaseSpawner maxNearbyEntities I
+accessible field net/minecraft/world/level/BaseSpawner requiredPlayerRange I
+accessible field net/minecraft/world/level/BaseSpawner spawnRange I

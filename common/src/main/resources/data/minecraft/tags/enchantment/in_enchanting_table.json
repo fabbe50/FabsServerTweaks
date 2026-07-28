@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     {
       "id": "fabsservertweaks:tree_chopper",
@@ -34,6 +35,14 @@
     },
     {
       "id": "fabsservertweaks:ender",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:luck",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:ice_touch",
       "required": false
     }
   ]

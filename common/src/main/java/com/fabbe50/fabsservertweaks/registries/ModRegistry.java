@@ -31,8 +31,14 @@ public class ModRegistry {
     public static final TagKey<EntityType<?>> LEAD_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("lead_blacklist"));
     public static final TagKey<Item> STACK_16 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_16"));
     public static final TagKey<Item> STACK_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_64"));
-    public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("immune_to_cactus"));
+    public static final TagKey<Item> FITS_IN_BUNDLE_16 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("fits_in_bundle_16"));
+    public static final TagKey<Item> FITS_IN_BUNDLE_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("fits_in_bundle_64"));
+    public static final TagKey<Item> MUSHROOM_HEAD_BLOCKS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("mushroom_head_blocks"));
+    public static final TagKey<Item> VAULT_KEY = TagKey.create(Registries.ITEM, Fabsservertweaks.location("vault_key"));
+    public static final TagKey<Item> BLOCK_DISPENSE_BLACKLIST = TagKey.create(Registries.ITEM, Fabsservertweaks.location("block_dispense_blacklist"));
+    public static final TagKey<Item> PREVENTS_HOT_FLOOR_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("prevents_hot_floor_damage"));
+    public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_attachments"));
     public static final TagKey<Block> SPIDER_NOT_CLIMBABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("spider_not_climbable"));
@@ -41,6 +47,9 @@ public class ModRegistry {
     public static final TagKey<Block> PISTON_MOVE_OVERRIDE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_move_override"));
     public static final TagKey<Block> PISTON_PUSH_BLACKLIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_blacklist"));
     public static final TagKey<Block> PISTON_PUSH_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_push_whitelist"));
+    public static final TagKey<Block> PISTON_BREAKER_RODS = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("piston_breaker_rods"));
+    public static final TagKey<Block> FIELD_GROWABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("field_growable"));
+    public static final TagKey<Block> HARVESTABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("harvestable"));
 
     public static final TagKey<Item> TUBE_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "tube_corals"));
     public static final TagKey<Item> BRAIN_CORALS = TagKey.create(Registries.ITEM, Fabsservertweaks.location("c", "brain_corals"));
@@ -53,6 +62,8 @@ public class ModRegistry {
     public static final ResourceKey<Enchantment> HAMMER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("hammer"));
     public static final ResourceKey<Enchantment> ENDER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ender"));
     public static final ResourceKey<Enchantment> ORE_MINER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ore_miner"));
+    public static final ResourceKey<Enchantment> SOUL_BOUND = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("soul_bound"));
+    public static final ResourceKey<Enchantment> ICE_TOUCH = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ice_touch"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");

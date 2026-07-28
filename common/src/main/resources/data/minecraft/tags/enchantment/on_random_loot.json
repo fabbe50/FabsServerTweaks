@@ -39,6 +39,18 @@
     {
       "id": "fabsservertweaks:ore_miner",
       "required": false
+    },
+    {
+      "id": "fabsservertweaks:soul_bound",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:luck",
+      "required": false
+    },
+    {
+      "id": "fabsservertweaks:ice_touch",
+      "required": false
     }
   ]
 }
