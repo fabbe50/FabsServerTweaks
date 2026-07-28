@@ -30,25 +30,27 @@ public class SugarCaneBlockMixin extends Block {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void injectRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
         int maxHeight = level.getGameRules().get(ModGameRules.RULE_SUGAR_CANE_GROW_HEIGHT);
-        int height = PillarGrowUtil.getPillarHeight(state, level, pos);
-        if (maxHeight > height) {
-            ci.cancel();
-            BlockPos activePos = pos;
-            BlockPos above = pos.above();
-            if (level.isEmptyBlock(above)) {
-                int age = state.getValue(AGE);
-                if (WorldUtil.shouldPlantGrowExtra(level, pos, random, age, 15)) {
-                    level.setBlockAndUpdate(above, this.defaultBlockState());
-                    level.setBlock(activePos, state.setValue(AGE, 0), 260);
-                    activePos = above;
-                    above = activePos.above();
-                }
-                if (PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
-                    if (age == 15) {
+        if (maxHeight > 0) {
+            int height = PillarGrowUtil.getPillarHeight(state, level, pos);
+            if (maxHeight > height) {
+                ci.cancel();
+                BlockPos activePos = pos;
+                BlockPos above = pos.above();
+                if (level.isEmptyBlock(above)) {
+                    int age = state.getValue(AGE);
+                    if (WorldUtil.shouldPlantGrowExtra(level, pos, random, age, 15)) {
                         level.setBlockAndUpdate(above, this.defaultBlockState());
                         level.setBlock(activePos, state.setValue(AGE, 0), 260);
-                    } else {
-                        level.setBlock(activePos, state.setValue(AGE, age + 1), 260);
+                        activePos = above;
+                        above = activePos.above();
+                    }
+                    if (PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
+                        if (age == 15) {
+                            level.setBlockAndUpdate(above, this.defaultBlockState());
+                            level.setBlock(activePos, state.setValue(AGE, 0), 260);
+                        } else {
+                            level.setBlock(activePos, state.setValue(AGE, age + 1), 260);
+                        }
                     }
                 }
             }

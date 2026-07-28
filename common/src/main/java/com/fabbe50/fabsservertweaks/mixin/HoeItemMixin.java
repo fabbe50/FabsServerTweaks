@@ -61,18 +61,18 @@ public abstract class HoeItemMixin extends Item {
             ItemStack toolStack = useOnContext.getItemInHand();
             Direction face = useOnContext.getClickedFace();
             AtomicBoolean flag = new AtomicBoolean(false);
-            BlockState originState = level.getBlockState(blockPos);
+            BlockState originState = serverLevel.getBlockState(blockPos);
             if (TILLABLES.get(originState.getBlock()) != null) {
                 WorldUtil.getBlocksInRadius(blockPos, ToolUtil.getTillingRadiusFromHoe(toolStack)).forEach(blockPos1 -> {
-                    BlockState state = level.getBlockState(blockPos1);
+                    BlockState state = serverLevel.getBlockState(blockPos1);
                     Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair = TILLABLES.get(state.getBlock());
                     if (pair != null) {
                         Predicate<UseOnContext> predicate = pair.getFirst();
                         Consumer<UseOnContext> consumer = pair.getSecond();
                         UseOnContext context = new UseOnContext(player, useOnContext.getHand(), useOnContext.getHitResult().withPosition(blockPos1));
                         if (predicate.test(context)) {
-                            level.playSound(player, blockPos1, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            if (!level.isClientSide()) {
+                            serverLevel.playSound(player, blockPos1, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                            if (!serverLevel.isClientSide()) {
                                 consumer.accept(context);
                                 context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                                 flag.set(true);

@@ -21,8 +21,8 @@ public class ShulkerMixin {
     @Shadow @Final protected static EntityDataAccessor<Byte> DATA_COLOR_ID;
 
     @Inject(method = "finalizeSpawn", at = @At("RETURN"))
-    private void injectFinalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, EntitySpawnReason entitySpawnReason, SpawnGroupData spawnGroupData, CallbackInfoReturnable<SpawnGroupData> cir) {
         if (serverLevelAccessor.getLevel().getGameRules().get(ModGameRules.RULE_SHULKERS_RANDOM_COLOR)) {
+    private void injectFinalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
             Shulker INSTANCE = ((Shulker) (Object) this);
             INSTANCE.getEntityData().set(DATA_COLOR_ID, (byte) DyeColor.byId(serverLevelAccessor.getRandom().nextInt(16)).getId());
         }

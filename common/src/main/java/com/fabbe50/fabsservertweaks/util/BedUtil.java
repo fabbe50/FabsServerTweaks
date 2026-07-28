@@ -2,7 +2,10 @@ package com.fabbe50.fabsservertweaks.util;
 
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -45,6 +48,21 @@ public class BedUtil {
         BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
         Component customName = BedNameStore.get(level, bedOrigin);
         return customName != null && customName.getString().equalsIgnoreCase("sleeping bag");
+    }
+
+    public static boolean wakeUpFromSleepingBag(Level level, BlockPos pos, BlockState state) {
+        BlockPos bedOrigin = BedUtil.getBaseBedPos(pos, state);
+        Component customName = BedNameStore.getAndRemove(level, bedOrigin);
+        if (customName != null) {
+            ItemStack stack = new ItemStack(state.getBlock().asItem());
+            if (stack.is(ItemTags.BEDS)) {
+                BedUtil.breakBed(level, pos, state);
+                stack.set(DataComponents.CUSTOM_NAME, customName);
+                WorldUtil.dropItem(level, pos, stack);
+            }
+            return true;
+        }
+        return false;
     }
 }
 

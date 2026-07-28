@@ -19,9 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
-    @Inject(method = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("TAIL"))
+    @Inject(method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("TAIL"))
     private void injectConstructor(Holder<Item> item, int count, PatchedDataComponentMap components, CallbackInfo ci) {
-        ItemStackEvent.CREATED.invoker().create((ItemStack) (Object)this);
-        components.set(DataComponents.MAX_STACK_SIZE, ((ItemStack) (Object) this).getMaxStackSize());
+        ItemStack instance = (ItemStack) (Object) this;
+        components.set(DataComponents.MAX_STACK_SIZE, instance.getMaxStackSize());
+        ItemStackEvent.CREATED.invoker().create(instance);
     }
 }

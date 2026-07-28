@@ -1,8 +1,12 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
+import com.fabbe50.fabsservertweaks.events.CollisionEvent;
 import com.fabbe50.fabsservertweaks.util.TorchflowerLightHelper;
+import dev.architectury.event.EventResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,6 +34,17 @@ public abstract class BlockBehaviourMixin {
                 TorchflowerLightHelper.refreshAdjacentLights(serverLevel, pos);
             } else if (state.is(Blocks.LIGHT)) {
                 TorchflowerLightHelper.removeIfOrphaned(serverLevel, pos);
+            }
+        }
+    }
+
+    @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
+    private void injectEntityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise, CallbackInfo ci) {
+        BlockState blockState = level.getBlockState(pos);
+        if (!blockState.isAir()) {
+            EventResult result = CollisionEvent.COLLISION_EVENT.invoker().onCollision(level, pos, blockState, entity);
+            if (result.interruptsFurtherEvaluation()) {
+                ci.cancel();
             }
         }
     }

@@ -24,33 +24,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LiquidBlockMixin {
     @Shadow @Final public static ImmutableList<Direction> POSSIBLE_FLOW_DIRECTIONS;
 
-    @Shadow protected abstract void fizz(LevelAccessor levelAccessor, BlockPos blockPos);
+    @Shadow protected abstract void fizz(LevelAccessor level, BlockPos pos);
 
     @Shadow @Final protected FlowingFluid fluid;
 
     @Inject(method = "shouldSpreadLiquid", at = @At("HEAD"), cancellable = true)
-    private void injectShouldSpreadLiquid(Level level, BlockPos blockPos, BlockState blockState, CallbackInfoReturnable<Boolean> cir) {
+    private void injectShouldSpreadLiquid(Level level, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
         if (level instanceof ServerLevel serverLevel) {
             if (serverLevel.getGameRules().get(ModGameRules.RULE_NO_COBBLE_GEN)) {
                 if (this.fluid.is(FluidTags.LAVA)) {
-                    boolean bl = level.getBlockState(blockPos.below()).is(Blocks.SOUL_SOIL);
-                    if (!bl) {
-                        for (Direction direction : POSSIBLE_FLOW_DIRECTIONS) {
-                            BlockPos blockPos2 = blockPos.relative(direction.getOpposite());
-                            if (level.getFluidState(blockPos2).is(FluidTags.WATER)) {
-                                Block block = null;
-                                if (level.getFluidState(blockPos).isSource()) {
-                                    block = Blocks.OBSIDIAN;
-                                    level.setBlockAndUpdate(blockPos, block.defaultBlockState());
-                                    this.fizz(level, blockPos);
-                                } else if (level.getFluidState(blockPos2).isSource()) {
-                                    block = Blocks.COBBLESTONE;
-                                    level.setBlockAndUpdate(blockPos2, block.defaultBlockState());
-                                    this.fizz(level, blockPos2);
-                                }
-                                cir.setReturnValue(false);
-                                return;
+                    boolean isOverSoulSoil = level.getBlockState(pos.below()).is(Blocks.SOUL_SOIL);
+                    for (Direction direction : POSSIBLE_FLOW_DIRECTIONS) {
+                        BlockPos neighborPos = pos.relative(direction.getOpposite());
+                        if (level.getFluidState(neighborPos).is(FluidTags.WATER)) {
+                            Block block = null;
+                            if (level.getFluidState(pos).isSource()) {
+                                block = Blocks.OBSIDIAN;
+                            } else if (level.getFluidState(neighborPos).isSource()) {
+                                block = Blocks.COBBLESTONE;
                             }
+                            if (block != null) {
+                                level.setBlockAndUpdate(neighborPos, block.defaultBlockState());
+                                this.fizz(level, neighborPos);
+                            }
+                            cir.setReturnValue(false);
+                            return;
+                        }
+
+                        if (isOverSoulSoil && level.getBlockState(neighborPos).is(Blocks.BLUE_ICE)) {
+                            cir.setReturnValue(true);
+                            return;
                         }
                     }
                 }

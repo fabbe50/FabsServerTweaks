@@ -18,6 +18,7 @@ public enum BuiltinDatapack {
     COMBINE_SLABS_RECIPES("combine_slabs_recipes", "Combine Slab Recipes", Pack.Position.TOP, true, false),
     POTTERY_SHERD_DUPLICATION("pottery_sherd_duplication", "Pottery Sherd Duplication", Pack.Position.TOP, true, false),
     ORE_MINER("ore_miner", "Ore Miner", Pack.Position.TOP, false, true),
+    VAULT_BREAKING("vault_breaking", "Vault Breaking", Pack.Position.TOP, true, false),
     ;
 
     private final String path;

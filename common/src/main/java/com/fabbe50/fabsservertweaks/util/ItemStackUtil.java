@@ -3,6 +3,7 @@ package com.fabbe50.fabsservertweaks.util;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.BlockItemStateProperties;
@@ -29,6 +30,20 @@ public class ItemStackUtil {
         }
     }
 
+    public static void addLore(ItemStack stack, Component loreText) {
+        ItemLore lore = stack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
+        AtomicBoolean shouldAddLore = new AtomicBoolean(true);
+        lore.lines().forEach(component -> {
+            if (component.getString().equalsIgnoreCase(loreText.getString())) {
+                shouldAddLore.set(false);
+            }
+        });
+        if (shouldAddLore.get()) {
+            lore = lore.withLineAdded(loreText);
+            stack.set(DataComponents.LORE, lore);
+        }
+    }
+
     public static void removeLore(ItemStack stack, String loreText) {
         ItemLore lore = stack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
         List<Component> components = new ArrayList<>(lore.lines());
@@ -45,6 +60,13 @@ public class ItemStackUtil {
             lore = new ItemLore(components);
             stack.set(DataComponents.LORE, lore);
         }
+    }
+
+    public static void shrink(ItemStack stack, Player player) {
+        if (player.isCreative() || player.isSpectator()) {
+            return;
+        }
+        stack.shrink(1);
     }
 
     public static ItemStackTemplate createStackTemplateWithState(BlockState state) {
@@ -68,7 +90,7 @@ public class ItemStackUtil {
         return stack;
     }
 
-    private static BlockItemStateProperties copyProperty(BlockItemStateProperties properties, BlockState state, Property<?> property) {
+    public static BlockItemStateProperties copyProperty(BlockItemStateProperties properties, BlockState state, Property<?> property) {
         return properties.with(property, state);
     }
 }

@@ -1,5 +1,7 @@
 package com.fabbe50.fabsservertweaks.util;
 
+import com.google.gson.JsonParseException;
+import dev.architectury.platform.Platform;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.repository.PackRepository;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class BuiltinDatapackUtil {
+    private static boolean NEEDS_RELOAD = false;
+
     private BuiltinDatapackUtil() {
     }
 
@@ -24,7 +28,7 @@ public final class BuiltinDatapackUtil {
         Objects.requireNonNull(pack, "pack");
 
         PackRepository repository = server.getPackRepository();
-        repository.reload();
+        reloadIfUnavailable(repository, pack);
 
         String packId = resolvePackId(repository, pack);
         if (packId == null) {
@@ -38,16 +42,27 @@ public final class BuiltinDatapackUtil {
             selectedIds.remove(packId);
         }
 
+        if (pack.requiresRestart()) {
+            NEEDS_RELOAD = true;
+        }
+
         repository.setSelected(selectedIds);
         return server.reloadResources(repository.getSelectedIds());
     }
 
     public static boolean isEnabled(MinecraftServer server, BuiltinDatapack pack) {
+        if (server == null || pack == null) {
+            return false;
+        }
         Objects.requireNonNull(server, "server");
         Objects.requireNonNull(pack, "pack");
 
+        if (pack.requiresRestart() && NEEDS_RELOAD) {
+            return false;
+        }
+
         PackRepository repository = server.getPackRepository();
-        repository.reload();
+        reloadIfUnavailable(repository, pack);
 
         String packId = resolvePackId(repository, pack);
         return packId != null && repository.getSelectedIds().contains(packId);
@@ -64,5 +79,14 @@ public final class BuiltinDatapackUtil {
             return pack.neoForgePackId();
         }
         return null;
+    }
+
+    private static void reloadIfUnavailable(PackRepository repository, BuiltinDatapack pack) {
+        if (!(repository.isAvailable(pack.fabricPackId()) || repository.isAvailable(pack.neoForgePackId()))) {
+            try {
+                repository.reload();
+            } catch (JsonParseException ignored) {
+            }
+        }
     }
 }

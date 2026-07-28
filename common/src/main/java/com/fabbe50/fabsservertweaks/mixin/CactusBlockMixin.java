@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.redstone.Orientation;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,7 @@ public abstract class CactusBlockMixin extends Block {
     }
 
     @Shadow
-    protected abstract boolean canSurvive(BlockState state, LevelReader level, BlockPos pos);
+    protected abstract boolean canSurvive(@NonNull BlockState state, @NonNull LevelReader level, @NonNull BlockPos pos);
 
     @Shadow
     @Final
@@ -50,42 +50,44 @@ public abstract class CactusBlockMixin extends Block {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void injectRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
         int maxHeight = level.getGameRules().get(ModGameRules.RULE_CACTUS_GROW_HEIGHT);
-        int height = PillarGrowUtil.getPillarHeight(state, level, pos);
-        if (maxHeight >= height) {
-            ci.cancel();
-            BlockPos activePos = pos;
-            BlockPos above = pos.above();
-            if (level.isEmptyBlock(above)) {
-                int age = state.getValue(AGE);
+        if (maxHeight > 0) {
+            int height = PillarGrowUtil.getPillarHeight(state, level, pos);
+            if (maxHeight >= height) {
+                ci.cancel();
+                BlockPos activePos = pos;
+                BlockPos above = pos.above();
+                if (level.isEmptyBlock(above)) {
+                    int age = state.getValue(AGE);
 
-                if (!PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
-                    return;
-                }
-                if (WorldUtil.shouldPlantGrowExtra(level, pos, random, age, 15)) {
-                    level.setBlockAndUpdate(above, this.defaultBlockState());
-                    level.setBlock(activePos, state.setValue(AGE, 0), 260);
-                    height++;
-                    activePos = above;
-                    above = activePos.above();
                     if (!PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
                         return;
                     }
-                }
-
-                if (age == 8 && this.canSurvive(this.defaultBlockState(), level, above)) {
-                    double chanceToGrowFlower = height >= maxHeight ? (double)0.25F : 0.1;
-                    if (random.nextDouble() <= chanceToGrowFlower) {
-                        level.setBlockAndUpdate(above, Blocks.CACTUS_FLOWER.defaultBlockState());
+                    if (WorldUtil.shouldPlantGrowExtra(level, pos, random, age, 15)) {
+                        level.setBlockAndUpdate(above, this.defaultBlockState());
+                        level.setBlock(activePos, state.setValue(AGE, 0), 260);
+                        height++;
+                        activePos = above;
+                        above = activePos.above();
+                        if (!PillarGrowUtil.canPillarGrow(height, maxHeight, age)) {
+                            return;
+                        }
                     }
-                } else if (age == 15 && height < maxHeight) {
-                    level.setBlockAndUpdate(above, this.defaultBlockState());
-                    BlockState aboveBlock = state.setValue(AGE, 0);
-                    level.setBlock(activePos, aboveBlock, 260);
-                    level.neighborChanged(aboveBlock, above, this, null, false);
-                }
 
-                if (age < 15) {
-                    level.setBlock(activePos, state.setValue(AGE, age + 1), 260);
+                    if (age == 8 && this.canSurvive(this.defaultBlockState(), level, above)) {
+                        double chanceToGrowFlower = height >= maxHeight ? (double)0.25F : 0.1;
+                        if (random.nextDouble() <= chanceToGrowFlower) {
+                            level.setBlockAndUpdate(above, Blocks.CACTUS_FLOWER.defaultBlockState());
+                        }
+                    } else if (age == 15 && height < maxHeight) {
+                        level.setBlockAndUpdate(above, this.defaultBlockState());
+                        BlockState aboveBlock = state.setValue(AGE, 0);
+                        level.setBlock(activePos, aboveBlock, 260);
+                        level.neighborChanged(aboveBlock, above, this, null, false);
+                    }
+
+                    if (age < 15) {
+                        level.setBlock(activePos, state.setValue(AGE, age + 1), 260);
+                    }
                 }
             }
         }
