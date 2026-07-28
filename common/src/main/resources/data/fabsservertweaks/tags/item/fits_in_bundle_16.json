@@ -1,0 +1,13 @@
+{
+  "values": [
+    {
+      "id": "#c:tools",
+      "required": false
+    },
+    "minecraft:totem_of_undying",
+    "minecraft:lava_bucket",
+    "minecraft:water_bucket",
+    "#minecraft:shulker_boxes",
+    "minecraft:shield"
+  ]
+}
