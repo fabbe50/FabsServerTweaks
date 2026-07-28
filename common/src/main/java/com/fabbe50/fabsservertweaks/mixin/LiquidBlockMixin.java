@@ -57,6 +57,28 @@ public abstract class LiquidBlockMixin {
                         }
                     }
                 }
+            } else if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_STONE_TYPE_GENERATORS)) {
+                if (this.fluid.is(FluidTags.LAVA)) {
+                    boolean isOverSoulSoil = level.getBlockState(pos.below()).is(Blocks.SOUL_SOIL);
+                    for (Direction direction : POSSIBLE_FLOW_DIRECTIONS) {
+                        BlockPos neighborPos = pos.relative(direction.getOpposite());
+                        Block block = null;
+                        if (isOverSoulSoil && level.getBlockState(pos.above()).is(Blocks.PACKED_ICE)) {
+                            block = Blocks.CALCITE;
+                        } else if (isOverSoulSoil && level.getBlockState(neighborPos).is(Blocks.PACKED_ICE)) {
+                            block = Blocks.TUFF;
+                        } else if (isOverSoulSoil && level.getBlockState(neighborPos).is(Blocks.MAGMA_BLOCK)) {
+                            block = Blocks.DEEPSLATE;
+                        }
+
+                        if (block != null) {
+                            level.setBlockAndUpdate(neighborPos, block.defaultBlockState());
+                            this.fizz(level, neighborPos);
+                            cir.setReturnValue(false);
+                            return;
+                        }
+                    }
+                }
             }
         }
     }
