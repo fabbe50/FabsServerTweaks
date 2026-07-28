@@ -17,10 +17,10 @@ subprojects {
     }
 
     repositories {
-        maven { url "https://maven.neoforged.net/releases/" }
+        maven { url = "https://maven.neoforged.net/releases/" }
         if (rootProject.neoforge_pr != "") {
             maven {
-                url "https://prmaven.neoforged.net/NeoForge/pr$rootProject.neoforge_pr"
+                url = "https://prmaven.neoforged.net/NeoForge/pr$rootProject.neoforge_pr"
                 content {
                     includeModule("net.neoforged", "neoforge")
                 }
@@ -49,6 +49,9 @@ subprojects {
         maven {
             name = "Nucleoid Polymer"
             url = "https://maven.nucleoid.xyz/"
+        }
+        maven {
+            url = "https://repo.opencollab.dev/main/"
         }
         exclusiveContent {
             forRepository {

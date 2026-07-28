@@ -65,7 +65,7 @@ dependencies {
     compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
 
-    common(project(path: ':common')) { transitive false }
+    common(project(path: ':common')) { transitive = false }
     shadowCommon project(path: ':common', configuration: 'transformProductionNeoForge')
 }
 
