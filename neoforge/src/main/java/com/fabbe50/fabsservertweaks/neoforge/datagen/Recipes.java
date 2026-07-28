@@ -107,6 +107,19 @@ public abstract class Recipes extends RecipeProvider {
                     new ModIngredient(Items.RED_DYE)
             );
             shapeless(RecipeCategory.MISC, Items.LEATHER, 1, "leather_from_rotten_flesh", "has_rotten_flesh", new ModIngredient(Items.ROTTEN_FLESH, 9));
+            shapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD, 4, "amethyst_un_crafting", "has_amethyst_block", new ModIngredient(Items.AMETHYST_BLOCK));
+            shapeless(RecipeCategory.MISC, Items.SNOWBALL, 4, "snow_un_crafting", "has_snow", new ModIngredient(Items.SNOW_BLOCK));
+            shapeless(RecipeCategory.MISC, Items.PACKED_ICE, 9, "blue_ice_un_crafting", "has_blue_ice", new ModIngredient(Items.BLUE_ICE));
+            shapeless(RecipeCategory.MISC, Items.ICE, 9, "packed_ice_un_crafting", "has_packed_ice", new ModIngredient(Items.PACKED_ICE));
+            shapeless(RecipeCategory.MISC, Items.NETHER_WART, 9, "nether_wart_block_un_crafting", "has_nether_wart_block", new ModIngredient(Items.NETHER_WART_BLOCK));
+            shapeless(RecipeCategory.MISC, Items.RED_MUSHROOM, 9, "red_mushroom_block_un_crafting", "has_red_mushroom_block", new ModIngredient(Items.RED_MUSHROOM_BLOCK));
+            shapeless(RecipeCategory.MISC, Items.BROWN_MUSHROOM, 9, "brown_mushroom_block_un_crafting", "has_brown_mushroom_block", new ModIngredient(Items.BROWN_MUSHROOM_BLOCK));
+            shapeless(RecipeCategory.MISC, Items.MAGMA_CREAM, 4, "magma_cream_un_crafting", "has_magma_block", new ModIngredient(Items.MAGMA_BLOCK));
+
+            shapeless(RecipeCategory.MISC, Items.RED_MUSHROOM_BLOCK, 1, "red_mushroom_block_crafting", "has_red_mushroom", new ModIngredient(Items.RED_MUSHROOM, 9));
+            shapeless(RecipeCategory.MISC, Items.BROWN_MUSHROOM_BLOCK, 1, "brown_mushroom_block_crafting", "has_brown_mushroom", new ModIngredient(Items.BROWN_MUSHROOM, 9));
+            shapeless(RecipeCategory.MISC, Items.MUSHROOM_STEM, 2, "has_mushroom_stem", ModRegistry.MUSHROOM_HEAD_BLOCKS, modIngredient(ModRegistry.MUSHROOM_HEAD_BLOCKS, 2));
+
             shapeless9x9(RecipeCategory.MISC, Items.TUBE_CORAL_BLOCK, "has_tube_coral_block", ModRegistry.TUBE_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.BRAIN_CORAL_BLOCK, "has_brain_coral_block", ModRegistry.BRAIN_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.BUBBLE_CORAL_BLOCK, "has_bubble_coral_block", ModRegistry.BUBBLE_CORALS);
@@ -375,29 +388,47 @@ public abstract class Recipes extends RecipeProvider {
     }
 
 
+    @SuppressWarnings("SameParameterValue")
     protected void shapeless(RecipeCategory recipeCategory, Item result, int resultAmount, String group, String unlockedByName, ModIngredient... modIngredients) {
         shapeless(recipeCategory, result, resultAmount, "", group, unlockedByName, modIngredients);
     }
 
     protected void shapeless(RecipeCategory recipeCategory, Item result, int resultAmount, String prefix, String group, String unlockedByName, ModIngredient... modIngredients) {
         ShapelessRecipeBuilder recipeBuilder = this.shapeless(recipeCategory, result, resultAmount);
-        for (ModIngredient modIngredient : modIngredients) {
-            recipeBuilder.requires(modIngredient.item(), modIngredient.amount());
-        }
+        List<Item> items = processShapeless(recipeBuilder, modIngredients);
         recipeBuilder.group(Fabsservertweaks.MOD_ID + "_" + group);
-        recipeBuilder.unlockedBy(unlockedByName, has(Arrays.stream(modIngredients).map(ModIngredient::item).toArray(ItemLike[]::new)));
+        recipeBuilder.unlockedBy(unlockedByName, has(items.toArray(Item[]::new)));
         recipeBuilder.save(this.output, Fabsservertweaks.MOD_ID + (!prefix.isEmpty() ? "_" + prefix : "") + "_" + group);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void shapeless(RecipeCategory recipeCategory, Item result, int resultAmount, String unlockedByName, ModIngredient... modIngredients) {
         ShapelessRecipeBuilder recipeBuilder = this.shapeless(recipeCategory, result, resultAmount);
-        for (ModIngredient modIngredient : modIngredients) {
-            recipeBuilder.requires(modIngredient.item(), modIngredient.amount());
-        }
-        recipeBuilder.unlockedBy(unlockedByName, has(Arrays.stream(modIngredients).map(ModIngredient::item).toArray(ItemLike[]::new)));
+        List<Item> items = processShapeless(recipeBuilder, modIngredients);
+        recipeBuilder.unlockedBy(unlockedByName, has(items.toArray(Item[]::new)));
         recipeBuilder.save(this.output, Fabsservertweaks.MOD_ID + "_" + unlockedByName);
     }
 
+    @SuppressWarnings("SameParameterValue")
+    protected void shapeless(RecipeCategory recipeCategory, Item result, int resultAmount, String unlockedByName, TagKey<Item> unlockedByTag, ModIngredient... modIngredients) {
+        ShapelessRecipeBuilder recipeBuilder = this.shapeless(recipeCategory, result, resultAmount);
+        List<Item> items = processShapeless(recipeBuilder, modIngredients);
+        recipeBuilder.unlockedBy(unlockedByName, has(unlockedByTag));
+        recipeBuilder.save(this.output, Fabsservertweaks.MOD_ID + "_" + unlockedByName);
+    }
+
+    private List<Item> processShapeless(ShapelessRecipeBuilder recipeBuilder, ModIngredient... modIngredients) {
+        List<Item> items = new ArrayList<>();
+        for (ModIngredient modIngredient : modIngredients) {
+            recipeBuilder.requires(modIngredient.ingredient(), modIngredient.amount());
+            if (!modIngredient.isTag()) {
+                items.addAll(Arrays.asList(getItemsFromIngredient(modIngredient.ingredient())));
+            }
+        }
+        return items;
+    }
+
+    @SuppressWarnings("SameParameterValue")
     protected void shaped(RecipeCategory recipeCategory, Item result, int resultAmount, String group, String unlockedByName, List<String> pattern, Definition... definitions) {
         ShapedRecipeBuilder recipeBuilder = this.shaped(recipeCategory, result, resultAmount);
         for (String patternLine : pattern) {
@@ -417,6 +448,7 @@ public abstract class Recipes extends RecipeProvider {
         SmithingTransformRecipeBuilder.smithing(template, inputItem, catalyst, recipeCategory, result).save(this.output, Fabsservertweaks.MOD_ID + "_" + getItemName(result) + "_smithing");
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void shapeless9x9(RecipeCategory recipeCategory, Item result, String unlockedByName, TagKey<Item> input) {
         String recipeName = result.getDescriptionId();
         recipeName = recipeName.substring(recipeName.lastIndexOf(".") + 1);
@@ -438,6 +470,7 @@ public abstract class Recipes extends RecipeProvider {
         return new RecipeInfo(item, ingredient, unlockedBy, trigger, recipeName);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void woodStairRecipe(ItemLike item, Item ingredient, String groupPrefix, String recipeName) {
         stairRecipe(item, Ingredient.of(ingredient), "has_planks", has(ItemTags.PLANKS), groupPrefix, recipeName);
     }
@@ -449,6 +482,7 @@ public abstract class Recipes extends RecipeProvider {
         bigStair(item, ingredient).unlockedBy(unlockedBy, trigger).save(this.output);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void stairRecipe(ItemLike item, Ingredient ingredient, String unlockedBy, Criterion<InventoryChangeTrigger.TriggerInstance> trigger, String groupPrefix, String recipeName) {
         String group = groupPrefix + "_stairs";
         recipeName = recipeName + "_stairs";
@@ -497,6 +531,7 @@ public abstract class Recipes extends RecipeProvider {
                 .pattern("###");
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void trapdoorRecipe(ItemLike item, Item ingredient, String groupPrefix, String recipeName) {
         String group = groupPrefix + "_trapdoor";
         recipeName = recipeName + "_trapdoor";
@@ -514,10 +549,36 @@ public abstract class Recipes extends RecipeProvider {
         return inventoryTrigger(ItemPredicate.Builder.item().of(this.items, items));
     }
 
-    protected record ModIngredient(Item item, int amount) {
+    protected ModIngredient modIngredient(TagKey<Item> tag) {
+        return modIngredient(tag, 1);
+    }
+
+    protected ModIngredient modIngredient(TagKey<Item> tag, int amount) {
+        return new ModIngredient(Ingredient.of(this.items.getOrThrow(tag)), amount, true);
+    }
+
+    protected record ModIngredient(Ingredient ingredient, int amount, boolean isTag) {
         public ModIngredient(Item item) {
             this(item, 1);
         }
+
+        public ModIngredient(Item item, int amount) {
+            this(Ingredient.of(item), amount, false);
+        }
+    }
+
+    protected Item[] getItemsFromIngredient(Ingredient ingredient) {
+        return ingredient.getValues().stream().map(this::getItemFromHolder).toArray(Item[]::new);
+    }
+
+    protected Item getItemFromHolder(Holder<Item> itemHolder) {
+        if (itemHolder != null) {
+            ResourceKey<Item> itemKey = itemHolder.getKey();
+            if (itemKey != null) {
+                return items.getOrThrow(itemKey).value();
+            }
+        }
+        return null;
     }
 
     protected record Definition(Character character, ItemLike item) {}
