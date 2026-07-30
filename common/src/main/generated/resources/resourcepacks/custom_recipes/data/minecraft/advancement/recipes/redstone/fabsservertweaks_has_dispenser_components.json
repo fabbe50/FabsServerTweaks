@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dispenser_components": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:stick",
+              "minecraft:string",
+              "minecraft:dropper"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:fabsservertweaks_has_dispenser_components"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dispenser_components"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:fabsservertweaks_has_dispenser_components"
+    ]
+  }
+}
