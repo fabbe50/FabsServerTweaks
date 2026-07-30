@@ -1,5 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
+import com.fabbe50.fabsservertweaks.util.EntityUtil;
+import com.fabbe50.fabsservertweaks.util.ItemStackUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -75,47 +77,13 @@ public abstract class CompassItemMixin extends Item {
                     }
                 }
                 if (teleportPosition != null) {
-                    if (!player.isCreative()) {
-                        for (ItemStack stack : player.getInventory()) {
-                            if (stack.is(ItemTags.BUNDLES)) {
-                                if (stack.getItem() instanceof BundleItem bundleItem) {
-                                    BundleContents contents = stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
-                                    List<ItemStack> stacks = new ArrayList<>(contents.itemCopyStream().toList());
-                                    for (ItemStack itemStack : new ArrayList<>(stacks)) {
-                                        if (itemStack.is(Items.ENDER_PEARL)) {
-                                            int index = stacks.indexOf(itemStack);
-                                            stacks.remove(itemStack);
-                                            itemStack.shrink(1);
-                                            stacks.add(index, itemStack);
-                                            break;
-                                        }
-                                    }
-                                    contents = new BundleContents(stacks.stream()
-                                            .map(stack1 -> {
-                                                if (!stack1.isEmpty()) {
-                                                    return ItemStackTemplate.fromNonEmptyStack(stack1);
-                                                }
-                                                return null;
-                                            })
-                                            .filter(Objects::nonNull).toList()
-                                    );
-                                    stack.set(DataComponents.BUNDLE_CONTENTS, contents);
-                                    teleport(serverLevel, serverPlayer, teleportPosition, compassItem);
-                                    return InteractionResult.SUCCESS;
-                                }
-                            }
-                            if (stack.is(Items.ENDER_PEARL)) {
-                                stack.shrink(1);
-                                teleport(targetDimension, serverPlayer, teleportPosition, compassItem);
-                                return InteractionResult.SUCCESS;
-                            }
-                        }
-                    } else {
-                        teleport(targetDimension, serverPlayer, teleportPosition, compassItem);
+                    if (ItemStackUtil.takeItemFromPlayerInventory(player, Items.ENDER_PEARL, true, true)) {
+                        EntityUtil.teleportPlayer(targetDimension, serverPlayer, teleportPosition, compassItem);
                         return InteractionResult.SUCCESS;
+                    } else {
+                        serverPlayer.sendSystemMessage(Component.literal("Missing ender pearl.").withStyle(ChatFormatting.RED), true);
+                        return InteractionResult.FAIL;
                     }
-                    serverPlayer.sendSystemMessage(Component.literal("Missing ender pearl.").withStyle(ChatFormatting.RED), true);
-                    return InteractionResult.FAIL;
                 } else {
                     serverPlayer.sendSystemMessage(Component.literal("No valid teleport location.").withStyle(ChatFormatting.RED), true);
                     return InteractionResult.FAIL;
@@ -123,12 +91,5 @@ public abstract class CompassItemMixin extends Item {
             }
         }
         return super.use(level, player, interactionHand);
-    }
-
-    @Unique
-    private void teleport(ServerLevel targetDimension, ServerPlayer serverPlayer, BlockPos teleportPosition, ItemStack compassItem) {
-        serverPlayer.teleport(new TeleportTransition(targetDimension, teleportPosition.getBottomCenter(), Vec3.ZERO, serverPlayer.getYRot(), serverPlayer.getXRot(), Relative.union(Relative.DELTA, Relative.ROTATION), entity -> {}));
-        serverPlayer.getCooldowns().addCooldown(compassItem, 600);
-        serverPlayer.sendSystemMessage(Component.literal("Teleported!"), true);
     }
 }

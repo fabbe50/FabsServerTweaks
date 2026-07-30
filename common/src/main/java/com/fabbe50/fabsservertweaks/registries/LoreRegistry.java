@@ -60,6 +60,7 @@ public class LoreRegistry {
         register(Items.LEAD, "If enchanted with Ender, the item will pick up entities inside the item.");
         register(Items.COMPASS, "Bind to a lodestone to be able to teleport to it using ender pearls.", stack -> !COMPASS_CONDITION.apply(stack));
         register(Items.COMPASS, "Right click to teleport to the set lodestone using ender pearls.", COMPASS_CONDITION);
+        register(Items.RECOVERY_COMPASS, "Right click to teleport to death point using ender pearls.");
         register(Items.LEAD, "Holding Entity: %s", "Holding Entity: ", ENTITY_TYPE_FUNCTION, LEAD_CONDITION);
         register(ModRegistry.SPIDER_NOT_CLIMBABLE, "Cannot be climbed by spiders.");
         register(ModRegistry.VAULT_KEY, "Can unlock vaults after being locked.");

@@ -133,6 +133,29 @@ public abstract class Recipes extends RecipeProvider {
             shapeless9x9(RecipeCategory.MISC, Items.BUBBLE_CORAL_BLOCK, "has_bubble_coral_block", ModRegistry.BUBBLE_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.FIRE_CORAL_BLOCK, "has_fire_coral_block", ModRegistry.FIRE_CORALS);
             shapeless9x9(RecipeCategory.MISC, Items.HORN_CORAL_BLOCK, "has_horn_coral_block", ModRegistry.HORN_CORALS);
+
+            shaped(RecipeCategory.REDSTONE, Items.DISPENSER, 1, "dispenser_bulk", "has_dispenser_components",
+                    List.of(" WS", "WDS", " WS"),
+                    new Definition('W', Items.STICK),
+                    new Definition('S', Items.STRING),
+                    new Definition('D', Items.DROPPER)
+            );
+
+            shaped(RecipeCategory.MISC, Items.CHEST, 4)
+                    .pattern("LLL")
+                    .pattern("L L")
+                    .pattern("LLL")
+                    .define('L', ItemTags.LOGS)
+                    .group("chests_from_logs")
+                    .unlockedBy("has_logs", has(ItemTags.LOGS))
+                    .save(output, Fabsservertweaks.MOD_ID + "_chests_from_logs");
+            shaped(RecipeCategory.MISC, Items.STICK, 16)
+                    .pattern("L")
+                    .pattern("L")
+                    .define('L', ItemTags.LOGS)
+                    .group("sticks_from_logs")
+                    .unlockedBy("has_logs", has(ItemTags.LOGS))
+                    .save(output, Fabsservertweaks.MOD_ID + "_sticks_from_logs");
         }
     }
 
@@ -270,6 +293,43 @@ public abstract class Recipes extends RecipeProvider {
             trapdoorRecipe(Items.CRIMSON_TRAPDOOR, Items.CRIMSON_PLANKS, "wooden", "crimson");
             trapdoorRecipe(Items.WARPED_TRAPDOOR, Items.WARPED_PLANKS, "wooden", "warped");
             trapdoorRecipe(Items.BAMBOO_TRAPDOOR, Items.BAMBOO_PLANKS, "wooden", "bamboo");
+            doorRecipe(Items.OAK_DOOR, Items.OAK_PLANKS, "wooden", "oak");
+            doorRecipe(Items.SPRUCE_DOOR, Items.SPRUCE_PLANKS, "wooden", "spruce");
+            doorRecipe(Items.BIRCH_DOOR, Items.BIRCH_PLANKS, "wooden", "birch");
+            doorRecipe(Items.JUNGLE_DOOR, Items.JUNGLE_PLANKS, "wooden", "jungle");
+            doorRecipe(Items.ACACIA_DOOR, Items.ACACIA_PLANKS, "wooden", "acacia");
+            doorRecipe(Items.DARK_OAK_DOOR, Items.DARK_OAK_PLANKS, "wooden", "dark_oak");
+            doorRecipe(Items.MANGROVE_DOOR, Items.MANGROVE_PLANKS, "wooden", "mangrove");
+            doorRecipe(Items.CHERRY_DOOR, Items.CHERRY_PLANKS, "wooden", "cherry");
+            doorRecipe(Items.PALE_OAK_DOOR, Items.PALE_OAK_PLANKS, "wooden", "pale_oak");
+            doorRecipe(Items.CRIMSON_DOOR, Items.CRIMSON_PLANKS, "wooden", "crimson");
+            doorRecipe(Items.WARPED_DOOR, Items.WARPED_PLANKS, "wooden", "warped");
+            doorRecipe(Items.BAMBOO_DOOR, Items.BAMBOO_PLANKS, "wooden", "bamboo");
+
+
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_ACACIA_LOG, Items.ACACIA_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_ACACIA_WOOD, Items.ACACIA_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_BIRCH_LOG, Items.BIRCH_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_BIRCH_WOOD, Items.BIRCH_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_DARK_OAK_LOG, Items.DARK_OAK_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_DARK_OAK_WOOD, Items.DARK_OAK_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_JUNGLE_LOG, Items.JUNGLE_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_JUNGLE_WOOD, Items.JUNGLE_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_OAK_LOG, Items.OAK_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_OAK_WOOD, Items.OAK_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_SPRUCE_LOG, Items.SPRUCE_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_SPRUCE_WOOD, Items.SPRUCE_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_CHERRY_LOG, Items.CHERRY_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_CHERRY_WOOD, Items.CHERRY_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_PALE_OAK_LOG, Items.PALE_OAK_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_PALE_OAK_WOOD, Items.PALE_OAK_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_MANGROVE_LOG, Items.MANGROVE_LOG);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_MANGROVE_WOOD, Items.MANGROVE_WOOD);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_BAMBOO_BLOCK, Items.BAMBOO_BLOCK);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_WARPED_HYPHAE, Items.WARPED_HYPHAE);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_CRIMSON_HYPHAE, Items.CRIMSON_HYPHAE);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_WARPED_STEM, Items.WARPED_STEM);
+            stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, Items.STRIPPED_CRIMSON_STEM, Items.CRIMSON_STEM);
         }
     }
 
@@ -551,6 +611,21 @@ public abstract class Recipes extends RecipeProvider {
                 .define('#', arg2)
                 .pattern("###")
                 .pattern("###");
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    protected void doorRecipe(ItemLike item, Item ingredient, String groupPrefix, String recipeName) {
+        String group = groupPrefix + "_door";
+        recipeName = recipeName + "_door";
+        door(item, Ingredient.of(ingredient)).group(group).unlockedBy("has_planks", has(ItemTags.PLANKS)).save(this.output);
+    }
+
+    protected @NotNull RecipeBuilder door(@NotNull ItemLike arg, @NotNull Ingredient arg2) {
+        return this.shaped(RecipeCategory.REDSTONE, arg, 6)
+                .define('#', arg2)
+                .pattern("##")
+                .pattern("##")
+                .pattern("##");
     }
 
     protected Criterion<InventoryChangeTrigger.TriggerInstance> has(ItemLike... items) {

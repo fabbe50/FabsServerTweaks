@@ -3,12 +3,19 @@ package com.fabbe50.fabsservertweaks.util;
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityUtil {
     public static boolean applyMobEffect(ServerLevel level, Entity entity) {
@@ -73,5 +80,11 @@ public class EntityUtil {
             return Fabsservertweaks.CONFIG.canLeashGolems;
         }
         return true;
+    }
+
+    public static void teleportPlayer(ServerLevel targetDimension, ServerPlayer serverPlayer, BlockPos teleportPosition, ItemStack compassItem) {
+        serverPlayer.teleport(new TeleportTransition(targetDimension, teleportPosition.getBottomCenter(), Vec3.ZERO, serverPlayer.getYRot(), serverPlayer.getXRot(), Relative.union(Relative.DELTA, Relative.ROTATION), entity -> {}));
+        serverPlayer.getCooldowns().addCooldown(compassItem, 600);
+        serverPlayer.sendSystemMessage(Component.literal("Teleported!"), true);
     }
 }

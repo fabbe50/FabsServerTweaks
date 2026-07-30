@@ -3,16 +3,20 @@ package com.fabbe50.fabsservertweaks.util;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlockItemStateProperties;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemStackUtil {
@@ -92,5 +96,44 @@ public class ItemStackUtil {
 
     public static BlockItemStateProperties copyProperty(BlockItemStateProperties properties, BlockState state, Property<?> property) {
         return properties.with(property, state);
+    }
+
+    public static boolean takeItemFromPlayerInventory(Player player, ItemLike item, boolean checkBundles, boolean resultOnCreative) {
+        if (player.isCreative() || player.isSpectator()) {
+            return resultOnCreative;
+        }
+        for (ItemStack stack : player.getInventory()) {
+            if (checkBundles && stack.is(ItemTags.BUNDLES)) {
+                if (stack.getItem() instanceof BundleItem) {
+                    BundleContents contents = stack.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+                    List<ItemStack> stacks = new ArrayList<>(contents.itemCopyStream().toList());
+                    for (ItemStack itemStack : new ArrayList<>(stacks)) {
+                        if (itemStack.is(item.asItem())) {
+                            int index = stacks.indexOf(itemStack);
+                            stacks.remove(itemStack);
+                            shrink(stack, player);
+                            stacks.add(index, itemStack);
+                            break;
+                        }
+                    }
+                    contents = new BundleContents(stacks.stream()
+                            .map(stack1 -> {
+                                if (!stack1.isEmpty()) {
+                                    return ItemStackTemplate.fromNonEmptyStack(stack1);
+                                }
+                                return null;
+                            })
+                            .filter(Objects::nonNull).toList()
+                    );
+                    stack.set(DataComponents.BUNDLE_CONTENTS, contents);
+                    return true;
+                }
+            }
+            if (stack.is(item.asItem())) {
+                shrink(stack, player);
+                return true;
+            }
+        }
+        return false;
     }
 }

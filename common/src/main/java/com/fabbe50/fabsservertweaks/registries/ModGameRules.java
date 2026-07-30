@@ -113,6 +113,7 @@ public class ModGameRules {
     public static final ExtGameRule<Boolean> RULE_BETTER_HOES;
     public static final ExtGameRule<Boolean> RULE_BETTER_BONE_MEAL;
     public static final ExtGameRule<Boolean> RULE_PREVENT_HOT_FLOOR_DAMAGE_ITEMS;
+    public static final ExtGameRule<Boolean> RULE_TELEPORT_TO_DEATH_POINT_WITH_RECOVERY_COMPASS;
 
     // Fun
     public static final ExtGameRule<Boolean> RULE_SHULKERS_RANDOM_COLOR;
@@ -168,6 +169,7 @@ public class ModGameRules {
         RULE_PREVENT_HOT_FLOOR_DAMAGE_ITEMS = registerBoolean("prevent_hot_floor_damage_items", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         RULE_REPAIRABLE_ANVILS = registerBoolean("repairable_anvils", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         RULE_ENDERMAN_TELEPORT_INHIBITOR = registerBoolean("enderman_teleport_inhibitor", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
+        RULE_TELEPORT_TO_DEATH_POINT_WITH_RECOVERY_COMPASS = registerBoolean("teleport_to_death_point_with_recovery_compass", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         if (Fabsservertweaks.CONFIG.enableExperimentalFeatures) {
             RULE_PISTONS_CAN_BREAK_BLOCKS = registerBoolean("pistons_can_break_blocks", GameRuleCategory.MISC, BOOLEAN_ALL_FALSE);
             RULE_BETTER_MOB_LOOT = registerBoolean("better_mob_loot", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);

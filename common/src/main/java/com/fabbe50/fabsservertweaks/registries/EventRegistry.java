@@ -503,6 +503,22 @@ public class EventRegistry {
                     return InteractionResult.SUCCESS;
                 }
             }
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (mainHandStack.is(Items.RECOVERY_COMPASS)) {
+                    Optional<GlobalPos> optionalDeathPoint = player.getLastDeathLocation();
+                    if (optionalDeathPoint.isPresent()) {
+                        GlobalPos deathPoint = optionalDeathPoint.get();
+                        if (ItemStackUtil.takeItemFromPlayerInventory(player, Items.ENDER_PEARL, true, true)) {
+                            EntityUtil.teleportPlayer(serverPlayer.level().getServer().getLevel(deathPoint.dimension()), serverPlayer, deathPoint.pos(), mainHandStack);
+                            return InteractionResult.SUCCESS;
+                        } else {
+                            serverPlayer.sendSystemMessage(Component.literal("Missing ender pearl.").withStyle(ChatFormatting.RED), true);
+                        }
+                    } else {
+                        serverPlayer.sendSystemMessage(Component.literal("No valid teleport location.").withStyle(ChatFormatting.RED), true);
+                    }
+                }
+            }
             return InteractionResult.PASS;
         });
         BedEvents.START_SLEEPING.register((livingEntity, pos) -> {
