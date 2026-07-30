@@ -6,6 +6,7 @@ import com.fabbe50.fabsservertweaks.ModPlatform;
 import com.fabbe50.fabsservertweaks.commands.*;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
 import com.fabbe50.fabsservertweaks.data.soulbound.SoulBoundRegistry;
+import com.fabbe50.fabsservertweaks.data.stats.PlayerOnline;
 import com.fabbe50.fabsservertweaks.data.stats.StatsRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
@@ -23,10 +24,8 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -68,6 +67,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class EventRegistry {
@@ -128,9 +128,16 @@ public class EventRegistry {
             PresetCommand.register(commandDispatcher);
             NicknameCommand.register(commandDispatcher);
             ServerTweaksCommand.register(commandDispatcher, commandBuildContext);
+            StatsCommand.register(commandDispatcher);
         });
         PlayerEvent.PLAYER_JOIN.register(serverPlayer -> {
             LogUtil.debugEventRun(String.format("Executed by player '%s'", serverPlayer.getName().getString()));
+            LocalDateTime lastOnline = StatsRegistry.getLastOnline(serverPlayer.getUUID());
+            if (lastOnline != null) {
+                LogUtil.log("Player " + serverPlayer.getName().getString() + " joined the server and was last online " + StringUtil.formatLocalDateTime(lastOnline));
+            } else {
+                LogUtil.log("Player " + serverPlayer.getName().getString() + " joined the server and has never been online.");
+            }
             if (Fabsservertweaks.CONFIG.warnPlayersAboutModNotOnClient) {
                 try {
                     if (!NetworkManager.canPlayerReceive(serverPlayer, SeedPacket.PACKET_ID)) {
@@ -146,6 +153,18 @@ public class EventRegistry {
                 } catch (UnsupportedOperationException ignored) {
                     serverPlayer.sendSystemMessage(Component.literal("Server Seed: " + serverPlayer.level().getSeed()));
                 }
+            }
+        });
+        PlayerEvent.PLAYER_QUIT.register(serverPlayer -> {
+            LogUtil.debugEventRun(String.format("Executed by player '%s'", serverPlayer.getName().getString()));
+            if (serverPlayer.level() instanceof ServerLevel serverLevel) {
+                StatsRegistry.setPlayerLastOnline(serverPlayer);
+            }
+            PlayerOnline playerStat = StatsRegistry.getPlayerOnlineStat(serverPlayer.getUUID());
+            if (playerStat != null) {
+                LogUtil.log("Player " + serverPlayer.getName().getString() + " left the server with data: {" + playerStat + "}");
+            } else {
+                LogUtil.log("Player " + serverPlayer.getName().getString() + " left the server without data.");
             }
         });
         PlayerEvent.PLAYER_RESPAWN.register((player, conqueredEnd, removalReason) -> {
@@ -643,6 +662,7 @@ public class EventRegistry {
             JsonUtil.init(instance.registryAccess());
 
             NicknameRegistry.loadNicknames();
+            StatsRegistry.loadStats();
             SoulBoundRegistry.loadSoulBoundData();
         });
     }

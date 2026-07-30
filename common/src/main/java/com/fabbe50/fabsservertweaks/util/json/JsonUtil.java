@@ -1,12 +1,17 @@
 package com.fabbe50.fabsservertweaks.util.json;
 
+import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import dev.architectury.platform.Platform;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -16,14 +21,20 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class JsonUtil {
+    private static volatile HolderLookup.Provider lookupProvider;
+
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
+            .registerTypeAdapter(Vec3.class, new Vec3TypeAdapter())
+            .registerTypeAdapter(ItemStack.class, new ItemStackTypeAdapter(JsonUtil::getLookupProvider))
             .create();
 
     private JsonUtil() {
@@ -31,6 +42,8 @@ public final class JsonUtil {
 
     public static void init(HolderLookup.Provider lookupProvider) {
         JsonUtil.lookupProvider = Objects.requireNonNull(lookupProvider, "lookupProvider");
+    }
+
     public static Path resolvePath(Path gameDirectory, String subfolder, String fileName) {
         Objects.requireNonNull(gameDirectory, "gameDirectory");
         validateSegment(subfolder, "subfolder");
@@ -140,6 +153,10 @@ public final class JsonUtil {
         return defaultValue;
     }
 
+    public static <T> T loadOrCreate(String fileName, TypeToken<T> typeToken, Supplier<T> defaultFactory) {
+        return loadOrCreate(Platform.getGameFolder(), Fabsservertweaks.MOD_ID, fileName, typeToken, defaultFactory);
+    }
+
     public static <T> T loadOrCreate(Path gameDirectory, String subfolder, String fileName, Class<T> type, Supplier<T> defaultFactory) {
         return loadOrDefault(gameDirectory, subfolder, fileName, type, defaultFactory);
     }
@@ -176,5 +193,13 @@ public final class JsonUtil {
         if (value.isBlank()) {
             throw new IllegalArgumentException(name + " must not be blank");
         }
+    }
+
+    private static HolderLookup.Provider getLookupProvider() {
+        HolderLookup.Provider provider = lookupProvider;
+        if (provider == null) {
+            throw new IllegalStateException("JsonUtil has not been initialized with registry access");
+        }
+        return provider;
     }
 }
