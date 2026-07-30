@@ -1,9 +1,7 @@
 package com.fabbe50.fabsservertweaks.data.nickname;
 
-import com.fabbe50.fabsservertweaks.Fabsservertweaks;
-import com.fabbe50.fabsservertweaks.util.JsonUtil;
+import com.fabbe50.fabsservertweaks.util.json.JsonUtil;
 import com.google.gson.reflect.TypeToken;
-import dev.architectury.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Player;
 
@@ -18,12 +16,12 @@ public class NicknameRegistry {
         NICKNAMES.removeIf(data -> data.playerID().equals(player.getUUID()));
         NicknameData data = new NicknameData(player.getUUID(), nickname, color);
         NICKNAMES.add(data);
-        JsonUtil.save(Platform.getGameFolder(), Fabsservertweaks.MOD_ID, NICKNAMES_FILE, NICKNAMES);
+        JsonUtil.save(NICKNAMES_FILE, NICKNAMES);
     }
 
     public static void clearNickname(Player player) {
         NICKNAMES.removeIf(data -> data.playerID().equals(player.getUUID()));
-        JsonUtil.save(Platform.getGameFolder(), Fabsservertweaks.MOD_ID, NICKNAMES_FILE, NICKNAMES);
+        JsonUtil.save(NICKNAMES_FILE, NICKNAMES);
     }
 
     public static String getNickname(Player player) {
@@ -36,6 +34,6 @@ public class NicknameRegistry {
 
     public static void loadNicknames() {
         NICKNAMES.clear();
-        NICKNAMES.addAll(JsonUtil.loadOrCreate(Platform.getGameFolder(), Fabsservertweaks.MOD_ID, NICKNAMES_FILE, new TypeToken<List<NicknameData>>() {}, ArrayList::new));
+        NICKNAMES.addAll(JsonUtil.loadOrCreate(NICKNAMES_FILE, new TypeToken<List<NicknameData>>() {}, ArrayList::new));
     }
 }

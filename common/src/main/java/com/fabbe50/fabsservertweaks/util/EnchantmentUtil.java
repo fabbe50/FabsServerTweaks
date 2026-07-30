@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.util;
 
 import com.fabbe50.fabsservertweaks.LogUtil;
+import com.fabbe50.fabsservertweaks.data.soulbound.SoulBoundRegistry;
 import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -342,24 +343,19 @@ public class EnchantmentUtil {
             return false;
         }
         LogUtil.debug("Soul bound items found, saving to storage... (items: " + soulBoundItems + ")");
-        SOUL_BOUND_SAVED.put(player.getUUID(), soulBoundItems);
+        SoulBoundRegistry.setSoulBoundItems(player, soulBoundItems);
         return true;
     }
 
     public static boolean handleSoulBoundAfterRespawn(Player player) {
-        if (SOUL_BOUND_SAVED.containsKey(player.getUUID())) {
-            LogUtil.debug("Player has soul bound items!");
-            List<ItemStack> soulBoundItems = SOUL_BOUND_SAVED.get(player.getUUID());
-            if (soulBoundItems != null) {
-                LogUtil.debug("Soul bound items are not null!");
-                for (ItemStack soulBoundItem : soulBoundItems) {
-                    player.getInventory().add(soulBoundItem.copy());
-                    LogUtil.debug("Adding soul bound item to player inventory: " + soulBoundItem);
-                }
-                SOUL_BOUND_SAVED.remove(player.getUUID());
-                LogUtil.debug("Removing cached items...");
-                return true;
+        List<ItemStack> soulBoundItems = SoulBoundRegistry.getAndClearSoulBoundItems(player);
+        if (!soulBoundItems.isEmpty()) {
+            LogUtil.debug("Player has soul bound items. Adding them to their inventory... (items: " + soulBoundItems + ")");
+            for (ItemStack soulBoundItem : soulBoundItems) {
+                player.getInventory().add(soulBoundItem.copy());
+                LogUtil.debug("Adding soul bound item to player inventory: " + soulBoundItem);
             }
+            return true;
         }
         return false;
     }

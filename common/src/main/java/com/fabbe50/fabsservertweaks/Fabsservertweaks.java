@@ -2,6 +2,8 @@ package com.fabbe50.fabsservertweaks;
 
 import com.fabbe50.fabsservertweaks.client.ClientData;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
+import com.fabbe50.fabsservertweaks.data.soulbound.SoulBoundRegistry;
+import com.fabbe50.fabsservertweaks.data.stats.StatsRegistry;
 import com.fabbe50.fabsservertweaks.network.NetworkHandler;
 import com.fabbe50.fabsservertweaks.registries.EventRegistry;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
@@ -41,7 +43,6 @@ public final class Fabsservertweaks {
 
     public static void initServer() {
         NetworkHandler.registerServerHandlers();
-        NicknameRegistry.loadNicknames();
     }
 
     public static void initClient() {

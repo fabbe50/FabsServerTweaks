@@ -3,11 +3,10 @@ package com.fabbe50.fabsservertweaks.registries;
 import com.fabbe50.fabsservertweaks.Fabsservertweaks;
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.fabbe50.fabsservertweaks.ModPlatform;
-import com.fabbe50.fabsservertweaks.commands.GotoCommand;
-import com.fabbe50.fabsservertweaks.commands.NicknameCommand;
-import com.fabbe50.fabsservertweaks.commands.PresetCommand;
-import com.fabbe50.fabsservertweaks.commands.ServerTweaksCommand;
+import com.fabbe50.fabsservertweaks.commands.*;
 import com.fabbe50.fabsservertweaks.data.nickname.NicknameRegistry;
+import com.fabbe50.fabsservertweaks.data.soulbound.SoulBoundRegistry;
+import com.fabbe50.fabsservertweaks.data.stats.StatsRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
 import com.fabbe50.fabsservertweaks.events.BedEvents;
 import com.fabbe50.fabsservertweaks.events.CollisionEvent;
@@ -19,6 +18,7 @@ import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.DisenchantingEntityResu
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.EnchantmentResult;
 import com.fabbe50.fabsservertweaks.util.EventUtil.BlockEventLogic;
 import com.fabbe50.fabsservertweaks.util.SpawnerUtil.Modifier;
+import com.fabbe50.fabsservertweaks.util.json.JsonUtil;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.event.events.common.EntityEvent;
@@ -51,16 +51,13 @@ import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
-import net.minecraft.world.level.block.entity.vault.VaultServerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -641,6 +638,12 @@ public class EventRegistry {
                 }
             }
             return EventResult.pass();
+        });
+        LifecycleEvent.SERVER_STARTING.register(instance -> {
+            JsonUtil.init(instance.registryAccess());
+
+            NicknameRegistry.loadNicknames();
+            SoulBoundRegistry.loadSoulBoundData();
         });
     }
 }

@@ -1,4 +1,4 @@
-package com.fabbe50.fabsservertweaks.util;
+package com.fabbe50.fabsservertweaks.util.json;
 
 import com.fabbe50.fabsservertweaks.LogUtil;
 import com.google.gson.Gson;
@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.core.HolderLookup;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -22,16 +23,23 @@ public final class JsonUtil {
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
+            .registerTypeAdapter(Identifier.class, new IdentifierTypeAdapter())
             .create();
 
     private JsonUtil() {
     }
 
+    public static void init(HolderLookup.Provider lookupProvider) {
+        JsonUtil.lookupProvider = Objects.requireNonNull(lookupProvider, "lookupProvider");
     public static Path resolvePath(Path gameDirectory, String subfolder, String fileName) {
         Objects.requireNonNull(gameDirectory, "gameDirectory");
         validateSegment(subfolder, "subfolder");
         validateSegment(fileName, "fileName");
         return gameDirectory.resolve(subfolder).resolve(fileName);
+    }
+
+    public static <T> void save(String fileName, T data) {
+        save(Platform.getGameFolder(), Fabsservertweaks.MOD_ID, fileName, data);
     }
 
     public static <T> void save(Path gameDirectory, String subfolder, String fileName, T data) {
