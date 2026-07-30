@@ -4,10 +4,20 @@
       "id": "#c:tools",
       "required": false
     },
+    {
+      "id": "#c:music_discs",
+      "required": false
+    },
     "minecraft:totem_of_undying",
     "minecraft:lava_bucket",
     "minecraft:water_bucket",
     "#minecraft:shulker_boxes",
-    "minecraft:shield"
+    "minecraft:shield",
+    "minecraft:elytra",
+    "#minecraft:harnesses",
+    "minecraft:carrot_on_a_stick",
+    "minecraft:warped_fungus_on_a_stick",
+    "#minecraft:boats",
+    "minecraft:goat_horn"
   ]
 }
