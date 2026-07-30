@@ -20,12 +20,15 @@ import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.EnchantmentResult;
 import com.fabbe50.fabsservertweaks.util.EventUtil.BlockEventLogic;
 import com.fabbe50.fabsservertweaks.util.SpawnerUtil.Modifier;
 import com.fabbe50.fabsservertweaks.util.json.JsonUtil;
+import com.jcraft.jorbis.Block;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.networking.NetworkManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -35,6 +38,7 @@ import net.minecraft.network.chat.HoverEvent.ShowText;
 import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -62,8 +66,13 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 
 import java.net.URI;
@@ -680,6 +689,85 @@ public class EventRegistry {
             NicknameRegistry.loadNicknames();
             StatsRegistry.loadStats();
             SoulBoundRegistry.loadSoulBoundData();
+        });
+        PlayerEvent.FILL_BUCKET.register((player, level, stack, target) -> {
+            if (EnchantmentUtil.hasEnchantment(player, stack, Enchantments.INFINITY)) {
+                if (target instanceof BlockHitResult blockHitResult) {
+                    BlockPos pos = blockHitResult.getBlockPos();
+                    Direction direction = blockHitResult.getDirection();
+                    BlockState state = level.getBlockState(pos);
+                    FluidState fluidState = state.getFluidState();
+                    if (stack.getItem() instanceof BucketItem bucketItem) {
+                        Fluid fluid = bucketItem.getContent();
+                        if (state.is(Blocks.CAULDRON) && (fluid.equals(Fluids.WATER) || fluid.equals(Fluids.LAVA))) {
+                            SoundEvent empty = SoundEvents.BUCKET_EMPTY;
+                            if (fluid == Fluids.WATER) {
+                                level.setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState());
+                            }
+                            if (fluid == Fluids.LAVA) {
+                                level.setBlockAndUpdate(pos, Blocks.LAVA_CAULDRON.defaultBlockState());
+                                empty = SoundEvents.BUCKET_EMPTY_LAVA;
+                            }
+                            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), empty, SoundSource.BLOCKS, 1, 1);
+                            return InteractionResult.SUCCESS_SERVER;
+                        } else if (state.is(Blocks.WATER_CAULDRON) && fluid.equals(Fluids.EMPTY)) {
+                            level.setBlockAndUpdate(pos, Blocks.CAULDRON.defaultBlockState());
+                            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1, 1);
+                            return InteractionResult.SUCCESS_SERVER;
+                        } else if (state.is(Blocks.LAVA_CAULDRON) && fluid.equals(Fluids.EMPTY)) {
+                            level.setBlockAndUpdate(pos, Blocks.CAULDRON.defaultBlockState());
+                            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BUCKET_FILL_LAVA, SoundSource.BLOCKS, 1, 1);
+                            return InteractionResult.SUCCESS_SERVER;
+                        }
+                        if (fluid == Fluids.EMPTY) {
+                            if (!fluidState.isEmpty()) {
+                                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                                SoundEvent fill = SoundEvents.BUCKET_FILL;
+                                if (fluidState.getType().equals(Fluids.LAVA)) {
+                                    fill = SoundEvents.BUCKET_FILL_LAVA;
+                                }
+                                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), fill, SoundSource.BLOCKS, 1, 1);
+                                return InteractionResult.SUCCESS_SERVER;
+                            } else if (state.getBlock() instanceof SimpleWaterloggedBlock simpleWaterloggedBlock) {
+                                simpleWaterloggedBlock.pickupBlock(player, level, pos, state);
+                                return InteractionResult.SUCCESS_SERVER;
+                            }
+                        } else {
+                            if (!fluidState.isEmpty() && !fluidState.is(fluid)) {
+                                level.setBlockAndUpdate(pos, fluid.defaultFluidState().createLegacyBlock());
+                                SoundEvent empty = SoundEvents.BUCKET_EMPTY;
+                                if (fluidState.getType().equals(Fluids.LAVA)) {
+                                    empty = SoundEvents.BUCKET_EMPTY_LAVA;
+                                }
+                                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), empty, SoundSource.BLOCKS, 1, 1);
+                                return InteractionResult.SUCCESS_SERVER;
+                            } else if (state.getBlock() instanceof SimpleWaterloggedBlock simpleWaterloggedBlock) {
+                                if (simpleWaterloggedBlock.canPlaceLiquid(player, level, pos, state, fluid)) {
+                                    simpleWaterloggedBlock.placeLiquid(level, pos, state, fluid.defaultFluidState());
+                                    return InteractionResult.SUCCESS_SERVER;
+                                } else {
+                                    level.setBlockAndUpdate(pos.relative(direction), fluid.defaultFluidState().createLegacyBlock());
+                                    SoundEvent empty = SoundEvents.BUCKET_EMPTY;
+                                    if (fluidState.getType().equals(Fluids.LAVA)) {
+                                        empty = SoundEvents.BUCKET_EMPTY_LAVA;
+                                    }
+                                    level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), empty, SoundSource.BLOCKS, 1, 1);
+                                    return InteractionResult.SUCCESS_SERVER;
+                                }
+                            } else {
+                                level.setBlockAndUpdate(pos.relative(direction), fluid.defaultFluidState().createLegacyBlock());
+                                SoundEvent empty = SoundEvents.BUCKET_EMPTY;
+                                if (fluidState.getType().equals(Fluids.LAVA)) {
+                                    empty = SoundEvents.BUCKET_EMPTY_LAVA;
+                                }
+                                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), empty, SoundSource.BLOCKS, 1, 1);
+                                return InteractionResult.SUCCESS_SERVER;
+                            }
+                        }
+                    }
+                }
+            }
+            return InteractionResult.PASS;
         });
     }
 }

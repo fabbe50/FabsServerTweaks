@@ -19,6 +19,7 @@ public enum BuiltinDatapack {
     POTTERY_SHERD_DUPLICATION("pottery_sherd_duplication", "Pottery Sherd Duplication", Pack.Position.TOP, true, false),
     ORE_MINER("ore_miner", "Ore Miner", Pack.Position.TOP, false, true),
     VAULT_BREAKING("vault_breaking", "Vault Breaking", Pack.Position.TOP, true, false),
+    INFINITY_BUCKETS("infinity_buckets", "Infinity Buckets", Pack.Position.TOP, true, true),
     ;
 
     private final String path;
