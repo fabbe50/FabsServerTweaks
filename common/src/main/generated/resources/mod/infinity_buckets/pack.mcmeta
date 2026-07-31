@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "Fab's Server Tweaks Infinity Buckets",
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minecraft:glowstone",
+      "required": false
+    },
+    {
+      "id": "#fabsservertweaks:mineable/pickaxe",
+      "required": false
+    }
+  ]
+}

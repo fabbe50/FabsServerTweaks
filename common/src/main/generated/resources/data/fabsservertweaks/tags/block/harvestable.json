@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#fabsservertweaks:field_growable",
+      "required": false
+    },
+    {
+      "id": "minecraft:cocoa",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:beds",
+      "required": false
+    },
+    {
+      "id": "#minecraft:boats",
+      "required": false
+    },
+    {
+      "id": "minecraft:enchanted_book",
+      "required": false
+    },
+    {
+      "id": "minecraft:potion",
+      "required": false
+    },
+    {
+      "id": "minecraft:splash_potion",
+      "required": false
+    },
+    {
+      "id": "minecraft:lingering_potion",
+      "required": false
+    },
+    {
+      "id": "minecraft:saddle",
+      "required": false
+    },
+    {
+      "id": "minecraft:copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:iron_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:golden_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:netherite_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:mushroom_stew",
+      "required": false
+    },
+    {
+      "id": "minecraft:rabbit_stew",
+      "required": false
+    },
+    {
+      "id": "minecraft:suspicious_stew",
+      "required": false
+    },
+    {
+      "id": "minecraft:beetroot_soup",
+      "required": false
+    },
+    {
+      "id": "minecraft:cake",
+      "required": false
+    }
+  ]
+}

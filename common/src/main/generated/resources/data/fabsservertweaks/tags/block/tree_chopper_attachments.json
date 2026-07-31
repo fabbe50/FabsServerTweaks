@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:leaves",
+      "required": false
+    },
+    {
+      "id": "minecraft:red_mushroom_block",
+      "required": false
+    },
+    {
+      "id": "minecraft:brown_mushroom_block",
+      "required": false
+    },
+    {
+      "id": "minecraft:nether_wart_block",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_wart_block",
+      "required": false
+    },
+    {
+      "id": "minecraft:shroomlight",
+      "required": false
+    }
+  ]
+}

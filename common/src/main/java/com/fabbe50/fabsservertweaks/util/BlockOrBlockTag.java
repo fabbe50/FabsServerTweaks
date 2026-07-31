@@ -17,6 +17,14 @@ public class BlockOrBlockTag {
         this.block = null;
     }
 
+    public static BlockOrBlockTag of(Block block) {
+        return new BlockOrBlockTag(block);
+    }
+
+    public static BlockOrBlockTag of(TagKey<Block> blockTag) {
+        return new BlockOrBlockTag(blockTag);
+    }
+
     public Block getBlock() {
         return block;
     }

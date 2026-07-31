@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "minecraft:iron_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:snow_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:copper_golem",
+      "required": false
+    }
+  ]
+}

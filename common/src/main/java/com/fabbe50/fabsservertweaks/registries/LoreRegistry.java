@@ -233,7 +233,26 @@ public class LoreRegistry {
             this.tag = tag;
         }
 
-        private Optional<TagKey<Item>> getItemTag() {
+        public static ItemOrTag<Block> of(Block block) {
+            return new ItemOrTag<>(block);
+        }
+
+        public static ItemOrTag<Item> of(Item item) {
+            return new ItemOrTag<>(item);
+        }
+
+        public static ItemOrTag<Item> of(TagKey<Item> tag) {
+            return new ItemOrTag<>(tag);
+        }
+
+        public Optional<Item> getItem() {
+            if (item != null) {
+                return Optional.of(item.asItem());
+            }
+            return Optional.empty();
+        }
+
+        public Optional<TagKey<Item>> getItemTag() {
             if (tag != null) {
                 return tag.cast(Registries.ITEM);
             }

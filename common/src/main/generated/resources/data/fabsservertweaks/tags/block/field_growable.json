@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:crops",
+      "required": false
+    },
+    {
+      "id": "minecraft:sweet_berry_bush",
+      "required": false
+    },
+    {
+      "id": "minecraft:sugar_cane",
+      "required": false
+    },
+    {
+      "id": "minecraft:cactus",
+      "required": false
+    },
+    {
+      "id": "minecraft:nether_wart",
+      "required": false
+    },
+    {
+      "id": "minecraft:torchflower",
+      "required": false
+    },
+    {
+      "id": "minecraft:pitcher_crop",
+      "required": false
+    }
+  ]
+}

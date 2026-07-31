@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:signs",
+      "required": false
+    },
+    {
+      "id": "#minecraft:eggs",
+      "required": false
+    },
+    {
+      "id": "minecraft:ender_pearl",
+      "required": false
+    }
+  ]
+}

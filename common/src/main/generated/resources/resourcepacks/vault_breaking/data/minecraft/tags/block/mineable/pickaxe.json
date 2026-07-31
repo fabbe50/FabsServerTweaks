@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minecraft:vault",
+      "required": false
+    },
+    {
+      "id": "minecraft:trial_spawner",
+      "required": false
+    }
+  ]
+}

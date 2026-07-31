@@ -1,0 +1,96 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:corals",
+      "required": false
+    },
+    {
+      "id": "#minecraft:wall_corals",
+      "required": false
+    },
+    {
+      "id": "minecraft:spore_blossom",
+      "required": false
+    },
+    {
+      "id": "minecraft:sugar_cane",
+      "required": false
+    },
+    {
+      "id": "minecraft:cactus",
+      "required": false
+    },
+    {
+      "id": "minecraft:lily_pad",
+      "required": false
+    },
+    {
+      "id": "minecraft:sea_pickle",
+      "required": false
+    },
+    {
+      "id": "minecraft:pumpkin_stem",
+      "required": false
+    },
+    {
+      "id": "minecraft:melon_stem",
+      "required": false
+    },
+    {
+      "id": "minecraft:poppy",
+      "required": false
+    },
+    {
+      "id": "minecraft:blue_orchid",
+      "required": false
+    },
+    {
+      "id": "minecraft:allium",
+      "required": false
+    },
+    {
+      "id": "minecraft:azure_bluet",
+      "required": false
+    },
+    {
+      "id": "minecraft:red_tulip",
+      "required": false
+    },
+    {
+      "id": "minecraft:orange_tulip",
+      "required": false
+    },
+    {
+      "id": "minecraft:white_tulip",
+      "required": false
+    },
+    {
+      "id": "minecraft:pink_tulip",
+      "required": false
+    },
+    {
+      "id": "minecraft:oxeye_daisy",
+      "required": false
+    },
+    {
+      "id": "minecraft:cornflower",
+      "required": false
+    },
+    {
+      "id": "minecraft:lily_of_the_valley",
+      "required": false
+    },
+    {
+      "id": "minecraft:tall_grass",
+      "required": false
+    },
+    {
+      "id": "minecraft:large_fern",
+      "required": false
+    },
+    {
+      "id": "minecraft:nether_wart",
+      "required": false
+    }
+  ]
+}

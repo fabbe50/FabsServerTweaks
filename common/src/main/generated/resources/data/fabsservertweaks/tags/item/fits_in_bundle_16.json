@@ -1,0 +1,56 @@
+{
+  "values": [
+    {
+      "id": "#c:tools",
+      "required": false
+    },
+    {
+      "id": "#c:music_discs",
+      "required": false
+    },
+    {
+      "id": "minecraft:totem_of_undying",
+      "required": false
+    },
+    {
+      "id": "minecraft:lava_bucket",
+      "required": false
+    },
+    {
+      "id": "minecraft:water_bucket",
+      "required": false
+    },
+    {
+      "id": "#minecraft:shulker_boxes",
+      "required": false
+    },
+    {
+      "id": "minecraft:shield",
+      "required": false
+    },
+    {
+      "id": "minecraft:elytra",
+      "required": false
+    },
+    {
+      "id": "#minecraft:harnesses",
+      "required": false
+    },
+    {
+      "id": "minecraft:carrot_on_a_stick",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_fungus_on_a_stick",
+      "required": false
+    },
+    {
+      "id": "#minecraft:boats",
+      "required": false
+    },
+    {
+      "id": "minecraft:goat_horn",
+      "required": false
+    }
+  ]
+}

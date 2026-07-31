@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/durability",
+      "required": false
+    },
+    {
+      "id": "#minecraft:bundles",
+      "required": false
+    }
+  ]
+}

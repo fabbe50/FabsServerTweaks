@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "minecraft:cactus",
+      "required": false
+    },
+    {
+      "id": "minecraft:cactus_flower",
+      "required": false
+    },
+    {
+      "id": "#c:netherite_items",
+      "required": false
+    }
+  ]
+}

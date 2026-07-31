@@ -38,6 +38,10 @@ public class ModRegistry {
     public static final TagKey<Item> VAULT_KEY = TagKey.create(Registries.ITEM, Fabsservertweaks.location("vault_key"));
     public static final TagKey<Item> BLOCK_DISPENSE_BLACKLIST = TagKey.create(Registries.ITEM, Fabsservertweaks.location("block_dispense_blacklist"));
     public static final TagKey<Item> PREVENTS_HOT_FLOOR_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("prevents_hot_floor_damage"));
+    public static final TagKey<Item> INFINITY_COMPATIBLE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("enchantable/infinity_compatible"));
+    public static final TagKey<Item> CHEST_PIECES = TagKey.create(Registries.ITEM, Fabsservertweaks.location("enchantable/chest_pieces"));
+    public static final TagKey<Item> SOULBOUND_COMPATIBLE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("enchantable/soulbound_compatible"));
+    public static final TagKey<Item> SWIFTNESS_COMPATIBLE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("enchantable/swiftness_compatible"));
     public static final TagKey<Block> SCYTHE_ABLE = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("scythe-able"));
     public static final TagKey<Block> TREE_CHOPPER_WHITELIST = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_whitelist"));
     public static final TagKey<Block> TREE_CHOPPER_ATTACHMENTS = TagKey.create(Registries.BLOCK, Fabsservertweaks.location("tree_chopper_attachments"));
