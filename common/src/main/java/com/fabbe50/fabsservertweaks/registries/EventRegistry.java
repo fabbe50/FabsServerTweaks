@@ -119,22 +119,10 @@ public class EventRegistry {
         EntityEvent.LIVING_DEATH.register((livingEntity, damageSource) -> {
             LogUtil.debugEventRun(String.format("Executed by entity '%s' by %s", livingEntity.getName().getString(), damageSource));
             Level level = livingEntity.level();
-            Entity sourceEntity = damageSource.getEntity();
-
             if (level instanceof ServerLevel serverLevel) {
-                if (BuiltinDatapackUtil.isEnabled(level.getServer(), BuiltinDatapack.CUSTOM_ENCHANTMENTS)) {
-                    if (livingEntity instanceof Mob mob) {
-                        if (sourceEntity instanceof LivingEntity sourceLivingEntity) {
-                            if (EnchantmentUtil.performCapturing(serverLevel, mob, sourceLivingEntity)) {
-                                LogUtil.debug("Entity spawn egg dropped.");
-                            }
-                        }
-                    }
-                    if (livingEntity instanceof Player player) {
-                        if (EnchantmentUtil.handleSoulBoundAfterDeath(player)) {
-                            LogUtil.debug("Soul bound items are saved for player: " + player);
-                        }
-                    }
+                if (EntityUtil.handleMobDeath(serverLevel, livingEntity, damageSource)) {
+                    livingEntity.discard();
+                    return EventResult.interruptTrue();
                 }
             }
             return EventResult.pass();
@@ -265,10 +253,8 @@ public class EventRegistry {
                                 player.getCooldowns().addCooldown(mainHandStack, 10);
                                 if (success) {
                                     ParticleUtil.spawnParticleExplodeUpperSphere(serverLevel, entity.position().add(new Vec3(0, 0.5, 0)), ParticleTypes.REVERSE_PORTAL, 100, 0.1, 0.7d);
-                                    serverLevel.addFreshEntity(result.itemEntity());
                                     serverLevel.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1, 1);
                                     serverLevel.playSound(null, pos, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.BLOCKS, 0.5f, 0.5f);
-                                    player.getCooldowns().addCooldown(mainHandStack, 10);
                                     LogUtil.debug("Operation seems successful. Passing success result.");
                                     return InteractionResult.SUCCESS;
                                 } else {
