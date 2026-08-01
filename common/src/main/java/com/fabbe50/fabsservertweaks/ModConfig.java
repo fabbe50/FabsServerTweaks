@@ -4,6 +4,7 @@ import com.fabbe50.fabsservertweaks.registries.gamerules.DifficultyValue.Difficu
 import com.fabbe50.fabsservertweaks.registries.gamerules.TrampleValue.TrampleMode;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.BoundedDiscrete;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.RequiresRestart;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
@@ -68,6 +69,10 @@ public class ModConfig implements ConfigData {
 
     @Comment("The maximum amount of extra level cost in an anvil. The cost may still exceed this number as it's only affecting the extra cost.")
     public int maxAnvilCost = 100;
+
+    @Comment("The chance in percent that creepers can spawn charged")
+    @BoundedDiscrete(min = 0, max = 100)
+    public int creeperChargedChance = 10;
 
     @Comment("If true, the ender dragon will always generate a spawn egg and drop xp like it would on the first defeat.")
     public boolean shouldEnderDragonAlwaysLootLikeFirst = true;
