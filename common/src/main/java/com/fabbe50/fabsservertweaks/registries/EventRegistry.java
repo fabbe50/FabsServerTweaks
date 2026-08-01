@@ -424,6 +424,14 @@ public class EventRegistry {
                             return EventResult.interruptTrue();
                         }
                     }
+                    if (BuiltinDatapackUtil.isEnabled(serverLevel.getServer(), BuiltinDatapack.CAULDRON_CONVERSIONS) && state.is(BlockTags.CAMPFIRES)) {
+                        LogUtil.debug("Detected silk touch used on campfire.");
+                        Block block = state.getBlock();
+                        if (WorldUtil.dropItemWithData(level, pos, new ItemStack(block))) {
+                            LogUtil.debug("Dropped block with data.");
+                            return EventResult.interruptTrue();
+                        }
+                    }
                 }
                 if (WorldUtil.handleSpecialBreakingConditions(serverLevel, pos, state, player, toolStack)) {
                     LogUtil.debug("Handled special breaking conditions.");
