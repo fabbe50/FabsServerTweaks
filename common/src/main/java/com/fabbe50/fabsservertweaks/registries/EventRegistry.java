@@ -261,6 +261,8 @@ public class EventRegistry {
                                     player.addItem(book);
                                     success = true;
                                 }
+                                serverLevel.addFreshEntity(result.itemEntity());
+                                player.getCooldowns().addCooldown(mainHandStack, 10);
                                 if (success) {
                                     ParticleUtil.spawnParticleExplodeUpperSphere(serverLevel, entity.position().add(new Vec3(0, 0.5, 0)), ParticleTypes.REVERSE_PORTAL, 100, 0.1, 0.7d);
                                     serverLevel.addFreshEntity(result.itemEntity());
