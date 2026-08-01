@@ -44,8 +44,8 @@ public abstract class LiquidBlockMixin {
                                 block = Blocks.COBBLESTONE;
                             }
                             if (block != null) {
-                                level.setBlockAndUpdate(neighborPos, block.defaultBlockState());
-                                this.fizz(level, neighborPos);
+                                level.setBlockAndUpdate(pos, block.defaultBlockState());
+                                this.fizz(level, pos);
                             }
                             cir.setReturnValue(false);
                             return;
@@ -72,8 +72,8 @@ public abstract class LiquidBlockMixin {
                         }
 
                         if (block != null) {
-                            level.setBlockAndUpdate(neighborPos, block.defaultBlockState());
-                            this.fizz(level, neighborPos);
+                            level.setBlockAndUpdate(pos, block.defaultBlockState());
+                            this.fizz(level, pos);
                             cir.setReturnValue(false);
                             return;
                         }
