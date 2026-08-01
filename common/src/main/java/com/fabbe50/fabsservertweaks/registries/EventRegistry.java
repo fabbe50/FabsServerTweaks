@@ -20,7 +20,6 @@ import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.EnchantmentResult;
 import com.fabbe50.fabsservertweaks.util.EventUtil.BlockEventLogic;
 import com.fabbe50.fabsservertweaks.util.SpawnerUtil.Modifier;
 import com.fabbe50.fabsservertweaks.util.json.JsonUtil;
-import com.jcraft.jorbis.Block;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.*;
 import dev.architectury.event.events.common.EntityEvent;
@@ -53,6 +52,7 @@ import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
@@ -72,7 +72,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 
 import java.net.URI;
@@ -95,6 +94,14 @@ public class EventRegistry {
                 if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_MOBS_SPAWN_WITH_EFFECTS)) {
                     if (EntityUtil.applyMobEffect(serverLevel, entity)) {
                         LogUtil.debug("Entity got effects applied.");
+                    }
+                }
+                if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_CREEPERS_CAN_SPAWN_CHARGED)) {
+                    if (entity instanceof Creeper creeper) {
+                        int chance = Fabsservertweaks.CONFIG.creeperChargedChance;
+                        if (serverLevel.getRandom().nextInt(100) + 1 < chance) {
+                            creeper.getEntityData().set(Creeper.DATA_IS_POWERED, true);
+                        }
                     }
                 }
             }

@@ -76,6 +76,7 @@ public class ModGameRules {
     public static final ExtGameRule<Boolean> RULE_PET_FRIENDLY_FIRE;
     public static final ExtGameRule<Boolean> RULE_SHULKERS_CAN_TELEPORT;
     public static final ExtGameRule<Boolean> RULE_ENDERMAN_TELEPORT_INHIBITOR;
+    public static final ExtGameRule<Boolean> RULE_CREEPERS_CAN_SPAWN_CHARGED;
 
     // Block Behavior
     public static final ExtGameRule<Boolean> RULE_TORCHFLOWERS_GLOW;
@@ -170,6 +171,7 @@ public class ModGameRules {
         RULE_REPAIRABLE_ANVILS = registerBoolean("repairable_anvils", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         RULE_ENDERMAN_TELEPORT_INHIBITOR = registerBoolean("enderman_teleport_inhibitor", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
         RULE_TELEPORT_TO_DEATH_POINT_WITH_RECOVERY_COMPASS = registerBoolean("teleport_to_death_point_with_recovery_compass", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
+        RULE_CREEPERS_CAN_SPAWN_CHARGED = registerBoolean("creepers_can_spawn_charged", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
         if (Fabsservertweaks.CONFIG.enableExperimentalFeatures) {
             RULE_PISTONS_CAN_BREAK_BLOCKS = registerBoolean("pistons_can_break_blocks", GameRuleCategory.MISC, BOOLEAN_ALL_FALSE);
             RULE_BETTER_MOB_LOOT = registerBoolean("better_mob_loot", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
