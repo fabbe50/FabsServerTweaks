@@ -236,6 +236,11 @@ public class Tags {
         BASE_MOD_ITEM_TAGS.put(ModRegistry.PREVENTS_HOT_FLOOR_DAMAGE, List.of(
                 ItemOrTag.of(Items.NETHERITE_BOOTS)
         ));
+        BASE_MOD_ITEM_TAGS.put(ModRegistry.STACK_4, List.of(
+                ItemOrTag.of(Items.LAVA_BUCKET),
+                ItemOrTag.of(Items.WATER_BUCKET)
+        ));
+        BASE_MOD_ITEM_TAGS.put(ModRegistry.STACK_8, List.of());
         BASE_MOD_ITEM_TAGS.put(ModRegistry.STACK_16, List.of(
                 ItemOrTag.of(ItemTags.BEDS),
                 ItemOrTag.of(ItemTags.BOATS),

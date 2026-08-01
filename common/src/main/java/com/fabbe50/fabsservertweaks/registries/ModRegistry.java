@@ -29,6 +29,8 @@ public class ModRegistry {
     public static final TagKey<EntityType<?>> PETS = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("pets"));
     public static final TagKey<EntityType<?>> VILLAGER_TYPES = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("villager_types"));
     public static final TagKey<EntityType<?>> LEAD_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("lead_blacklist"));
+    public static final TagKey<Item> STACK_4 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_4"));
+    public static final TagKey<Item> STACK_8 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_8"));
     public static final TagKey<Item> STACK_16 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_16"));
     public static final TagKey<Item> STACK_64 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_64"));
     public static final TagKey<Item> IMMUNE_TO_CACTUS_DAMAGE = TagKey.create(Registries.ITEM, Fabsservertweaks.location("immune_to_cactus"));

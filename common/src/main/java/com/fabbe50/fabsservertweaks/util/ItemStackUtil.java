@@ -1,5 +1,6 @@
 package com.fabbe50.fabsservertweaks.util;
 
+import com.fabbe50.fabsservertweaks.registries.ModRegistry;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -71,6 +72,49 @@ public class ItemStackUtil {
             return;
         }
         stack.shrink(1);
+    }
+
+    private static final List<Item> NON_TAGGED_CUSTOM_STACK_SIZE_CHECK = List.of(
+            Items.LEAD
+    );
+
+    private static final List<Item> STACKABLE_WHEN_ENCHANTED = List.of(
+            Items.ENCHANTED_BOOK
+    );
+
+    public static int getCustomMaxStackSize(ItemInstance itemInstance) {
+        if (itemInstance instanceof ItemStack stack) {
+            return getCustomMaxStackSize(stack);
+        }
+        return -1;
+    }
+
+    /**
+     * @param stack The stack to check
+     * @return Returns the custom max stack size of the stack, or -1 if the stack doesn't have a custom max stack size.
+     */
+    public static int getCustomMaxStackSize(ItemStack stack) {
+        if (hasCustomStackSize(stack) || NON_TAGGED_CUSTOM_STACK_SIZE_CHECK.contains(stack.getItem())) {
+            int targetMax = 1;
+            if (stack.isEnchanted() && !STACKABLE_WHEN_ENCHANTED.contains(stack.getItem())) {
+                return 1;
+            }
+            if (stack.is(ModRegistry.STACK_4)) {
+                targetMax = 4;
+            } else if (stack.is(ModRegistry.STACK_8)) {
+                targetMax = 8;
+            } else if (stack.is(ModRegistry.STACK_16)) {
+                targetMax = 16;
+            } else if (stack.is(ModRegistry.STACK_64)) {
+                targetMax = 64;
+            }
+            return targetMax;
+        }
+        return -1;
+    }
+
+    public static boolean hasCustomStackSize(ItemStack stack) {
+        return stack.is(ModRegistry.STACK_4) || stack.is(ModRegistry.STACK_8) || stack.is(ModRegistry.STACK_16) || stack.is(ModRegistry.STACK_64);
     }
 
     public static ItemStackTemplate createStackTemplateWithState(BlockState state) {
