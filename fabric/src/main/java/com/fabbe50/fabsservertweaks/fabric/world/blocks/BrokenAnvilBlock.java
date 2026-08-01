@@ -4,6 +4,8 @@ import com.fabbe50.fabsservertweaks.fabric.plugins.lootr.PolymerStateSupplier;
 import com.fabbe50.fabsservertweaks.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +36,7 @@ public class BrokenAnvilBlock extends PolymerHorizontalDirectionalTexturedBlock 
     protected @NonNull InteractionResult useItemOn(ItemStack itemStack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         if (itemStack.is(Items.IRON_BLOCK)) {
             level.setBlockAndUpdate(pos, Blocks.DAMAGED_ANVIL.defaultBlockState().setValue(FACING, state.getValue(FACING)));
+            level.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
             ItemStackUtil.shrink(itemStack, player);
             return InteractionResult.SUCCESS;
         }

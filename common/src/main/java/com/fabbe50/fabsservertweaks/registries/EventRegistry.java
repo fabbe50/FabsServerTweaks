@@ -322,10 +322,14 @@ public class EventRegistry {
                 if (ModGameRules.getGameRuleBoolean(serverLevel, ModGameRules.RULE_REPAIRABLE_ANVILS) && mainHandStack.is(Items.IRON_BLOCK) && state.is(BlockTags.ANVIL)) {
                     if (state.is(Blocks.DAMAGED_ANVIL)) {
                         serverLevel.setBlockAndUpdate(pos, Blocks.CHIPPED_ANVIL.defaultBlockState().setValue(AnvilBlock.FACING, state.getValue(AnvilBlock.FACING)));
+                        serverLevel.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
+                        ItemStackUtil.shrink(mainHandStack, player);
                         return InteractionResult.SUCCESS;
                     }
                     if (state.is(Blocks.CHIPPED_ANVIL)) {
                         serverLevel.setBlockAndUpdate(pos, Blocks.ANVIL.defaultBlockState().setValue(AnvilBlock.FACING, state.getValue(AnvilBlock.FACING)));
+                        serverLevel.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
+                        ItemStackUtil.shrink(mainHandStack, player);
                         return InteractionResult.SUCCESS;
                     }
                 }
