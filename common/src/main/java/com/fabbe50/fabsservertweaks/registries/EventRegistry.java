@@ -781,6 +781,33 @@ public class EventRegistry {
             }
             return InteractionResult.PASS;
         });
+        TickEvent.PLAYER_PRE.register(player -> {
+            if (player == null) {
+                return;
+            }
+
+            AttributeInstance attribute = player.getAttribute(Attributes.STEP_HEIGHT);
+            ItemStack legsStack = player.getItemBySlot(EquipmentSlot.LEGS);
+            Identifier LONG_LEGS_MODIFIER_ID = Fabsservertweaks.location("long_legs_modifier");
+            if (attribute == null) {
+                return;
+            }
+
+            if (!legsStack.isEmpty() && EnchantmentUtil.hasEnchantment(player, legsStack, ModRegistry.LONG_LEGS)) {
+                if (player.isCrouching() && attribute.hasModifier(LONG_LEGS_MODIFIER_ID)) {
+                    LogUtil.debug("Player is crouching and has long legs enchantment. Removing long legs modifier...");
+                    attribute.removeModifier(LONG_LEGS_MODIFIER_ID);
+                } else if (!player.isCrouching() && !attribute.hasModifier(LONG_LEGS_MODIFIER_ID)) {
+                    LogUtil.debug("Player is not crouching and does not have long legs enchantment. Adding long legs modifier...");
+                    attribute.addOrReplacePermanentModifier(new AttributeModifier(LONG_LEGS_MODIFIER_ID, 0.5, Operation.ADD_VALUE));
+                }
+            } else {
+                if (attribute.hasModifier(LONG_LEGS_MODIFIER_ID)) {
+                    LogUtil.debug("Player does not have long legs enchantment and has long legs modifier. Removing long legs modifier...");
+                    attribute.removeModifier(LONG_LEGS_MODIFIER_ID);
+                }
+            }
+        });
         ExtendedEntityEvent.PRE_ENTITY_TICK.register(entity -> {
             if (entity.level() instanceof ServerLevel level) {
                 if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_MOBS_FLEE_FROM_CREEPERS)) {

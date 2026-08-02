@@ -4,20 +4,6 @@
     "translate": "enchantment.fabsservertweaks.long_legs",
     "fallback": "Long Legs"
   },
-  "effects": {
-    "minecraft:attributes": [
-      {
-        "amount": {
-          "type": "minecraft:linear",
-          "base": 0.5,
-          "per_level_above_first": 0.5
-        },
-        "attribute": "step_height",
-        "id": "fabsservertweaks:enchantment.long_legs",
-        "operation": "add_value"
-      }
-    ]
-  },
   "max_cost": {
     "base": 65,
     "per_level_above_first": 10

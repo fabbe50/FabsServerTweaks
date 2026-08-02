@@ -71,6 +71,7 @@ public class ModRegistry {
     public static final ResourceKey<Enchantment> ORE_MINER = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ore_miner"));
     public static final ResourceKey<Enchantment> SOUL_BOUND = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("soul_bound"));
     public static final ResourceKey<Enchantment> ICE_TOUCH = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ice_touch"));
+    public static final ResourceKey<Enchantment> LONG_LEGS = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("long_legs"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");

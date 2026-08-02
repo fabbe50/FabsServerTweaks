@@ -206,7 +206,7 @@ This pack is enabled by default and requires restart.
 - `Longsword I-III`:
   Increases entity interaction range.
 - `Long Legs I`:
-  Increases step height.
+  Increases step height. Does not apply when sneaking for more control.
 - `Reach I-III`:
   Increases block reach. Works on chest armor and Elytra.
 - `Springy I-III`:
