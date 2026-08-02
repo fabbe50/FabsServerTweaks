@@ -93,6 +93,7 @@ public class ModGameRules {
     public static final ExtGameRule<Boolean> RULE_SNOW_FILLS_CAULDRON;
     public static final ExtGameRule<Boolean> RULE_BETTER_RAIL_PLACEMENT;
     public static final ExtGameRule<Boolean> RULE_AMETHYST_DOES_DAMAGE;
+    public static final ExtGameRule<Boolean> RULE_SPAWNERS_DONT_WORK_IN_LIGHT;
 
     // Block Interaction
     public static final ExtGameRule<Boolean> RULE_XP_TO_BOTTLES;
@@ -178,6 +179,7 @@ public class ModGameRules {
         RULE_CREEPERS_CAN_SPAWN_CHARGED = registerBoolean("creepers_can_spawn_charged", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
         RULE_ALL_MOBS_BURN_IN_DAYLIGHT = registerBoolean("all_mobs_burn_in_daylight", GameRuleCategory.MISC, BOOLEAN_ALL_FALSE);
         RULE_MOBS_FLEE_FROM_CREEPERS = registerBoolean("mobs_flee_from_creepers", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);
+        RULE_SPAWNERS_DONT_WORK_IN_LIGHT = registerBoolean("spawners_dont_work_in_light", GameRuleCategory.MISC, BOOLEAN_DEFAULT);
         if (Fabsservertweaks.CONFIG.enableExperimentalFeatures) {
             RULE_PISTONS_CAN_BREAK_BLOCKS = registerBoolean("pistons_can_break_blocks", GameRuleCategory.MISC, BOOLEAN_ALL_FALSE);
             RULE_BETTER_MOB_LOOT = registerBoolean("better_mob_loot", GameRuleCategory.MOBS, BOOLEAN_DEFAULT);

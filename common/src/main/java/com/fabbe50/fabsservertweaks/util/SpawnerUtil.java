@@ -1,21 +1,35 @@
 package com.fabbe50.fabsservertweaks.util;
 
 import com.fabbe50.fabsservertweaks.LogUtil;
+import com.mojang.logging.LogUtils;
 import dev.architectury.event.EventResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
+
+import java.util.Optional;
 
 public class SpawnerUtil {
     public static boolean tryChangeSpawner(Player player, BaseSpawner spawner, Item mainHandItem, boolean isHoldingQuartz) {
@@ -117,6 +131,12 @@ public class SpawnerUtil {
 
     public static boolean placeSpawnerWithData(ServerLevel level, BlockPos pos, BlockState state, ItemStack mainHandStack) {
         return WorldUtil.placeBlockWithData(level, pos, state, mainHandStack, BlockEntityType.MOB_SPAWNER);
+    }
+
+    public static boolean isSpawningAnimals(ServerLevel level, SpawnData spawnData) {
+        ValueInput input = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), spawnData.getEntityToSpawn());
+        Optional<EntityType<?>> entityType = EntityType.by(input);
+        return entityType.filter(type -> !(type.create(level, EntitySpawnReason.SPAWNER) instanceof Enemy)).isPresent();
     }
 
     public enum Modifier {
