@@ -58,6 +58,7 @@ These settings are stored in the mod config and can be viewed or changed with `/
 - `maxAnvilCost`: the maximum anvil extra cost.
 - `shouldEnderDragonAlwaysLootLikeFirst`: when enabled, the ender dragon will always generate a dragon egg and drop xp like it's the first defeat.
 - `warnPlayersAboutModNotOnClient`: allows the server owner to notify players when the mod is not installed on the client.
+- `creeperChargedChance`: sets the chance of a creeper to spawn charged [min: 0, max: 100], also controlled by the `creepers_can_spawn_charged` gamerule.
 
 ## Gamerule Features
 
@@ -82,6 +83,9 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `snow_golems_generate_snow`: toggles snow trail generation.
 - `snow_golems_survive_on_ice`: prevents snow golems from melting while standing on ice.
 - `enderman_teleport_inhibitor`: enables the enderman teleportation inhibitor.
+- `creepers_can_spawn_charged`: creepers can spawn charged with a configurable chance.
+- `all_mobs_burn_in_daylight`: all mobs burn in daylight.
+- `mobs_flee_from_creepers`: if enabled, mobs will run away from swelling creepers.
 
 ### World and Block Behavior
 
@@ -113,6 +117,7 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `modify_spawners`: allows spawners to be modified by using certain items on them.
 - `enchantment_transfer_to_books`: allows the player to transfer enchantments from a tool to a book.
 - `xp_to_bottles`: allows the transfer of XP to bottles.
+- `teleport_to_death_point_with_recovery_compass`: allows the recover compass to teleport the player to the death point.
 
 ### Projectile and Item Recovery
 

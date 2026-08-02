@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 
@@ -164,5 +166,21 @@ public class EntityUtil {
             }
         }
         return false;
+    }
+
+    public static boolean fleeFrom(PathfinderMob mob, Entity threat, double speedModifier, int horizontalRange, int verticalRange) {
+        Vec3 targetPos = DefaultRandomPos.getPosAway(mob, horizontalRange, verticalRange, threat.position());
+        if (targetPos == null) {
+            return false;
+        }
+
+        Path path = mob.getNavigation().createPath(BlockPos.containing(targetPos), 0);
+
+        if (path == null || !path.canReach()) {
+            return false;
+        }
+
+        mob.getNavigation().moveTo(path, speedModifier);
+        return true;
     }
 }

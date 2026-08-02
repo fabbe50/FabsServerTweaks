@@ -1,6 +1,7 @@
 package com.fabbe50.fabsservertweaks.mixin;
 
 import com.fabbe50.fabsservertweaks.events.BedEvents;
+import com.fabbe50.fabsservertweaks.events.ExtendedEntityEvent;
 import com.fabbe50.fabsservertweaks.registries.ModGameRules;
 import dev.architectury.event.EventResult;
 import net.minecraft.core.BlockPos;
@@ -39,6 +40,22 @@ public abstract class LivingEntityMixin {
     @Inject(method = "stopSleeping", at = @At("HEAD"), cancellable = true)
     private void injectStopSleeping(CallbackInfo ci) {
         EventResult result = BedEvents.STOP_SLEEPING.invoker().wakeup(((LivingEntity)(Object)this));
+        if (result.interruptsFurtherEvaluation()) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    private void injectTick(CallbackInfo ci) {
+        EventResult result = ExtendedEntityEvent.PRE_ENTITY_TICK.invoker().onEntityTick((LivingEntity)(Object)this);
+        if (result.interruptsFurtherEvaluation()) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
+    private void injectTickPost(CallbackInfo ci) {
+        EventResult result = ExtendedEntityEvent.POST_ENTITY_TICK.invoker().onEntityTick((LivingEntity)(Object)this);
         if (result.interruptsFurtherEvaluation()) {
             ci.cancel();
         }

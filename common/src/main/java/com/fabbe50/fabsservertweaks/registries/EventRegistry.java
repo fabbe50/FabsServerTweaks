@@ -9,10 +9,7 @@ import com.fabbe50.fabsservertweaks.data.soulbound.SoulBoundRegistry;
 import com.fabbe50.fabsservertweaks.data.stats.PlayerOnline;
 import com.fabbe50.fabsservertweaks.data.stats.StatsRegistry;
 import com.fabbe50.fabsservertweaks.data.storage.BedNameStore;
-import com.fabbe50.fabsservertweaks.events.BedEvents;
-import com.fabbe50.fabsservertweaks.events.CollisionEvent;
-import com.fabbe50.fabsservertweaks.events.ExtendedBlockEvent;
-import com.fabbe50.fabsservertweaks.events.ItemStackEvent;
+import com.fabbe50.fabsservertweaks.events.*;
 import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.util.*;
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.DisenchantingEntityResult;
@@ -35,6 +32,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.OpenUrl;
 import net.minecraft.network.chat.HoverEvent.ShowText;
 import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -43,11 +41,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
@@ -59,6 +62,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import net.minecraft.world.level.Level;
@@ -81,6 +85,7 @@ import java.util.*;
 public class EventRegistry {
     private static final ThreadLocal<Boolean> REBROADCASTING_CHAT = ThreadLocal.withInitial(() -> false);
     private static final ThreadLocal<Boolean> PLACING_MOB_FROM_LEAD = ThreadLocal.withInitial(() -> false);
+    private static int tick = 0;
 
     public static void init() {
         EntityEvent.ADD.register((entity, level) -> {
@@ -775,6 +780,39 @@ public class EventRegistry {
                 }
             }
             return InteractionResult.PASS;
+        });
+        ExtendedEntityEvent.PRE_ENTITY_TICK.register(entity -> {
+            if (entity.level() instanceof ServerLevel level) {
+                if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_MOBS_FLEE_FROM_CREEPERS)) {
+                    if (entity instanceof Creeper creeper) {
+                        if (creeper.swell > 0) {
+                            level.getEntities(creeper, new AABB(creeper.blockPosition()).inflate(6)).forEach(livingEntity -> {
+                                if (livingEntity instanceof PathfinderMob mob) {
+                                    if (mob.is(ModRegistry.RUNNING_FROM_CREEPER)) {
+                                        if (EntityUtil.fleeFrom(mob, creeper, 1.25, 16, 7)) {
+                                            LogUtil.debug("Mob '" + mob + "' fled from creeper.");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                tick++;
+                if (tick == 20) {
+                    boolean canSeeSky = level.canSeeSky(entity.blockPosition());
+                    boolean isBright = level.getBrightness(LightLayer.SKY, entity.blockPosition()) > 0;
+                    if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_ALL_MOBS_BURN_IN_DAYLIGHT)) {
+                        if (canSeeSky && isBright) {
+                            entity.setRemainingFireTicks(30);
+                            entity.setSharedFlagOnFire(true);
+                        }
+                    }
+                    tick = 0;
+                }
+            }
+
+            return EventResult.pass();
         });
     }
 }

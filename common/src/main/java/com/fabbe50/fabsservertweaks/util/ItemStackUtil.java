@@ -108,6 +108,9 @@ public class ItemStackUtil {
             } else if (stack.is(ModRegistry.STACK_64)) {
                 targetMax = 64;
             }
+            if (NON_TAGGED_CUSTOM_STACK_SIZE_CHECK.contains(stack.getItem())) {
+                return 64;
+            }
             return targetMax;
         }
         return -1;

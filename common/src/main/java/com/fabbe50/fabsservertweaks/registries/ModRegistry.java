@@ -29,6 +29,7 @@ public class ModRegistry {
     public static final TagKey<EntityType<?>> PETS = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("pets"));
     public static final TagKey<EntityType<?>> VILLAGER_TYPES = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("villager_types"));
     public static final TagKey<EntityType<?>> LEAD_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("lead_blacklist"));
+    public static final TagKey<EntityType<?>> RUNNING_FROM_CREEPER = TagKey.create(Registries.ENTITY_TYPE, Fabsservertweaks.location("running_from_creeper"));
     public static final TagKey<Item> STACK_4 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_4"));
     public static final TagKey<Item> STACK_8 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_8"));
     public static final TagKey<Item> STACK_16 = TagKey.create(Registries.ITEM, Fabsservertweaks.location("stack_16"));
