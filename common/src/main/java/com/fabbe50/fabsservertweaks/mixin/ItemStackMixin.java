@@ -22,7 +22,11 @@ public class ItemStackMixin {
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("TAIL"))
     private void injectConstructor(Holder<Item> item, int count, PatchedDataComponentMap components, CallbackInfo ci) {
         ItemStack instance = (ItemStack) (Object) this;
-        components.set(DataComponents.MAX_STACK_SIZE, instance.getMaxStackSize());
+        int maxStackSize = instance.getMaxStackSize();
+        if (instance.getCount() > maxStackSize) {
+            instance.setCount(maxStackSize);
+        }
+        components.set(DataComponents.MAX_STACK_SIZE, maxStackSize);
         ItemStackEvent.CREATED.invoker().create(instance);
     }
 }
