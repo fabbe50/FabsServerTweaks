@@ -51,6 +51,10 @@
     {
       "id": "minecraft:goat_horn",
       "required": false
+    },
+    {
+      "id": "minecraft:spyglass",
+      "required": false
     }
   ]
 }

@@ -193,6 +193,29 @@ public class Tags {
                 EntityType.VILLAGER,
                 EntityType.WANDERING_TRADER
         ));
+        BASE_MOD_ENTITY_TAGS.put(ModRegistry.RUNNING_FROM_CREEPER, List.of(
+                EntityType.VILLAGER,
+                EntityType.WANDERING_TRADER,
+                EntityType.COPPER_GOLEM,
+                EntityType.CAT,
+                EntityType.SKELETON,
+                EntityType.WITHER_SKELETON,
+                EntityType.HORSE,
+                EntityType.WOLF,
+                EntityType.FOX,
+                EntityType.LLAMA,
+                EntityType.COW,
+                EntityType.PIG,
+                EntityType.CREEPER,
+                EntityType.IRON_GOLEM,
+                EntityType.MOOSHROOM,
+                EntityType.TRADER_LLAMA,
+                EntityType.PIGLIN,
+                EntityType.PIGLIN_BRUTE,
+                EntityType.PARCHED,
+                EntityType.STRAY,
+                EntityType.WITCH
+        ));
 
         BASE_MOD_ITEM_TAGS = new HashMap<>();
         BASE_MOD_ITEM_TAGS.put(ModRegistry.CHEST_PIECES, List.of(
@@ -221,7 +244,8 @@ public class Tags {
                 ItemOrTag.of(Items.CARROT_ON_A_STICK),
                 ItemOrTag.of(Items.WARPED_FUNGUS_ON_A_STICK),
                 ItemOrTag.of(ItemTags.BOATS),
-                ItemOrTag.of(Items.GOAT_HORN)
+                ItemOrTag.of(Items.GOAT_HORN),
+                ItemOrTag.of(Items.SPYGLASS)
         ));
         BASE_MOD_ITEM_TAGS.put(ModRegistry.FITS_IN_BUNDLE_64, List.of());
         BASE_MOD_ITEM_TAGS.put(ModRegistry.IMMUNE_TO_CACTUS_DAMAGE, List.of(

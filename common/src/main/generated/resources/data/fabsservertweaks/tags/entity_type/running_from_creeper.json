@@ -1,0 +1,88 @@
+{
+  "values": [
+    {
+      "id": "minecraft:villager",
+      "required": false
+    },
+    {
+      "id": "minecraft:wandering_trader",
+      "required": false
+    },
+    {
+      "id": "minecraft:copper_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:cat",
+      "required": false
+    },
+    {
+      "id": "minecraft:skeleton",
+      "required": false
+    },
+    {
+      "id": "minecraft:wither_skeleton",
+      "required": false
+    },
+    {
+      "id": "minecraft:horse",
+      "required": false
+    },
+    {
+      "id": "minecraft:wolf",
+      "required": false
+    },
+    {
+      "id": "minecraft:fox",
+      "required": false
+    },
+    {
+      "id": "minecraft:llama",
+      "required": false
+    },
+    {
+      "id": "minecraft:cow",
+      "required": false
+    },
+    {
+      "id": "minecraft:pig",
+      "required": false
+    },
+    {
+      "id": "minecraft:creeper",
+      "required": false
+    },
+    {
+      "id": "minecraft:iron_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:mooshroom",
+      "required": false
+    },
+    {
+      "id": "minecraft:trader_llama",
+      "required": false
+    },
+    {
+      "id": "minecraft:piglin",
+      "required": false
+    },
+    {
+      "id": "minecraft:piglin_brute",
+      "required": false
+    },
+    {
+      "id": "minecraft:parched",
+      "required": false
+    },
+    {
+      "id": "minecraft:stray",
+      "required": false
+    },
+    {
+      "id": "minecraft:witch",
+      "required": false
+    }
+  ]
+}

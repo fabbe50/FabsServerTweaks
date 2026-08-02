@@ -2,8 +2,8 @@
   "defaultCookTime": 200,
   "defaultXp": 0.7,
   "furnaceType": [
-    "blast_furnace",
-    "furnace"
+    "furnace",
+    "blast_furnace"
   ],
   "ingredient": "minecraft:golden_nautilus_armor",
   "tiers": [
