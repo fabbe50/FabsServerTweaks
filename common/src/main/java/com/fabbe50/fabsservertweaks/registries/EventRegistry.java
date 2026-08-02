@@ -667,29 +667,20 @@ public class EventRegistry {
                         if (state.is(Blocks.SMALL_AMETHYST_BUD)) {
                             if (health > 1) {
                                 LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 1");
-                                entity.hurtServer(serverLevel, level.damageSources().cactus(), 1);
+                                entity.hurtServer(serverLevel, AmethystDamageSource.source(ModRegistry.AMETHYST_DAMAGE, serverLevel, false), 1);
                             }
                         }
                         if (state.is(Blocks.MEDIUM_AMETHYST_BUD)) {
                             LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 2");
-                            entity.hurtServer(serverLevel, level.damageSources().cactus(), 2);
+                            entity.hurtServer(serverLevel, AmethystDamageSource.source(ModRegistry.AMETHYST_DAMAGE, serverLevel, false), 2);
                         }
                         if (state.is(Blocks.LARGE_AMETHYST_BUD)) {
                             LogUtil.debug("Amethyst bud is damaging entity. Damage dealt: 3");
-                            entity.hurtServer(serverLevel, level.damageSources().cactus(), 3);
+                            entity.hurtServer(serverLevel, AmethystDamageSource.source(ModRegistry.AMETHYST_DAMAGE, serverLevel, false), 3);
                         }
                         if (state.is(Blocks.AMETHYST_CLUSTER)) {
-                            Player player = serverLevel.getNearestPlayer(entity, 16);
-                            if (player == null) {
-                                player = serverLevel.getRandomPlayer();
-                            }
-                            if (player != null) {
-                                LogUtil.debug("Amethyst cluster is performing player damage. Used player=\"" + player.getName().getString() + "\" Damage dealt: 4");
-                                entity.hurtServer(serverLevel, level.damageSources().playerAttack(player), 4);
-                            } else {
-                                LogUtil.debug("Amethyst cluster is performing normal damage. Damage dealt: 4");
-                                entity.hurtServer(serverLevel, level.damageSources().cactus(), 4);
-                            }
+                            LogUtil.debug("Amethyst cluster is damaging entity. Damage dealt: 4");
+                            entity.hurtServer(serverLevel, AmethystDamageSource.source(ModRegistry.AMETHYST_DAMAGE, serverLevel, true), 4);
                         }
                     }
                 }

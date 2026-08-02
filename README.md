@@ -118,6 +118,7 @@ Most of the gameplay tweaks are controlled with gamerules.
 - `enchantment_transfer_to_books`: allows the player to transfer enchantments from a tool to a book.
 - `xp_to_bottles`: allows the transfer of XP to bottles.
 - `teleport_to_death_point_with_recovery_compass`: allows the recover compass to teleport the player to the death point.
+- `spawners_dont_work_in_light`: prevents spawners from working in the light regardless of the mob type (only applies enemy mobs).
 
 ### Projectile and Item Recovery
 

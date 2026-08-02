@@ -36,6 +36,7 @@
     "LevelMixin",
     "LiquidBlockMixin",
     "LivingEntityMixin",
+    "LootItemKilledByPlayerConditionMixin",
     "MobMixin",
     "PhantomMixin",
     "PistonBaseBlockMixin",
