@@ -8,10 +8,12 @@ import com.fabbe50.fabsservertweaks.data.loader.DurabilitySmeltLoader;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.registry.registries.Registrar;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -72,6 +74,8 @@ public class ModRegistry {
     public static final ResourceKey<Enchantment> SOUL_BOUND = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("soul_bound"));
     public static final ResourceKey<Enchantment> ICE_TOUCH = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("ice_touch"));
     public static final ResourceKey<Enchantment> LONG_LEGS = ResourceKey.create(Registries.ENCHANTMENT, Fabsservertweaks.location("long_legs"));
+
+    public static final ResourceKey<DamageType> AMETHYST_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, Fabsservertweaks.location("amethyst_damage"));
 
     public static void init() {
         LogUtil.log("Setting up registry...");
