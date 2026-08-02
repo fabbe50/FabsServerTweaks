@@ -27,6 +27,11 @@ import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class EntityUtil {
     public static boolean applyMobEffect(ServerLevel level, Entity entity) {
@@ -182,5 +187,99 @@ public class EntityUtil {
 
         mob.getNavigation().moveTo(path, speedModifier);
         return true;
+    }
+
+    public static void startMovingAway(PathfinderMob mob, Entity threat, double speedModifier) {
+        Vec3 away = mob.position()
+                .subtract(threat.position())
+                .multiply(1.0, 0.0, 1.0);
+
+        if (away.lengthSqr() < 1.0E-6) {
+            return;
+        }
+
+        Vec3 temporaryTarget = mob.position()
+                .add(away.normalize().scale(4.0));
+
+        mob.getMoveControl().setWantedPosition(
+                temporaryTarget.x(),
+                temporaryTarget.y(),
+                temporaryTarget.z(),
+                speedModifier
+        );
+    }
+
+    public static final class FleePathQueue {
+        private static final int MAX_PATHS_PER_TICK = 10;
+        private static final int MAX_ATTEMPTS = 5;
+
+        private static final Queue<FleeRequest> REQUESTS = new ConcurrentLinkedQueue<>();
+        private static final Set<UUID> QUEUED_MOBS = ConcurrentHashMap.newKeySet();
+
+        private FleePathQueue() {
+        }
+
+        public static void request(PathfinderMob mob, Entity threat, double speedModifier, int horizontalRange, int verticalRange) {
+            if (!mob.isAlive() || mob.level().isClientSide() || !QUEUED_MOBS.add(mob.getUUID())) {
+                return;
+            }
+
+            REQUESTS.add(new FleeRequest(
+                    mob,
+                    threat,
+                    speedModifier,
+                    horizontalRange,
+                    verticalRange
+            ));
+        }
+
+        public static void tick() {
+            for (int processed = 0; processed < MAX_PATHS_PER_TICK; processed++) {
+                FleeRequest request = REQUESTS.poll();
+
+                if (request == null) {
+                    return;
+                }
+
+                QUEUED_MOBS.remove(request.mob().getUUID());
+                process(request);
+            }
+        }
+
+        private static void process(FleeRequest request) {
+            PathfinderMob mob = request.mob();
+            Entity threat = request.threat();
+
+            if (!mob.isAlive() || !threat.isAlive() || mob.level() != threat.level()) {
+                return;
+            }
+
+            double currentDistance = mob.distanceToSqr(threat);
+
+            for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+                Vec3 targetPosition = DefaultRandomPos.getPosAway(
+                        mob,
+                        request.horizontalRange(),
+                        request.verticalRange(),
+                        threat.position()
+                );
+
+                if (targetPosition == null || targetPosition.distanceToSqr(threat.position()) <= currentDistance) {
+                    continue;
+                }
+
+                Path path = mob.getNavigation().createPath(BlockPos.containing(targetPosition), 0);
+
+                if (path == null || !path.canReach()) {
+                    continue;
+                }
+
+                mob.getNavigation().moveTo(path, request.speedModifier());
+                return;
+            }
+        }
+
+        private record FleeRequest(PathfinderMob mob, Entity threat, double speedModifier, int horizontalRange, int verticalRange) {
+        }
     }
 }

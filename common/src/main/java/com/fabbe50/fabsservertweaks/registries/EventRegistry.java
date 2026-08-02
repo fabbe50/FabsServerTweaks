@@ -14,6 +14,7 @@ import com.fabbe50.fabsservertweaks.network.packets.SeedPacket;
 import com.fabbe50.fabsservertweaks.util.*;
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.DisenchantingEntityResult;
 import com.fabbe50.fabsservertweaks.util.EnchantmentUtil.EnchantmentResult;
+import com.fabbe50.fabsservertweaks.util.EntityUtil.FleePathQueue;
 import com.fabbe50.fabsservertweaks.util.EventUtil.BlockEventLogic;
 import com.fabbe50.fabsservertweaks.util.SpawnerUtil.Modifier;
 import com.fabbe50.fabsservertweaks.util.json.JsonUtil;
@@ -808,6 +809,9 @@ public class EventRegistry {
                 }
             }
         });
+        TickEvent.SERVER_POST.register(server -> {
+            FleePathQueue.tick();
+        });
         ExtendedEntityEvent.PRE_ENTITY_TICK.register(entity -> {
             if (entity.level() instanceof ServerLevel level) {
                 if (ModGameRules.getGameRuleBoolean(level, ModGameRules.RULE_MOBS_FLEE_FROM_CREEPERS)) {
@@ -816,9 +820,8 @@ public class EventRegistry {
                             level.getEntities(creeper, new AABB(creeper.blockPosition()).inflate(6)).forEach(livingEntity -> {
                                 if (livingEntity instanceof PathfinderMob mob) {
                                     if (mob.is(ModRegistry.RUNNING_FROM_CREEPER)) {
-                                        if (EntityUtil.fleeFrom(mob, creeper, 1.25, 16, 7)) {
-                                            LogUtil.debug("Mob '" + mob + "' fled from creeper.");
-                                        }
+                                        EntityUtil.startMovingAway(mob, creeper, 2);
+                                        FleePathQueue.request(mob, creeper, 2, 16, 7);
                                     }
                                 }
                             });
